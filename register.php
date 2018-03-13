@@ -56,7 +56,7 @@ else { // Email doesn't already exist in a database, proceed...
         http://localhost/oosd/verify.php?email='.$email.'&hash='.$hash;
 
         $headers =  'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'From: Kumudu Weerasinghe <blacklionsweer@gmail.com>' . "\r\n";
+        $headers .= 'From: Kumudu Weerasinghe <geekquero@gmail.com>' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 
         mail( $to, $subject, $message_body , $headers );
