@@ -22,7 +22,7 @@ a:hover {
 }
 
 .form {
-  background: rgba(19, 35, 47, 0.9); 
+  background: rgba(19, 35, 47, 0.9);
   padding: 40px;
   max-width: 600px;
   margin: 40px auto;
@@ -75,45 +75,45 @@ h1 {
 }
 
 h2 {
-    text-align: center;
-    color: #1ab188;
-    font-weight: 1000;
-    margin: 0;
+  text-align: center;
+  color: #1ab188;
+  font-weight: 1000;
+  margin: 0;
 }
 
 span {
-    color: #1ab188;
-    font-weight: bold;
+  color: #1ab188;
+  font-weight: bold;
 }
 
 p {
-    text-align: center;
-    color: #ffffff;
-    margin: 0px 0px 50px 0px;
+  text-align: center;
+  color: #ffffff;
+  margin: 0px 0px 50px 0px;
 }
 
 div.info {
-    color: pink;
-    display: box;
-    text-align: center;
-    padding: 5px;
-    margin-top: -20px;
-    margin-bottom: 15px;
-    border: 1px solid red;
-    background: #66131c;
+  color: pink;
+  display: box;
+  text-align: center;
+  padding: 5px;
+  margin-top: -20px;
+  margin-bottom: 15px;
+  border: 1px solid red;
+  background: #66131c;
 }
 
 label {
-  position: absolute;
+
   -webkit-transform: translateY(6px);
-          transform: translateY(6px);
+  transform: translateY(6px);
   left: 13px;
   color: rgba(255, 255, 255, 0.5);
   -webkit-transition: all 0.25s ease;
   transition: all 0.25s ease;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
-  font-size: 22px;
+  font-size: 14px;
 }
 label .req {
   margin: 2px;
@@ -122,7 +122,7 @@ label .req {
 
 label.active {
   -webkit-transform: translateY(50px);
-          transform: translateY(50px);
+  transform: translateY(50px);
   left: 2px;
   font-size: 14px;
 }
@@ -134,7 +134,7 @@ label.highlight {
   color: #ffffff;
 }
 
-input, textarea {
+input, textarea, select {
   font-size: 22px;
   display: block;
   width: 100%;
