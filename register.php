@@ -53,7 +53,7 @@ else { // Email doesn't already exist in a database, proceed...
 
         Please click this link to activate your account:
 
-        http://localhost/oosd/verify.php?email='.$email.'&hash='.$hash;
+        http://localhost/oosd_project/verify.php?email='.$email.'&hash='.$hash;
 
         $headers =  'MIME-Version: 1.0' . "\r\n";
         $headers .= 'From: Kumudu Weerasinghe <geekquero@gmail.com>' . "\r\n";
