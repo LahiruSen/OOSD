@@ -37,7 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     <div class="tab-content">
 
         <div id="login">
-            <h1>Welcome Back!</h1>
+
+            <div style="width: 100%; text-align: center">
+                <img src="img/login.png" style="width: 40%"></img>
+            </div>
+
 
             <form action="index.php" method="post" autocomplete="off">
 
@@ -64,7 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         </div>
 
         <div id="signup">
-            <h1>Sign Up for Free</h1>
+            <div style="width: 100%; text-align: center">
+                <img src="img/signup.png" style="width: 40%"></img>
+            </div>
 
             <form action="index.php" method="post" autocomplete="off">
 

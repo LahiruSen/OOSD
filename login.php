@@ -22,7 +22,17 @@ else { // User exists
         // This is how we'll know the user is logged in
         $_SESSION['logged_in'] = true;
 
-        header("location: profile.php");
+        if($user['active'] != 1)
+        {
+            $_SESSION['message'] = "Please verify your account before login to your account. Check your e-mail!";
+            header("location: error.php");
+        }
+
+        else
+            {
+                header("location: profile.php");
+            }
+
     }
     else {
         $_SESSION['message'] = "You have entered wrong password, try again!";
