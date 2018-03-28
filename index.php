@@ -26,6 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     }
 }
 ?>
+
+<?php
+
+if(isset($_SESSION['logged_in'])) {
+    if ($_SESSION['logged_in'] == 1) {
+
+        if ($_SESSION['types'] == 1) {
+
+            header('location: home_employee.php');
+        } else {
+            header('location: home_student.php');
+        }
+    }
+}
+?>
 <body>
 <div class="form">
 
@@ -105,17 +120,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     </label>
 
                     <select name="types" id="types">
-                        <option value="1">Employee</option>
-                        <option value="2">Student</option>
+                        <option style="color: black" value="1">Employee</option>
+                        <option style="color: black" value="2">Student</option>
                     </select>
                 </div>
+
 
                 <div class="field-wrap">
                     <label>
                         Set A Password<span class="req">*</span>
                     </label>
-                    <input type="password"required autocomplete="off" name='password'/>
+
+                        <input  id="password" type="password" required autocomplete="off" name='password' aria-describedby="btnGroupAddon" />
+                        <span id="passwordicon" class="fa fa-eye " style="color: white; float: right; margin-right: 10px;margin-top: -24px; position: relative;z-index: 2;" ></span>
                 </div>
+
 
                 <button type="submit" class="button button-block" name="register" />Register</button>
 

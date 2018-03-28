@@ -8,13 +8,13 @@ session_destroy();
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Error</title>
+  <title>Logout</title>
   <?php include 'css/css.html'; ?>
 </head>
 
 <body>
     <div class="form">
-          <h1>Thanks for stopping by</h1>
+          <h1>Thank you.</h1>
               
           <p><?= 'You have been logged out!'; ?></p>
           

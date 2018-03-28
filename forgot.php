@@ -28,15 +28,15 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
 
         // Send registration confirmation link (reset.php)
         $to      = $email;
-        $subject = 'Password Reset Link ( clevertechie.com )';
+        $subject = 'Password Reset Link';
         $message_body = '
         Hello '.$first_name.',
 
         You have requested password reset!
 
-        Please click this link to reset your password:
+        Please click this link to reset your password:'.
 
-        http://localhost/oosd/reset.php?email='.$email.'&hash='.$hash;
+        $HOST.'reset.php?email='.$email.'&hash='.$hash;
 
         $headers =  'MIME-Version: 1.0' . "\r\n";
         $headers .= 'From: Kumudu Weerasinghe <blacklionsweer@gmail.com>' . "\r\n";

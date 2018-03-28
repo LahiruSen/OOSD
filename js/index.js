@@ -41,3 +41,27 @@ $('.tab a').on('click', function (e) {
   $(target).fadeIn(600);
   
 });
+
+
+//JS for password eye-slash
+$(document.body).on("click","#passwordicon", function () {
+
+    var i = 0;
+
+    if($(this).hasClass('fa-eye') && i==0){
+        $(this).removeClass('fa-eye');
+        $(this).addClass('fa-eye-slash');
+        $('#password').attr('type', 'text');
+        i++;
+    }
+
+    if($(this).hasClass('fa-eye-slash') && i==0){
+
+        $(this).removeClass('fa-eye-slash');
+        $(this).addClass('fa-eye');
+        $('#password').attr('type', 'password');
+        i++;
+    }
+
+});
+
