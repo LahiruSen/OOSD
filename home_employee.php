@@ -17,20 +17,10 @@ else {
     $types = $_SESSION['types'];
     $two_step= $_SESSION['two_step'];
 
-
-
-
     if($types == 2)
     {
         header("location: home_student.php");
     }
-
-
-
-
-
-
-
 }
 ?>
 
@@ -87,7 +77,7 @@ else {
                         <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 2</a>
+                        <a href="Udhan/courses.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Courses</a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
                         <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
@@ -394,8 +384,4 @@ else {
 <?php } ?>
 
 </body>
-
 </html>
-
-
-

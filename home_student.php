@@ -79,7 +79,7 @@ else {
                             <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
                         </li>
                         <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 2</a>
+                            <a href="Udhan/view_assignments_student.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Your Assignments</a>
                         </li>
                         <li class="nav-item mx-0 mx-lg-1">
                             <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
