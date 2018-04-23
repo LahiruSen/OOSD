@@ -71,6 +71,7 @@ else {
                             <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
                 <?php } else { ?>
 
+
                <!-- Navigation menu-->
 
                     <li class="nav-item mx-0 mx-lg-1">
@@ -155,7 +156,7 @@ else {
                             </div>
                         <?php }else{ ?>
 
-                            <div class="row topfive-margin">
+<!--                            <div class="row topfive-margin">
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
 
                                     <h5>Facebook.com </h5>
@@ -165,7 +166,6 @@ else {
                                     <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
                                 </div>
                             </div>
-
                             <div class="row topfive-margin">
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
 
@@ -186,7 +186,6 @@ else {
                                     <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
                                 </div>
                             </div>
-
                             <div class="row topfive-margin">
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
 
@@ -197,7 +196,6 @@ else {
                                     <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
                                 </div>
                             </div>
-
                             <div class="row topfive-margin">
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
 
@@ -227,7 +225,8 @@ else {
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
                                     <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
                                 </div>
-                            </div>
+                            </div>-->
+
                         <?php } ?>
 
                     </div>
