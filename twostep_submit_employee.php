@@ -20,7 +20,7 @@ title
 sex
 full_name
 dob
-civil_states
+civil_status
 nic
 is_physical
 father_full_name
@@ -50,7 +50,7 @@ $old['sex'] = $_POST['sex'];
 $old['full_name'] = $_POST['full_name'];
 $old['dob'] = $_POST['dob'];
 $old['nic'] = $_POST['nic'];
-$old['civil_states'] = $_POST['civil_states'];
+$old['civil_status'] = $_POST['civil_status'];
 $old['add_line_1'] = $_POST['add_line_1'];
 $old['add_line_2'] = $_POST['add_line_2'];
 $old['postal_code'] = $_POST['postal_code'];

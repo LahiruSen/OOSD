@@ -20,7 +20,7 @@ title
 sex
 full_name
 dob
-civil_states
+civil_status
 nic
 is_physical
 father_full_name
@@ -38,6 +38,8 @@ type
 
 */
 
+var_dump($_POST);
+die();
 
 //This array is useful to get previous value of post if there is validation error(s)
 
@@ -48,7 +50,7 @@ $old['sex'] = $_POST['sex'];
 $old['full_name'] = $_POST['full_name'];
 $old['dob'] = $_POST['dob'];
 $old['nic'] = $_POST['nic'];
-$old['civil_states'] = $_POST['civil_states'];
+$old['civil_status'] = $_POST['civil_status'];
 
 if(isset($_POST['is_physical']))
 {
@@ -106,8 +108,97 @@ for($i=0;$i< sizeof($validation_result);$i++)
 if($error_counter == 0)
 {
 
+    $user_id = $_POST['user_id'];
+    $address_line_1 = $_POST['add_line_1'];
+    $address_line_2 = $_POST['add_line_2'];
+    $city = $_POST['city'];
+    $title = $_POST['title'];
+    $phone_number = $_POST['phone_number'];
+    $postal_code = $_POST['postal_code'];
+    $father_full_name = $_POST['father_full_name'];
+    $mother_full_name = $_POST['mother_full_name'];
+    $contact_person_full_name = $_POST['cp_full_name'];
+    $contact_person_phone_number = $_POST['cp_phone_number'];
+    $full_name = $_POST['full_name'];
+    $dob = $_POST['dob'];
+    $civil_status = $_POST['civil_status'];
+    $sex = $_POST['sex'];
+    $nic = $_POST['nic'];
+
+    if(isset($_POST['is_physical']))
+    {
+        $is_physically_disabled = $_POST['is_physical'];
+    }
+    else
+    {
+        $is_physically_disabled = 'off';
+    }
+
+    $al_index_number = $_POST['al_index_number'];
 
 
+    $date_of_create= $mysqli->escape_string( date("Y-m-d H:i:s"));
+    $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
+    $registered_ayear_id = $_POST['ayear_id'];
+
+    $is_student_result = $mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+    if($is_student_result->num_rows != 0)
+    {
+
+        $is_student_data = $is_student_result->fetch_assoc();
+
+        if($is_student_data['is_locked'] == 0)
+        {
+            //update query
+            $sql = "UPDATE student_data SET address_line_1='$address_line_1', address_line_2='$address_line_2', city='$city', title='$title', phone_number='$phone_number', postal_code='$postal_code',"
+                ." father_full_name='$father_full_name', mother_full_name='$mother_full_name', contact_person_full_name='$contact_person_full_name', contact_person_phone_number='$contact_person_phone_number', full_name='$full_name', dob='$dob', "
+                ."civil_status='$civil_status', sex='$sex', nic='$nic', is_physically_disabled='$is_physically_disabled', al_index_number='$al_index_number', date_of_create='$date_of_create', date_of_update='$date_of_update', registered_ayear_id='$registered_ayear_id' WHERE user_id='$user_id'";
+
+        } else
+            {
+                $_SESSION['message'] = "You can not change your profile information Now. Deadline is exceeded";
+                header("location:error.php");
+
+            }
+
+    }else
+        {
+            //insert query
+            $sql = "INSERT INTO student_data (user_id, address_line_1, address_line_2, city, title, phone_number, postal_code,"
+                ." father_full_name, mother_full_name, contact_person_full_name, contact_person_phone_number, full_name, dob, "
+                ."civil_status, sex, nic, is_physically_disabled, al_index_number, date_of_create, date_of_update, registered_ayear_id) "
+                . "VALUES ('$user_id','$address_line_1','$address_line_2','$city', '$title', '$phone_number','$postal_code','$father_full_name',"
+                ."'$mother_full_name','$contact_person_full_name','$contact_person_phone_number','$full_name','$dob','$civil_status','$sex',"
+                ."'$nic','$is_physically_disabled','$al_index_number','$date_of_create','$date_of_update','$registered_ayear_id')";
+
+        }
+
+
+    if ( $mysqli->query($sql) )
+    {
+
+        $ay_result = $mysqli->query("SELECT * FROM academic_year WHERE id='$registered_ayear_id'") or die($mysqli->error());
+
+        if($ay_result->num_rows != 0)
+        {
+            $ay_data = $ayear_result->fetch_assoc();
+
+            if($ay_data['status'] == 1) {
+                $_SESSION['message'] = "You have successfully save your profile information. You can change those information before the deadline for the academic year reregistration. The information will lock after the deadline ".$ay_data['registration_deadline'];
+                header("location:success.php");
+            }
+            else
+                {
+                    $_SESSION['message'] = "You have successfully save your profile information. But the is an issue with the academic year. Please contact the administrator.";
+                    header("location:error.php");
+                }
+        }
+
+
+
+
+    }
 
 
 

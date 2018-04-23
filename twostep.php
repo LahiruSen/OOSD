@@ -55,6 +55,16 @@ require 'db.php';
             if( $types == 2)
             {
                 $student_result = $mysqli->query("SELECT * FROM student_data WHERE user_id='$userId'") or die($mysqli->error());
+                $ayear_result = $mysqli->query("SELECT * FROM academic_year WHERE status=1") or die($mysqli->error());
+
+
+
+                if($ayear_result->num_rows != 0)
+                {
+
+                    $ayear_data = $ayear_result->fetch_assoc();
+                }
+
 
                 if($student_result->num_rows != 0)
                 {
@@ -189,11 +199,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <?php if($types == 2) { ?>
 
-                <h3 style="font-size:50px" class="text-dark mb-2"><?= $first_name.' '.$last_name; ?>, complete your student profile</h3>
+                <h4 style="font-size:50px" class="text-dark mb-2"> <?php if(isset($ayear_data)) { echo('You are registering for '.$ayear_data['title']);} ?>. <strong class="text-white"><?= $first_name.' '.$last_name; ?></strong>, Please complete your student profile</h4>
 
             <?php } else { ?>
 
-                <h3 style="font-size:50px" class="text-dark mb-2"><?= $first_name.' '.$last_name ?>, complete your employee profile</h3>
+                <h4 style="font-size:50px" class="text-dark mb-2"><?= $first_name.' '.$last_name ?>, complete your employee profile</h4>
 
             <?php } ?>
 
@@ -298,9 +308,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="sex">Civil Status</label>
-                                <select id="civil_states" name="civil_states">
-                                    <option value="Single" <?php if(isset($old)){if ($old['civil_states'] == 'Single') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_states'] == 'Single') {echo "selected";}}} ?> >Single</option>
-                                    <option value="Married" <?php if(isset($old)){if ($old['civil_states'] == 'Married') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_states'] == 'Married') {echo "selected";}}} ?> >Married</option>
+                                <select id="civil_status" name="civil_status">
+                                    <option value="Single" <?php if(isset($old)){if ($old['civil_status'] == 'Single') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Single') {echo "selected";}}} ?> >Single</option>
+                                    <option value="Married" <?php if(isset($old)){if ($old['civil_status'] == 'Married') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Married') {echo "selected";}}} ?> >Married</option>
                                 </select>
                             </div>
                         </div>
@@ -455,7 +465,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 
     <!-- for Student -->
-<?php } else { ?>
+<?php } else { if(isset($ayear_data)){ ?>
+
     <section style="padding:10px;" id="portfolio">
         <div class="container ">
             <form id="two_step_submission_form" class="two_step_form" action="twostep.php" method="post">
@@ -536,10 +547,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                 <?php } ?>
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
-                                <label class="text-dark" for="civil_states">Civil Status</label>
-                                <select id="civil_states" name="civil_states">
-                                    <option value="Single" <?php if(isset($old)){if ($old['civil_states'] == 'Single') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_states'] == 'Single') {echo "selected";}}} ?> >Single</option>
-                                    <option value="Married" <?php if(isset($old)){if ($old['civil_states'] == 'Married') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_states'] == 'Married') {echo "selected";}}} ?> >Married</option>
+                                <label class="text-dark" for="civil_status">Civil Status</label>
+                                <select id="civil_status" name="civil_status">
+                                    <option value="Single" <?php if(isset($old)){if ($old['civil_status'] == 'Single') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_status'] == 'Single') {echo "selected";}}} ?> >Single</option>
+                                    <option value="Married" <?php if(isset($old)){if ($old['civil_status'] == 'Married') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_status'] == 'Married') {echo "selected";}}} ?> >Married</option>
                                 </select>
                             </div>
                         </div>
@@ -563,7 +574,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-4 col-md-4">
                                 <label class="text-dark" for="is_physical">Are you physically okay?</label>
-                                <input  type="checkbox" id="is_physical" name="is_physical" <?php if(isset($old)){if ($old['is_physical'] == 'on') {echo "checked";}}else{if(isset($student_data)) {if ($student_data['is_physical'] == 'on') {echo "checked";}}} ?> >
+                                <input  type="checkbox" id="is_physical" name="is_physical" <?php if(isset($old)){if ($old['is_physical'] == 'on') {echo "checked";}}else{if(isset($student_data)) {if ($student_data['is_physically_disabled'] == 'on') {echo "checked";}}} ?> >
                             </div>
                         </div>
 
@@ -609,7 +620,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_1">Address Line 1</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>"type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['add_line_1'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>"type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_1'].'"';}} ?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -625,7 +636,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_2">Address Line 2</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['add_line_2'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_2'].'"';}} ?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -686,7 +697,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="cp_full_name">Contact Person's Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="cp_full_name" name="cp_full_name" required <?php if(isset($old)){echo 'value="'.$old['cp_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['cp_full_name'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="cp_full_name" name="cp_full_name" required <?php if(isset($old)){echo 'value="'.$old['cp_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['contact_person_full_name'].'"';}} ?> >
                                 <?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -703,7 +714,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             <div class="form-group col-lg-8 col-md-8">
 
                                 <label class="text-dark" for="cp_phone_number">Contact Person's Phone Number</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('cp_phone_number',$error_array))  { echo('text-danger');} ?>" type="number" id="cp_phone_number" name="cp_phone_number" required <?php if(isset($old)){echo 'value="'.$old['cp_phone_number'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['cp_phone_number'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('cp_phone_number',$error_array))  { echo('text-danger');} ?>" type="number" id="cp_phone_number" name="cp_phone_number" required <?php if(isset($old)){echo 'value="'.$old['cp_phone_number'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['contact_person_phone_number'].'"';}} ?> >
                                 <?php if(isset($error_array) && array_key_exists('cp_phone_number',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -742,6 +753,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                     <input name="user_id" id="user_id" type="hidden" value="<?= $userId ?>">
                     <input name="type" id="type" type="hidden" value="<?= $types ?>">
+                    <input name="ayear_id" id="ayear_id" type="hidden" value="<?= $ayear_data['id'] ?>">
 
                     <div class="text-center mt-4">
                         <button name="student" type="submit" class="btn btn-xl btn-outline-primary" >Save</button>
@@ -751,7 +763,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             </form>
         </div>
     </section>
-<?php } ?>
+<?php }
+else
+    {?>
+
+    <section style="padding:10px;" id="portfolio">
+        <div class="container ">
+            <div class="row topfive-margin">
+                <div class="col-lg-12">
+
+                    <h2>New batch registration is not started yet. It will be available soon. Please be wait :)</h2>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <?php
+
+    }
+} ?>
 
     <!--Model-->
 
