@@ -50,7 +50,7 @@ else {
     <!--content-->
     <div class="form">
         <h1>Submit Scholarship Application</h1>
-            <form action="scholarship_submission_button.php" method="post" enctype="multipart/form-data">
+            <form action="scholarship_submission.php" method="post" enctype="multipart/form-data">
                 <div class="field-wrap">
                 First Name              :<br>
                 <input type="text" name="first_name">
@@ -67,27 +67,6 @@ else {
     </form>
 
     </div>
-
-    
-
-
-
-
-
-
-
-
-
-
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
-            $('#completeProfile').modal('show');
-        });
-
-    </script>
-
-<?php } ?>
 
 </body>
 
