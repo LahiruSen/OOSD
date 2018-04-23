@@ -25,9 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
     }
 }
-?>
-
-<?php
 
 if(isset($_SESSION['logged_in'])) {
     if ($_SESSION['logged_in'] == 1) {
