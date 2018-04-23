@@ -13,27 +13,27 @@ $last_name = $_SESSION['last_name'];
 $reg_no=$_SESSION['reg_no'];
 $result1=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
 $no_of_rows=$result1->num_rows;
-$assignment_id='';
-
-$val=false;
-while ($row1 = mysqli_fetch_array($result1, MYSQLI_NUM)) {
-    $course_id= $row1[5];
-    $result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-    while ($row2 = mysqli_fetch_array($result2,MYSQLI_NUM)) {
-        if(isset($_POST[$row2[0]])){
-            $assignment_id=$row2[0];
-            $val=true;
-            break;
-        }
-        if($val){break;}
-    }
-}
-
+$assignment_id=$_GET['assignment_id'];
+$assignment_title=$_GET['assignment_title'];
+//    $val=false;
+//    while ($row1 = mysqli_fetch_array($result1, MYSQLI_NUM)) {
+//        $course_id= $row1[5];
+//        $result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+//        while ($row2 = mysqli_fetch_array($result2,MYSQLI_NUM)) {
+//            if(isset($_POST[$row2[0]])){
+//                $assignment_id=$row2[0];
+//                $val=true;
+//                break;
+//            }
+//            if($val){break;}
+//        }
+//    }
 
 $result=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
 $assignment=$result->fetch_assoc();
+
 $_SESSION['assignment_id']=$assignment_id;
-$assignment_title=$assignment['title'];
+//$assignment_title=$assignment['title'];
 $_SESSION['assignment_title']=$assignment_title;
 $deadline=$assignment['date_of_update'];
 

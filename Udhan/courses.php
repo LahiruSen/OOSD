@@ -69,7 +69,7 @@ $_SESSION['name']=$name;
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h2 style="font-size:50px" class="text-dark mb-2">Teacher</h2>
         <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
@@ -85,9 +85,14 @@ $_SESSION['name']=$name;
         <?php
         while ($row = mysqli_fetch_array($result2,MYSQLI_NUM)) {
             ?>
-            <form action="course_details.php" method="post">
-                <input class="button button-block" type="submit" value="<?php echo $row[1];?>" name="<?php echo $row[0];?>">
-            </form>
+            <!--                <form action="course_details.php" method="post">-->
+            <!--                   <input class="button button-block" type="submit" value="--><?php //echo $row[1];?><!--" name="--><?php //echo $row[0];?><!--">-->
+            <!--                </form>-->
+            <div class="container">
+                <a class="text-dark" href="course_details.php?id=<?php echo $row[0];?>&title=<?php echo $row[1];?>"> <input class="button button-block" type="submit" value="<?php echo $row[1];?>"></a>
+                <br>
+            </div>
+
             <?php
         }
 

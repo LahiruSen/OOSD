@@ -1,18 +1,22 @@
 <?php
 session_start();
 require 'connection.php';
-$course_id='';
-$course_title='';
-$result=$mysqli->query("SELECT * FROM courses");
-while ($row = mysqli_fetch_array($result, $result->num_rows)) {
-    if (isset($_POST[$row[0]])) {
-        $course_id= $row[0];
-        $course_title=$row[1];
-        break;
-    }
-}
-$_SESSION['course_id']=$course_id;
-$_SESSION['course_title']=$course_title;
+
+
+
+
+$course_id=$_GET['id'];
+$course_title=$_GET['title'];
+//$result=$mysqli->query("SELECT * FROM courses");
+//while ($row = mysqli_fetch_array($result, $result->num_rows)) {
+//    if (isset($_POST[$row[0]])) {
+//        $course_id= $row[0];
+//        $course_title=$row[1];
+//        break;
+//    }
+//}
+#$_SESSION['course_id']=$course_id;
+#$_SESSION['course_title']=$course_title;
 $name=$_SESSION['name'];
 ?>
 
@@ -86,10 +90,10 @@ $name=$_SESSION['name'];
 
 
                 <li class="button button-block">
-                    <a href="create_assignments.php" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Create Assignments</a>
+                    <a href="create_assignments.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Create Assignments</a>
                 </li><br>
                 <li class="button button-block">
-                    <a href="view_assignments_teacher.php" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">View  Submissions</a>
+                    <a href="view_assignments_teacher.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">View  Submissions</a>
                 </li><br>
                 <li class="button button-block">
                     <a class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>

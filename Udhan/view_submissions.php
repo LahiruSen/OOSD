@@ -9,17 +9,19 @@ session_start();
 require 'connection.php';
 
 $name=$_SESSION['name'];
-$assignment_id='';
-$result=$mysqli->query("SELECT * FROM assignments");
-while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-    if(isset($_POST[$row[0]])){
-        $assignment_id=$row[0];
-    }
-}
+$assignment_id=$_GET['assignment_id'];
+//$result=$mysqli->query("SELECT * FROM assignments");
+//while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+//   if(isset($_POST[$row[0]])){
+//       $assignment_id=$row[0];
+//   }
+//}
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
 
 $_SESSION['assignment_id']=$assignment_id;
 $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id'");
-$no_of_rows=$result2->num_rows;
+//$no_of_rows=$result2->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +60,7 @@ $no_of_rows=$result2->num_rows;
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_teacher.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_teacher.php?id=<?php echo $course_id?>&title=<?php echo $course_title?>">BACK</a>
                 </li>
 
             </ul>
@@ -93,9 +95,15 @@ $no_of_rows=$result2->num_rows;
             while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
                 ?>
                 <div class="col-lg-6 ">
-                    <form action="submit_marks.php" method="POST">
+                    <!--  <form action="submit_marks.php" method="POST">
                         <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[2];?>" name="<?php echo $row[2];?>">
-                    </form><br></div>
+                    </form><br>-->
+                    <a class="text-dark" href="submit_marks.php?registration_number=<?php echo $row[2];?>"> <input class="btn btn-success btn-lg-0"  type="submit" value="<?php echo $row[2];?>"></a>
+                    <br>
+
+                </div>
+
+
                 <?php
             }}
         ?>

@@ -8,7 +8,11 @@
 require 'connection.php';
 session_start();
 $name=$_SESSION['name'];
-$course_title=$_SESSION['course_title'];
+$course_title=$_GET['title'];#;$_SESSION['course_title'];
+$_SESSION['course_title']=$course_title;
+$course_id=$_GET['id'];
+$_SESSION['course_id']=$course_id;
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +53,7 @@ $course_title=$_SESSION['course_title'];
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="courses.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="course_details.php?id=<?php echo $course_id;?>&title=<?php echo $course_title;?>">BACK</a>
                 </li>
 
 
@@ -63,7 +67,7 @@ $course_title=$_SESSION['course_title'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h2 style="font-size:50px" class="text-dark mb-2">Teacher</h2>
         <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 

@@ -14,6 +14,8 @@ $location='assignment_files/';
 move_uploaded_file($tmp_name,$location.$name);
 
 $course_id=$_SESSION["course_id"];
+$course_title=$_SESSION["course_title"];
+
 $description=$_POST["description"];
 $title=$_POST["title"];
 $deadline=$_POST["deadline"];
@@ -46,7 +48,7 @@ $full_name=$_SESSION['name'];
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
     <div class="container">
-        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_student.php">BACK</a>
+        <!-- <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_student.php">BACK</a>-->
         <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
         <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             Menu
@@ -65,7 +67,7 @@ $full_name=$_SESSION['name'];
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_student.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="course_details.php?id=<?php echo $course_id;?>&title=<?php echo $course_title;?>">BACK</a>
                 </li>
 
             </ul>
@@ -95,7 +97,7 @@ $full_name=$_SESSION['name'];
         </div>
 
         <div class="text-center text-secondary mb-0">
-            <br><li class="badge"><a href="courses.php"><input class="btn btn-secondary btn-lg" style="height:55px;" type="button" value="BACK"/></a></li>
+            <br><li class="badge"><a href="course_details.php?id=<?php echo $course_id;?>&title=<?php echo $course_title;?>"><input class="btn btn-secondary btn-lg" style="height:55px;" type="button" value="BACK"/></a></li>
         </div>
 
 

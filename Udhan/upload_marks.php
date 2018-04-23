@@ -14,6 +14,7 @@ $mark=$_POST['mark'];
 $mysqli->query("UPDATE assignment_submissions SET mark='$mark' WHERE id='$id'");
 $reg_no=$_SESSION['reg_no'];
 $title=$_SESSION['title'];
+$assignment_id=$_SESSION['assignment_id'];
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +55,7 @@ $title=$_SESSION['title'];
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_student.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_submissions.php?assignment_id=<?php echo $assignment_id;?>">BACK</a>
                 </li>
 
             </ul>
@@ -85,7 +86,7 @@ $title=$_SESSION['title'];
         </div>
 
         <div class="text-center text-secondary mb-0">
-            <br><li class="badge"><a href="courses.php"><input class="btn btn-secondary btn-lg" style="height:55px;" type="button" value="BACK"/></a></li>
+            <br><li class="badge"><a href="view_submissions.php?assignment_id=<?php echo $assignment_id?>"><input class="btn btn-secondary btn-lg" style="height:55px;" type="button" value="BACK"/></a></li>
         </div>
 
 

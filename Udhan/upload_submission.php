@@ -90,8 +90,6 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
         <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $assignment_title ?></h2>
         <hr class="star-dark mb-5">
 
-
-
         <?php
         if($name==''){
             ?>
@@ -198,8 +196,6 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
     </a>
 </div>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
-
-
 
 
 <!-- Bootstrap core JavaScript -->
