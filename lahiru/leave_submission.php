@@ -1,6 +1,6 @@
 <?php
 /* Reset your password form, sends reset.php password link */
-require 'db.php';
+require '../db.php';
 session_start();
 
 // Check if form submitted with method="post"
@@ -29,7 +29,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
     if ( $result->num_rows == 0 ) // User doesn't exist
     {
         $_SESSION['message'] = "This user detail doesn't exist in the system.";
-        header("location: error.php");
+        header("location: ../error.php");
         die();
     }
     else { // User exists (num_rows != 0)
@@ -41,7 +41,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
 
         if($result_new->num_rows==0){
             $_SESSION['message']="This employ detail doesn't exist in the system.";
-        header("location:error.php");
+        header("location: ../error.php");
         die();
     }
         else{
@@ -49,18 +49,20 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
             $employee_id = $employee['employee_id'];
 
             $sql = "INSERT INTO leave_submission (employee_id, reason, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
-                . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update',)";
+                . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update')";
+
+
 
             if ( $mysqli->query($sql) ) {
 
                 $_SESSION['message']="Your leave application is uploaded successfully";
-                header("location:success.php");
+                header("location: ../success.php");
                 die();
 
             }
             else{
                 $_SESSION['message']="Sorry. Your application could not be uploaded";
-                header("location:error.php");
+                header("location: ../error.php");
                 die();
             }
 
