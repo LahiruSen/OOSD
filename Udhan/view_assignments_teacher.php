@@ -10,9 +10,14 @@ session_start();
 require 'connection.php';
 
 $name=$_SESSION['name'];
-$course_id=$_SESSION['course_id'];
+$course_id=$_GET['id'];
+$course_title=$_GET['title'];
+
 $result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
 $no_of_rows=$result->num_rows;
+
+$_SESSION['course_id']=$course_id;
+$_SESSION['course_title']=$course_title;
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +56,7 @@ $no_of_rows=$result->num_rows;
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="courses.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="course_details.php?id=<?php echo $course_id;?>&title=<?php echo $course_title;?>">BACK</a>
                 </li>
 
             </ul>
@@ -86,10 +91,13 @@ $no_of_rows=$result->num_rows;
                 <div class="col-lg-6 ">
                     <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
                     </li>
-                    <form action="view_submissions.php" method="post">
-                        <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
-                               name="<?php echo $row[0]; ?>"><label  class="text-center text-danger mb-0">Overdue</label>
-                    </form>
+                    <!--              <form action="view_submissions.php" method="post">
+                    <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
+                           name="<?php echo $row[0]; ?>"><label  class="text-center text-danger mb-0">Overdue</label>
+                </form>-->
+                    <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+                    <label  class="text-center text-danger mb-0">Overdue</label>
+                    <br>
                     <br>
                 </div>
 
@@ -98,10 +106,14 @@ $no_of_rows=$result->num_rows;
                 <div class="col-lg-6 ">
                     <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
                     </li>
-                    <form action="view_submissions.php" method="post">
-                        <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
-                               name="<?php echo $row[0]; ?>"><label  class="text-center text-success mb-0">Ongoing</label>
-                    </form><br>
+                    <!--       <form action="view_submissions.php" method="post">
+                <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
+                       name="<?php echo $row[0]; ?>"><label  class="text-center text-success mb-0">Ongoing</label>
+            </form>-->
+                    <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+                    <label  class="text-center text-success mb-0">Ongoing</label>
+
+                    <br>
                 </div>
                 <?php
             }

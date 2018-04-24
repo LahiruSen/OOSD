@@ -21,18 +21,18 @@ $_SESSION['course_id']=$course_id;
 $result2=$mysqli->query("SELECT * FROM course_registration WHERE course_id='$course_id' AND is_approved='1'");
 $no_of_rows=$result2->num_rows;
 
-$registration_number='';
+$registration_number=$_GET['registration_number'];
 
-while ($row = mysqli_fetch_array($result2,MYSQLI_NUM)) {
-    if(isset($_POST[$row[1]])){
-        $registration_number=$row[1];
-        break;
-    }
-
-}
+//    while ($row = mysqli_fetch_array($result2,MYSQLI_NUM)) {
+//        if(isset($_POST[$row[1]])){
+//            $registration_number=$row[1];
+//            break;
+//        }
+//
+//    }
 
 $_SESSION['reg_no']=$registration_number;
-//******************************check multiple submits
+
 $result3=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$registration_number'");
 $submission=$result3->fetch_assoc();
 
@@ -76,7 +76,7 @@ $_SESSION['id']=$submission['id'];
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_teacher.php">BACK</a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_submissions.php?assignment_id=<?php echo $assignment_id?>">BACK</a>
                 </li>
 
             </ul>

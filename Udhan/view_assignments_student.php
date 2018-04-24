@@ -16,12 +16,10 @@ $result2=$mysqli->query("SELECT * FROM course_registration WHERE registration_nu
 $no_of_rows=$result2->num_rows;
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
@@ -92,19 +90,29 @@ $no_of_rows=$result2->num_rows;
             while ($row2 = mysqli_fetch_array($result3,MYSQLI_NUM)) {
                 $deadline=$row2[7];
                 ?>
-                <form action="create_submissions.php" method="post">
-                    <?php
-                    if($today<$deadline){
-                        ?>
-                        <input class="button button-block" type="submit" value="<?php echo $row2[5];?>" name="<?php echo $row2[0];?>" >
-                        <?php
-                    }else {
-                        ?>
-                        <input class="button button-block btn-danger" type="submit" value="<?php echo $row2[5]; ?> - Overdue" name="<?php echo $row2[0]; ?>">
-                        <?php
-                    }
+                <!-- <form action="create_submissions.php" method="post">-->
+                <?php
+                if($today<$deadline){
                     ?>
-                </form>
+                    <!--<input class="button button-block" type="submit" value="<?php echo $row2[5];?>" name="<?php echo $row2[0];?>" >-->
+                    <div class="container">
+                        <a class="text-dark" href="create_submissions.php?assignment_id=<?php echo $row2[0];?>&assignment_title=<?php echo $row2[5];?>"> <input class="button button-block" type="submit" value="<?php echo $row2[5];?>"></a>
+                        <br>
+                    </div>
+
+                    <?php
+                }else {
+                    ?>
+                    <!--  <input class="button button-block btn-danger" type="submit" value="<?php echo $row2[5]; ?> - Overdue" name="<?php echo $row2[0]; ?>">-->
+                    <div class="container">
+                        <a class="text-dark" href="create_submissions.php?assignment_id=<?php echo $row2[0];?>&assignment_title=<?php echo $row2[5];?>"> <input class="button button-block btn-danger" type="submit" value="<?php echo $row2[5];?>-Overdue"></a>
+                        <br>
+                    </div>
+
+                    <?php
+                }
+                ?>
+                <!-- </form>-->
                 <br>
                 <?php
             }
