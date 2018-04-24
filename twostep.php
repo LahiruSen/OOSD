@@ -201,20 +201,106 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                 <h4 style="font-size:50px" class="text-dark mb-2"> <?php if(isset($ayear_data)) { echo('You are registering for '.$ayear_data['title']);} ?>. <strong class="text-white"><?= $first_name.' '.$last_name; ?></strong>, Please complete your student profile</h4>
 
+                <h5 style="font-size:30px" class="text-white text-uppercase mb-2">Deadline <?=$ayear_data['registration_deadline']?></h5>
             <?php } else { ?>
 
-                <h4 style="font-size:50px" class="text-dark mb-2"><?= $first_name.' '.$last_name ?>, complete your employee profile</h4>
+                <h4 style="font-size:50px" class="text-dark mb-2"><strong class="text-white"><?= $first_name.' '.$last_name ?></strong>, complete your employee profile</h4>
 
             <?php } ?>
 
         <div class="container">
 
+
+            <?php if($types == 2) { ?>
+
+                <?php if (isset($student_data)) { if($student_data['is_locked'] !=1 ) {?>
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                When you submitted your profile, you only get <strong> one week </strong> period to change your profile information. After one week, our system administrator will lock your profile information and sent it to verification.
+
+                When you save your profile, you only get <strong> one week </strong> period to change your profile information. After one week, our system administrator will lock your profile information and sent it to verification.
+
             </div>
+                    <?php }else{ ?>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        You have completed your profile information submission. If you want to inquire about your information, please contact admin.
+
+                    </div>
+
+
+
+
+               <?php }} else {
+
+                    ?>
+
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        <?php if(isset($ayear_data)) {?>
+
+                        Before the deadline <?= $ayear_data['registration_deadline'] ?> please save and submit your profile information.
+
+                        <?php } ?>
+
+                    </div>
+
+
+                    <?php
+                } ?>
+
+            <?php } else { ?>
+                <?php if (isset($employee_data)) { if($employee_data['is_locked'] !=1 ) {?>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        When you save your profile, you can complete your account anytime you that you want. When you complete your profile you won't be able to change it from here
+
+                    </div>
+                <?php }else{ ?>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                        You have completed your profile information submission. If you want to inquire about your information, please contact admin.
+
+                    </div>
+
+
+
+
+                <?php }} else {
+
+                    ?>
+
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+
+                            Please save and complete your profile information.
+
+
+                    </div>
+
+
+                    <?php
+                } ?>
+
+            <?php } ?>
+
+
         </div>
 
         </div>
@@ -258,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="title">Title</label>
-                                <select id="title" name="title" >
+                                <select id="title" name="title" <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('disabled');}}?> >
                                     <option value="Mr" <?php if(isset($old)){if ($old['title'] == 'Mr') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['title'] == 'Mr') {echo "selected";}}} ?> >Mr</option>
                                     <option value="Miss" <?php if(isset($old)){if ($old['title'] == 'Miss') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['title'] == 'Miss') {echo "selected";}}} ?> >Miss</option>
                                     <option value="Mrs" <?php if(isset($old)){if ($old['title'] == 'Mrs') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['title'] == 'Mrs') {echo "selected";}}} ?> >Mrs</option>
@@ -266,7 +352,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="sex">Sex</label>
-                                <select id="sex" name="sex">
+                                <select id="sex" name="sex" <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('disabled');}}?>>
                                     <option value="Male" <?php if(isset($old)){if ($old['sex'] == 'Male') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['sex'] == 'Male') {echo "selected";}}} ?> >Male</option>
                                     <option value="Female" <?php if(isset($old)){if ($old['sex'] == 'Female') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['sex'] == 'Female') {echo "selected";}}} ?> >Female</option>
                                 </select>
@@ -276,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="full_name">Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name" required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['full_name'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name" required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['full_name'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
 
                                 <?php if(isset($error_array) && array_key_exists('full_name',$error_array))  {?>
                                     <div class="row">
@@ -294,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="dob">Date of Birth</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('dob',$error_array))  { echo('text-danger');} ?>" type="date" id="dob" name="dob" required <?php if(isset($old)){echo 'value="'.$old['dob'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['dob'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('dob',$error_array))  { echo('text-danger');} ?>" type="date" id="dob" name="dob" required <?php if(isset($old)){echo 'value="'.$old['dob'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['dob'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
 
                                 <?php if(isset($error_array) && array_key_exists('dob',$error_array))  {?>
                                     <div class="row">
@@ -308,7 +394,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="sex">Civil Status</label>
-                                <select id="civil_status" name="civil_status">
+                                <select id="civil_status" name="civil_status" <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('disabled');}}?> >
                                     <option value="Single" <?php if(isset($old)){if ($old['civil_status'] == 'Single') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Single') {echo "selected";}}} ?> >Single</option>
                                     <option value="Married" <?php if(isset($old)){if ($old['civil_status'] == 'Married') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Married') {echo "selected";}}} ?> >Married</option>
                                 </select>
@@ -318,7 +404,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="nic">National Identity Card Number</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('nic',$error_array))  { echo('text-danger');} ?>" type="text" id="nic" name="nic" required <?php if(isset($old)){echo 'value="'.$old['nic'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['nic'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('nic',$error_array))  { echo('text-danger');} ?>" type="text" id="nic" name="nic" required <?php if(isset($old)){echo 'value="'.$old['nic'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['nic'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('nic',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -342,7 +428,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_1">Address Line 1</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['add_line_1'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_1'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -358,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_2">Address Line 2</label>
-                                <input class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['add_line_2'].'"';}} ?> >
+                                <input class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_2'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -374,7 +460,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="postal_code">Postal Code</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('postal_code',$error_array))  { echo('text-danger');} ?>" type="number" id="postal_code" name="postal_code" required <?php if(isset($old)){echo 'value="'.$old['postal_code'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['postal_code'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('postal_code',$error_array))  { echo('text-danger');} ?>" type="number" id="postal_code" name="postal_code" required <?php if(isset($old)){echo 'value="'.$old['postal_code'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['postal_code'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('postal_code',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -388,7 +474,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="city">City</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['city'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['city'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('city',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -404,7 +490,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-8 col-md-8">
                                 <label class="text-dark" for="phone_number">Phone Number</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('phone_number',$error_array))  { echo('text-danger');} ?>" type="number" id="phone_number" name="phone_number" required <?php if(isset($old)){echo 'value="'.$old['phone_number'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['phone_number'].'"';}} ?> >
+                                <input  class="<?php if(isset($error_array) && array_key_exists('phone_number',$error_array))  { echo('text-danger');} ?>" type="number" id="phone_number" name="phone_number" required <?php if(isset($old)){echo 'value="'.$old['phone_number'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['phone_number'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('phone_number',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -428,7 +514,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="employee_id">Employee ID</label>
 
-                                <input class="<?php if(isset($error_array) && array_key_exists('employee_id',$error_array))  { echo('text-danger');} ?>" type="number" id="employee_id" name="employee_id" class="input-active" required <?php if(isset($old)){echo 'value="'.$old['employee_id'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['employee_id'].'"';}} ?> >
+                                <input class="<?php if(isset($error_array) && array_key_exists('employee_id',$error_array))  { echo('text-danger');} ?>" type="number" id="employee_id" name="employee_id" class="input-active" required <?php if(isset($old)){echo 'value="'.$old['employee_id'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['employee_id'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('employee_id',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -441,7 +527,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="employee_type_id">I want to be a/an</label>
-                                <select id="employee_type_id" name="employee_type_id" >
+                                <select id="employee_type_id" name="employee_type_id" <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('disabled');}}?> >
 
                                     <?php for( $j=0; $j<sizeof($employee_type_data);$j++ ) { ?>
                                         <option value="<?= $employee_type_data[$j][0] ?>" <?php if(isset($old)){if ($old['employee_type_id'] == $employee_type_data[$j][0]) {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['employee_type_id'] == $employee_type_data[$j][0]) {echo "selected";}}} ?> ><?= $employee_type_data[$j][1] ?></option>
@@ -454,8 +540,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     <input name="user_id" id="user_id" type="hidden" value="<?= $userId ?>">
                     <input name="type" id="type" type="hidden" value="<?= $types ?>">
 
-                    <div class="text-center mt-4">
-                        <button name="employee" type="submit" class="btn btn-xl btn-outline-primary">Save</button>
+                    <?php if(isset($employee_data)) {?>
+
+                        <?php if($employee_data['is_locked'] != 1) {?>
+                                <div class="text-center mt-4">
+                                    <button name="employee" type="submit" class="btn btn-xl btn-outline-primary">Save</button>
+                                    <button value="lock" name="employee" type="submit" class="btn btn-xl btn-outline-success">Complete</button>
+                                </div>
+
+                        <?php }?>
+                    <?php }else {?>
+
+                        <div class="text-center mt-4">
+                            <button name="employee" type="submit" class="btn btn-xl btn-outline-primary">Save</button>
+                        </div>
+                        <?php } ?>
+
                     </div>
                 </div>
 

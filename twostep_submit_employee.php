@@ -91,7 +91,96 @@ for($i=0;$i< sizeof($validation_result);$i++)
 if($error_counter == 0)
 {
 
-    //Do the DB insertion and redirect to home page with success messages
+    $user_id = $_POST['user_id'];
+    $address_line_1 = $_POST['add_line_1'];
+    $address_line_2 = $_POST['add_line_2'];
+    $city = $_POST['city'];
+    $title = $_POST['title'];
+    $phone_number = $_POST['phone_number'];
+    $employee_id = $_POST['employee_id'];
+    $employee_type_id = $_POST['employee_type_id'];
+    $postal_code = $_POST['postal_code'];
+    $full_name = $_POST['full_name'];
+    $dob = $_POST['dob'];
+    $civil_status = $_POST['civil_status'];
+    $sex = $_POST['sex'];
+    $nic = $_POST['nic'];
+    $date_of_create= $mysqli->escape_string( date("Y-m-d H:i:s"));
+    $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
+
+    $is_employee_result = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+    if($is_employee_result->num_rows != 0)
+    {
+
+        $is_employee_data = $is_employee_result->fetch_assoc();
+
+        if($is_employee_data['is_locked'] == 0)
+        {
+
+            if($_POST['employee'] == "lock")
+            {
+                $sql = "UPDATE employee_data SET address_line_1='$address_line_1', address_line_2='$address_line_2', city='$city', title='$title', phone_number='$phone_number', postal_code='$postal_code',"
+                    ."full_name='$full_name', dob='$dob', "
+                    ."civil_status='$civil_status', sex='$sex', nic='$nic', employee_id='$employee_id', employee_type_id='$employee_type_id', date_of_update='$date_of_update', is_locked=1 WHERE user_id='$user_id'";
+
+            }
+
+            else {
+                //update query
+                $sql = "UPDATE employee_data SET address_line_1='$address_line_1', address_line_2='$address_line_2', city='$city', title='$title', phone_number='$phone_number', postal_code='$postal_code',"
+                    . "full_name='$full_name', dob='$dob', "
+                    . "civil_status='$civil_status', sex='$sex', nic='$nic', employee_id='$employee_id', employee_type_id='$employee_type_id', date_of_update='$date_of_update' WHERE user_id='$user_id'";
+            }
+
+        } else
+        {
+            $_SESSION['message'] = "You can not change your profile information Now. You already locked your information. Please contact the admin if you want to change the information!";
+            header("location:error.php");
+
+        }
+
+    }else
+    {
+        //insert query
+        $sql = "INSERT INTO employee_data (user_id, address_line_1, address_line_2, city, title, phone_number, postal_code,"
+            ." full_name, dob, "
+            ."civil_status, sex, nic, employee_id, employee_type_id, date_of_create, date_of_update) "
+            . "VALUES ('$user_id','$address_line_1','$address_line_2','$city', '$title', '$phone_number','$postal_code',"
+            ."'$full_name','$dob','$civil_status','$sex',"
+            ."'$nic','$employee_id','$employee_type_id','$date_of_create','$date_of_update')";
+
+    }
+
+
+
+
+
+
+    if ( $mysqli->query($sql) )
+    {
+
+        if($_POST['employee'] == "lock")
+        {
+            $_SESSION['message'] = "You have successfully submitted your profile information. Our admin will look about it and verify your account. Thank you.";
+            header("location:success.php");
+        }
+        else
+            {
+                $_SESSION['message'] = "You have successfully save your profile information. When you have finish with your profile please press the complete button instead of pressing save button";
+                header("location:success.php");
+
+            }
+
+
+
+    }else
+        {
+
+        }
+
+
 
 }
 

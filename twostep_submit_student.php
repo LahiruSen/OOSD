@@ -38,8 +38,6 @@ type
 
 */
 
-var_dump($_POST);
-die();
 
 //This array is useful to get previous value of post if there is validation error(s)
 
@@ -153,7 +151,7 @@ if($error_counter == 0)
             //update query
             $sql = "UPDATE student_data SET address_line_1='$address_line_1', address_line_2='$address_line_2', city='$city', title='$title', phone_number='$phone_number', postal_code='$postal_code',"
                 ." father_full_name='$father_full_name', mother_full_name='$mother_full_name', contact_person_full_name='$contact_person_full_name', contact_person_phone_number='$contact_person_phone_number', full_name='$full_name', dob='$dob', "
-                ."civil_status='$civil_status', sex='$sex', nic='$nic', is_physically_disabled='$is_physically_disabled', al_index_number='$al_index_number', date_of_create='$date_of_create', date_of_update='$date_of_update', registered_ayear_id='$registered_ayear_id' WHERE user_id='$user_id'";
+                ."civil_status='$civil_status', sex='$sex', nic='$nic', is_physically_disabled='$is_physically_disabled', al_index_number='$al_index_number', date_of_update='$date_of_update', registered_ayear_id='$registered_ayear_id' WHERE user_id='$user_id'";
 
         } else
             {
@@ -175,6 +173,8 @@ if($error_counter == 0)
         }
 
 
+
+
     if ( $mysqli->query($sql) )
     {
 
@@ -182,7 +182,10 @@ if($error_counter == 0)
 
         if($ay_result->num_rows != 0)
         {
-            $ay_data = $ayear_result->fetch_assoc();
+            $ay_data = $ay_result->fetch_assoc();
+
+
+
 
             if($ay_data['status'] == 1) {
                 $_SESSION['message'] = "You have successfully save your profile information. You can change those information before the deadline for the academic year reregistration. The information will lock after the deadline ".$ay_data['registration_deadline'];
@@ -193,12 +196,20 @@ if($error_counter == 0)
                     $_SESSION['message'] = "You have successfully save your profile information. But the is an issue with the academic year. Please contact the administrator.";
                     header("location:error.php");
                 }
+        }else
+            {
+                $_SESSION['message'] = "The academic year is wrong";
+                header("location:error.php");
+            }
+
+
+
+
+    }else
+        {
+            $_SESSION['message'] = "Something went wrong!!!. Please contact the admin";
+            header("location:error.php");
         }
-
-
-
-
-    }
 
 
 
