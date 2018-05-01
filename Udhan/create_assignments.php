@@ -215,7 +215,7 @@ $_SESSION['course_id']=$course_id;
 <script src="js/jqBootstrapValidation.min.js"></script>
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
-<script src="js/freelancer.js"></script>
+
 
 </body>
 

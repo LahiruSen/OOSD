@@ -1,6 +1,7 @@
 
 <?php
 /* Displays user information and some useful messages */
+require 'db.php';
 session_start();
 
 // Check if user is logged in using the session variable
@@ -15,10 +16,9 @@ else {
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
-    $two_step= $_SESSION['two_step'];
+    $two_step = $_SESSION['two_step'];
 
-    if($types == 2)
-    {
+    if ($types == 2) {
         header("location: home_student.php");
     }
 }
@@ -64,41 +64,7 @@ else {
             <i class="fa fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-
-
-                <?php if($_SESSION['two_step'] == 0) { ?>
-                            <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
-                <?php } else { ?>
-
-
-               <!-- Navigation menu-->
-
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
-                    </li>
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a href="Udhan/courses.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Courses</a>
-                    </li>
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
-                    </li>
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
-                    </li>
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
-                    </li>
-
-
-
-                <?php } ?>
-
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
-                </li>
-
-            </ul>
+            <?php require 'navigation.php';?>
         </div>
     </div>
 </nav>
@@ -268,7 +234,29 @@ else {
 
 <!--Model-->
 
-<?php if($_SESSION['two_step'] == 0) { ?>
+<?php if($_SESSION['two_step'] == 0) {
+
+
+$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+if($user_result->num_rows != 0)
+{
+$user_data = $user_result->fetch_assoc();
+$user_result->free();
+$user_id = $user_data['id'];
+$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+if($employee_result->num_rows != 0)
+{
+$employee_data = $employee_result->fetch_assoc();
+
+$employee_result->free();
+
+if($employee_data['is_locked'] != 1)
+{
+?>
+
     <div class="modal fade" id="completeProfile">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
@@ -293,7 +281,86 @@ else {
         </div>
     </div>
 
-<?php } ?>
+    <?php
+}
+else
+{
+    ?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <?php
+}
+
+}
+else
+{
+
+    ?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Add Profile information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <?php
+
+}
+
+}
+
+else
+{
+
+    $_SESSION['message'] = "You are not a valid user";
+    header("location:error.php");
+}
+
+    } ?>
+
+
+
     <!-- Footer -->
 <footer class="footer text-center">
     <div class="container">
@@ -359,6 +426,8 @@ else {
 
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
+<script src="js/moment.min.js"></script>
+
 <script src="js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -370,6 +439,7 @@ else {
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
+
 
 
 <?php if($_SESSION['two_step'] == 0) { ?>
@@ -384,3 +454,5 @@ else {
 
 </body>
 </html>
+
+

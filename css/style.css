@@ -227,7 +227,7 @@ background-color: white;
 
 
 
-#two_step_submission_form input,select
+#two_step_submission_form input,select,textarea
 {
 
 
@@ -245,6 +245,24 @@ background-color: white;
 }
 
 
+#two_step_submission_form textarea:focus
+{
+
+
+  border: 1px solid rgba(66, 134, 244, 0.5);
+  -webkit-transition: border-color .25s ease, box-shadow .25s ease;
+  transition: border-color .25s ease, box-shadow .25s ease;
+
+}
+
+.textarea_expand
+{
+
+
+  height: 92px;
+
+
+}
 
 #two_step_submission_form h2
 {
@@ -255,10 +273,20 @@ background-color: white;
 
 }
 
+#two_step_submission_form h2
+{
+  text-align: left;
+  font-size: 20px;
+  padding-left: 10px;
+  color: white;
+
+}
 
 #form_section_header
 {
   border-radius: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 
   background: -webkit-gradient(linear,  left top, right top, color-stop(0%, #04befe), color-stop(100%, #0f2c86)); /* Chrome, Safari4+ */
   background: -webkit-linear-gradient(bottom,#04befe  0%, #0f2c86 100%); /* Chrome10+, Safari5.1+ */
@@ -284,4 +312,10 @@ background-color: white;
   -webkit-transition: border-color .25s ease, box-shadow .25s ease;
   transition: border-color .25s ease, box-shadow .25s ease;
 
+}
+
+#navigation_dropdown
+{
+
+  background-color: rgba(255,255,255,0.7);
 }

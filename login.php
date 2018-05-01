@@ -11,6 +11,7 @@ if ( $result->num_rows == 0 ){ // User doesn't exist
 }
 else { // User exists
     $user = $result->fetch_assoc();
+    $result->free();
 
     if ( password_verify($_POST['password'], $user['password']) ) {
         

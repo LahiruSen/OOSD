@@ -17,6 +17,8 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
     else { // User exists (num_rows != 0)
 
         $user = $result->fetch_assoc(); // $user becomes array with user data
+
+        $result->free();
         
         $email = $user['email'];
         $hash = $user['hash'];

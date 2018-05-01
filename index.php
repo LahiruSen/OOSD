@@ -36,6 +36,15 @@ if(isset($_SESSION['logged_in'])) {
             header('location: home_student.php');
         }
     }
+    else
+    {
+        $_SESSION['message'] = "You must log in before viewing your profile page!";
+        header("location: error.php");
+    }
+}else
+{
+    $_SESSION['message'] = "No session fund according to your account";
+    header("location: error.php");
 }
 ?>
 <body>

@@ -210,6 +210,7 @@ $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_i
 <script src="js/freelancer.js"></script>
 
 
+
 </body>
 
 </html>

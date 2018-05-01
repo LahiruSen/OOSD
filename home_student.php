@@ -69,11 +69,74 @@ else {
                 <ul class="navbar-nav ml-auto">
 
 
-                    <?php if($_SESSION['two_step'] == 0) { ?>
-                        <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
-                    <?php } else { ?>
+                    <?php if($_SESSION['two_step'] == 0) {
 
-                        <!-- Navigation menu-->
+                        $user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+                        if($user_result->num_rows != 0)
+                        {
+                            $user_data = $user_result->fetch_assoc();
+                            $user_result->free();
+
+                            $user_id = $user_data['id'];
+
+                            $student_result =  $mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+                            if($student_result->num_rows != 0)
+                            {
+                                $student_data = $student_result->fetch_assoc();
+                                $student_result->free();
+
+                                if($student_data['is_locked'] != 1)
+                                {
+                                    ?>
+
+                                    <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
+
+                                    <?php
+                                }
+                                else
+                                {
+                                    ?>
+
+                                    <a href="twostep.php"><button class="btn btn-warning btn-lg">Activation pending <i class="fa fa-exclamation-triangle"></i></button> </a>
+
+                                    <?php
+                                }
+
+                            }else
+                            {
+
+                                ?>
+
+                                <a href="twostep.php"><button class="btn btn-info btn-lg">Add profile information</button> </a>
+
+                                <?php
+
+                            }
+
+                        }
+
+
+                        else
+                        {
+
+                            $_SESSION['message'] = "You are not a valid user";
+                            header("location:error.php");
+                        }
+
+
+                        ?>
+                    <?php } else {
+
+
+
+
+                        ?>
+
+                                                    <!-- Navigation menu for student-->
+<!--                        *******************Guys please add student related links in here************************-->
 
                         <li class="nav-item mx-0 mx-lg-1">
                             <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
@@ -369,6 +432,8 @@ else {
 
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
+<script src="js/moment.min.js"></script>
+
 <script src="js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -380,6 +445,7 @@ else {
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
+
 
 
 <?php if($_SESSION['two_step'] == 0) { ?>

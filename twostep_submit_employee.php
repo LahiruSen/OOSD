@@ -115,6 +115,7 @@ if($error_counter == 0)
     {
 
         $is_employee_data = $is_employee_result->fetch_assoc();
+        $is_employee_result->free();
 
         if($is_employee_data['is_locked'] == 0)
         {
@@ -177,7 +178,8 @@ if($error_counter == 0)
 
     }else
         {
-
+            $_SESSION['message'] = "Unexpected error is occurred . contact our administrator";
+            header("location:error.php");
         }
 
 

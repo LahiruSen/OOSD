@@ -145,6 +145,8 @@ if($error_counter == 0)
     {
 
         $is_student_data = $is_student_result->fetch_assoc();
+        $is_student_result->free();
+
 
         if($is_student_data['is_locked'] == 0)
         {
@@ -183,6 +185,7 @@ if($error_counter == 0)
         if($ay_result->num_rows != 0)
         {
             $ay_data = $ay_result->fetch_assoc();
+            $ay_result->free();
 
 
 

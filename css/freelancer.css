@@ -425,16 +425,33 @@ a:focus, a:hover, a:active {
   background: linear-gradient(to top, #1c92d2  0%,#f2fcfe 100%);      /* W3C */
 
 }
+.bg-dropdown {
 
-.img-bagroud-right
-{
-  background-image: url("../images/div_cover.png");
-  background-repeat: no-repeat;
+  background: -webkit-gradient(linear,  left top, right top, color-stop(0%, #f1edf0), color-stop(100%, #b3bdbf)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(bottom,#f1edf0  0%, #b3bdbf 100%); /* Chrome10+, Safari5.1+ */
+  background: -moz-linear-gradient(bottom,#f1edf0  0%,#b3bdbf 100%);    /* FF3.6+ */
+  background: linear-gradient(to top, #f1edf0  0%,#b3bdbf 100%);      /* W3C */
+
 }
+
+.bg-aylist {
+
+  background: -webkit-gradient(linear,  left top, right top, color-stop(0%, #3f74e9), color-stop(100%, #8beeff)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(bottom,#3f74e9  0%, #8beeff 100%); /* Chrome10+, Safari5.1+ */
+  background: -moz-linear-gradient(bottom,#3f74e9  0%,#8beeff 100%);    /* FF3.6+ */
+  background: linear-gradient(to top, #3f74e9  0%,#8beeff 100%);      /* W3C */
+
+}
+
+
 
 .card-style
 {
 background-color: rgba(255,255,255, 0.9);;
+}
+.user-dropdown
+{
+  background-color: rgba(255,255,255, 0.0);;
 }
 
 .topfive-margin
