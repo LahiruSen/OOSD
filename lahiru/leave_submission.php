@@ -55,7 +55,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
 
             if ( $mysqli->query($sql) ) {
 
-                $_SESSION['message']="Your leave application is uploaded successfully";
+                $_SESSION['message']="Your leave application was uploaded successfully";
                 header("location: ../success.php");
                 die();
 

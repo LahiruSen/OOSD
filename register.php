@@ -34,8 +34,8 @@ if ( $result->num_rows > 0 ) {
 else { // Email doesn't already exist in a database, proceed...
 
     // active is 0 by DEFAULT (no need to include it here)
-    $sql = "INSERT INTO users (first_name, last_name, email, password, hash, types,date_of_create,date_of_update) "
-        . "VALUES ('$first_name','$last_name','$email','$password', '$hash', '$types','$date_of_create','$date_of_update')";
+    $sql = "INSERT INTO users (first_name, last_name, email, password, hash, types,date_of_create,date_of_update,id) "
+        . "VALUES ('$first_name','$last_name','$email','$password', '$hash', '$types','$date_of_create','$date_of_update',)";
 
     // Add user to the database
     if ( $mysqli->query($sql) ){

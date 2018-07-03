@@ -41,9 +41,19 @@ function test_input($data)
 $nameErr;
 $regErr;
 $fileErr;
+$listErr;
 $first_name1 = $registration_number1 ='';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST"){
+
+
+    if ($_POST["list"]=='0') {
+        $listErr = "Please select the schplarship";
+    } else {
+        $scholarship = test_input($_POST["list"]);
+
+    }
+
     if (empty($_POST["first_name"])) {
         $nameErr = "Name is required";
     } else {
@@ -58,14 +68,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $regErr = "Registration Number is required.";
     } else {
         $registration_number1 = test_input($_POST["registration_number"]);
+        //check if registration number only contains letters and numbers
+        if (!preg_match("/^[a-zA-Z0-9 ]*$/", $registration_number1)) {
+            $regErr = "Registration number only can contain letters and numbers";
+        }
 
     }
 
 //    if (empty($_POST["scholarship_application"])) {
 //        $fileErr = "Please select a pdf file to upload.";}
 
-    if (!empty($nameErr) or !empty($regErr) or !empty($fileErr)) {
-        $_SESSION['message'] = $nameErr . '<br>' . $regErr.'<br>'.$fileErr;
+    if (!empty($nameErr) or !empty($regErr) or !empty($fileErr) or!empty($listErr)) {
+        $_SESSION['message'] = $nameErr . '<br>' . $regErr.'<br>'.$fileErr.'<br>'.$listErr;
         header("location: ../error.php");
         die();
     }
@@ -110,7 +124,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $registration_number_array = $result_registration_number->fetch_assoc(); // employ become arry with employ data
                 $registration_number = $registration_number_array['registration_number'];
                 $pdf_url= $target_dir.$newfilename;
-                $scholarship_id='1';
                 $date_of_create= $mysqli->escape_string( date("Y-m-d H:i:s"));
                 $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
 
@@ -170,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (move_uploaded_file($_FILES["scholarship_application"]["tmp_name"], 'scholarship_application_uploads/'.$newfilename)) {
 
                         $sql = "INSERT INTO scholarship_submissions (registration_number, pdf_url, scholarship_id, date_of_create,date_of_update) "
-                            . "VALUES ('$registration_number','$pdf_url','$scholarship_id','$date_of_create','$date_of_update')";
+                            . "VALUES ('$registration_number','$pdf_url','$scholarship','$date_of_create','$date_of_update')";
 
                         if ( $mysqli->query($sql) ) {
 
@@ -187,7 +200,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
 
 
-                    } else {
+                     } else {
                         $_SESSION['message'] = "Sorry. Error occoured during upload. (During moving file)";
                         header("location: ../error.php");
                         die();

@@ -10,7 +10,7 @@ $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
 if ( $result->num_rows == 0 ) // User doesn't exist
 {
     $_SESSION['message'] = "This user detail doesn't exist in the system.";
-    header("location: error.php");
+    header("location: ../error.php");
     die();
 }
 else { // User exists (num_rows != 0)
@@ -21,8 +21,8 @@ $user_id = $user['id'];
 $result_new = $mysqli->query("SELECT employee_id FROM employee_data WHERE user_id='$user_id' " );
 
 if($result_new->num_rows==0) {
-    $_SESSION['message'] = "This employ detail doesn't exist in employ_day table.";
-    header("location:error.php");
+    $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
+    header("location:../error.php");
     die();}
 
 else{
@@ -33,7 +33,7 @@ else{
 
     if($date_result->num_rows==0){
         $_SESSION['message'] = "This employ detail doesn't exist in employ_data table*.";
-        header("location:error.php");
+        header("location:../error.php");
         die();}
 
         else{
@@ -55,7 +55,7 @@ else{
 <html>
 <head>
     <title>Total Available Leave</title>
-    <?php include 'css.html'; ?>
+    <?php include 'css/css.html'; ?>
 </head>
 
 <body>
