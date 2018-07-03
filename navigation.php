@@ -1,3 +1,6 @@
+
+<!-- This is employee navigation bar -->
+<?php if($_SESSION['types']==1) { ?>
 <ul class="navbar-nav ml-auto">
 
 
@@ -5,6 +8,8 @@
     if($_SESSION['two_step'] == 0) {
 
         $user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+
 
         if($user_result->num_rows != 0)
         {
@@ -21,24 +26,59 @@
 
                 if($employee_data['is_locked'] != 1)
                 {
-                    ?>
-                    <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
-                    <?php
+                    if(!isset($on_two_step)) {
+                        ?>
+                        <a href="twostep.php">
+                            <button class="btn btn-success btn-lg">Complete your profile</button>
+                        </a>
+                        <?php
+
+                    }else
+                        {
+                            ?>
+                            <a href="index.php">
+                                <button class="btn btn-success btn-lg">Back to Home</button>
+                            </a>
+                            <?php
+                        }
                 }
                 else
                 {
-                    ?>
-                    <a href="twostep.php"><button class="btn btn-warning btn-lg">Activation pending <i class="fa fa-exclamation-triangle"></i></button> </a>
-                    <?php
+
+                    if(!isset($on_two_step)) {
+                        ?>
+                        <a href="twostep.php"><button class="btn btn-warning btn-lg">Activation pending <i class="fa fa-exclamation-triangle"></i></button> </a>
+
+                        <?php
+
+                    }else
+                    {
+                        ?>
+                        <a href="index.php">
+                            <button class="btn btn-success btn-lg">Back to Home</button>
+                        </a>
+                        <?php
+                    }
                 }
 
             }else
             {
 
-                ?>
-                <a href="twostep.php"><button class="btn btn-info btn-lg">Add profile information</button> </a>
-                <?php
 
+
+                if(!isset($on_two_step)) {
+                    ?>
+                    <a href="twostep.php"><button class="btn btn-info btn-lg">Add profile information</button> </a>
+                    <?php
+
+                }else
+                {
+                    ?>
+                    <a href="index.php">
+                        <button class="btn btn-success btn-lg">Back to Home</button>
+                    </a>
+                    <?php
+                }
             }
 
         }
@@ -117,32 +157,14 @@
                 <li class="nav-item mx-0 mx-lg-1">
                     <div class="dropdown">
                         <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Role
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <h6 class="dropdown-header">Role</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Create Roll</a>
-                            <a class="dropdown-item" href="#">Roll List</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Roll Access</a>
-
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <div class="dropdown">
-                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Academic
                         </button>
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <h6 class="dropdown-header">Academic Year</h6>
+                            <h6 class="dropdown-header">Academic</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="create_academic_year.php">Create Academic Year</a>
-                            <a class="dropdown-item" href="#">Academic Year List</a>
+                            <a class="dropdown-item" href="create_academic_year.php">Academic Years</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Create Academic Level</a>
-                            <a class="dropdown-item" href="#">Academic Level List</a>
+                            <a class="dropdown-item" href="#">Academic Level</a>
 
                         </div>
                     </div>
@@ -241,3 +263,159 @@
     </li>
 
 </ul>
+
+
+<?php } else { ?>
+
+
+
+
+
+<!-- This is student navigation bar -->
+
+
+
+<ul class="navbar-nav ml-auto">
+
+
+    <?php
+    if($_SESSION['two_step'] == 0) {
+
+        $user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+
+
+        if($user_result->num_rows != 0)
+        {
+            $user_data = $user_result->fetch_assoc();
+            $user_result->free();
+            $user_id = $user_data['id'];
+            $student_result =  $mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+            if($student_result->num_rows != 0)
+            {
+                $student_data = $student_result->fetch_assoc();
+                $student_result->free();
+
+                if($student_data['is_locked'] != 1)
+                {
+                    if(!isset($on_two_step)) {
+                        ?>
+                        <a href="twostep.php">
+                            <button class="btn btn-success btn-lg">Complete your profile</button>
+                        </a>
+                        <?php
+
+                    }else
+                    {
+                        ?>
+                        <a href="index.php">
+                            <button class="btn btn-success btn-lg">Back to Home</button>
+                        </a>
+                        <?php
+                    }
+                }
+                else
+                {
+                    if(!isset($on_two_step)) {
+                        ?>
+                        <a href="twostep.php"><button class="btn btn-warning btn-lg">Activation pending <i class="fa fa-exclamation-triangle"></i></button> </a>
+
+                        <?php
+
+                    }else
+                    {
+                        ?>
+                        <a href="index.php">
+                            <button class="btn btn-success btn-lg">Back to Home</button>
+                        </a>
+                        <?php
+                    }
+                }
+
+            }else
+            {
+
+                if(!isset($on_two_step)) {
+                    ?>
+                    <a href="twostep.php"><button class="btn btn-info btn-lg">Add profile information</button> </a>
+                    <?php
+
+                }else
+                {
+                    ?>
+                    <a href="index.php">
+                        <button class="btn btn-success btn-lg">Back to Home</button>
+                    </a>
+                    <?php
+                }
+
+            }
+
+        }
+        else
+        {
+
+            $_SESSION['message'] = "You are not a valid user";
+            header("location:error.php");
+        }
+    }
+    else
+    {
+
+?>
+
+                <!--FOR Student-->
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <a href="home_student.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
+                            Home
+                        </a>
+
+                    </div>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Student Link 1
+                        </button>
+                        <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Student Link 1</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Student link 1 sub-link 1</a>
+                            <a class="dropdown-item" href="#">>Student link 1 sub-link 2</a>
+                            <a class="dropdown-item" href="#">>Student link 1 sub-link 3</a>
+                            <a class="dropdown-item" href="#">>Student link 1 sub-link 4</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">>Student link 1 sub-link 5</a>
+                        </div>
+                    </div>
+                </li>
+
+            <?php
+
+    } ?>
+
+    <li class="nav-item mx-0 mx-lg-1">
+        <div class="dropdown">
+            <button style="width: 100%" class="btn  dropdown-toggle user-dropdown text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user-circle"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                <h6 class="dropdown-header b"><?= $first_name.' '.$last_name ?> </h6>
+                <div class="dropdown-divider"></div>
+                <?php if($two_step ==1) { ?>
+                    <a class="dropdown-item" href="#">Profile( <strong class="text-primary"><?php if(isset($student_type_data)){echo($student_type_data['title']);}?></strong> )</a>
+                <?php } ?>
+                <a class="dropdown-item" href="#">Messages</a>
+                <a class="dropdown-item" href="logout.php">Logout</a>
+
+
+            </div>
+        </div>
+    </li>
+
+</ul>
+
+<?php } ?>

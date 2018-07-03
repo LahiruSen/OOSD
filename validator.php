@@ -236,3 +236,34 @@ function employee_id_validator($val)
     }
 
 }
+
+//No point to have this validation rule
+
+//function date_withing_validator($from_date,$to_date,$mysqli,$id=0)
+//{
+//
+//        if($id !=0)
+//    {
+//        $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE ('$from_date' <= to_date AND '$to_date' >= from_date AND '$id' <> id)") or die($mysqli->error());
+//    }else
+//        {
+//            $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE ('$from_date' <= to_date AND '$to_date' >= from_date)") or die($mysqli->error());
+//        }
+//
+//    if($academic_years_result->num_rows !=0 )
+//    {
+//        $return_text ="Date range is overlapping! with following academic years: ";
+//
+//
+//        while ($row = $academic_years_result->fetch_assoc())
+//        {
+//            $return_text = $return_text.$row['title'].' ';
+//        }
+//
+//        return $return_text;
+//    }else
+//        {
+//            return "Y";
+//        }
+//
+//}

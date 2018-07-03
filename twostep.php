@@ -185,7 +185,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require 'navigation.php';?>
+                <?php
+                $on_two_step=0;
+                require 'navigation.php';
+                ?>
             </div>
         </div>
     </nav>
@@ -238,10 +241,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             <?php if($types == 2) { ?>
 
                 <?php if (isset($student_data)) { if($student_data['is_locked'] !=1 ) {?>
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
 
                 When you save your profile, you only get <strong> one week </strong> period to change your profile information. After one week, our system administrator will lock your profile information and sent it to verification.
 
@@ -268,11 +271,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             <span aria-hidden="true">&times;</span>
                         </button>
 
-                        <?php if(isset($ayear_data)) {?>
+                        <?php if(isset($ayear_data)) {
+
+                            $current_date = date('Y-m-d H:i:s');
+                            $deadline = date('Y-m-d H:i:s',strtotime($ayear_data['registration_deadline']));
+
+                            if($current_date<=$deadline)
+                            {
+                            ?>
 
                         Before the deadline <?= $ayear_data['registration_deadline'] ?> please save and submit your profile information.
 
-                        <?php } ?>
+                        <?php }else{
+
+                                ?>
+
+                                Registration deadline is exceeded, <strong style="color: indianred"><?= $ayear_data['registration_deadline'] ?></strong> contact administrator!
+
+
+                                <?php
+                            }
+                        } ?>
 
                     </div>
 
@@ -700,7 +719,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                         <div class="row m-2">
                             <div class="form-group col-lg-4 col-md-4">
-                                <label class="text-dark" for="is_physical">Are you physically okay?</label>
+                                <label class="text-dark" for="is_physical">Are you physically disabled?</label>
                                 <input  type="checkbox" id="is_physical" name="is_physical" <?php if(isset($old)){if ($old['is_physical'] == 'on') {echo "checked";}}else{if(isset($student_data)) {if ($student_data['is_physically_disabled'] == 'on') {echo "checked";}}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                             </div>
                         </div>

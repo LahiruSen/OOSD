@@ -1,6 +1,7 @@
 
 <?php
 /* Displays user information and some useful messages */
+require 'db.php';
 session_start();
 
 // Check if user is logged in using the session variable
@@ -66,103 +67,7 @@ else {
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-
-
-                    <?php if($_SESSION['two_step'] == 0) {
-
-                        $user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
-
-                        if($user_result->num_rows != 0)
-                        {
-                            $user_data = $user_result->fetch_assoc();
-                            $user_result->free();
-
-                            $user_id = $user_data['id'];
-
-                            $student_result =  $mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id'") or die($mysqli->error());
-
-
-                            if($student_result->num_rows != 0)
-                            {
-                                $student_data = $student_result->fetch_assoc();
-                                $student_result->free();
-
-                                if($student_data['is_locked'] != 1)
-                                {
-                                    ?>
-
-                                    <a href="twostep.php"><button class="btn btn-success btn-lg">Complete your profile</button> </a>
-
-                                    <?php
-                                }
-                                else
-                                {
-                                    ?>
-
-                                    <a href="twostep.php"><button class="btn btn-warning btn-lg">Activation pending <i class="fa fa-exclamation-triangle"></i></button> </a>
-
-                                    <?php
-                                }
-
-                            }else
-                            {
-
-                                ?>
-
-                                <a href="twostep.php"><button class="btn btn-info btn-lg">Add profile information</button> </a>
-
-                                <?php
-
-                            }
-
-                        }
-
-
-                        else
-                        {
-
-                            $_SESSION['message'] = "You are not a valid user";
-                            header("location:error.php");
-                        }
-
-
-                        ?>
-                    <?php } else {
-
-
-
-
-                        ?>
-
-                                                    <!-- Navigation menu for student-->
-<!--                        *******************Guys please add student related links in here************************-->
-
-                        <li class="nav-item mx-0 mx-lg-1">
-                            <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
-                        </li>
-                        <li class="nav-item mx-0 mx-lg-1">
-                            <a href="Udhan/view_assignments_student.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Your Assignments</a>
-                        </li>
-                        <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
-                        </li>
-                        <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
-                        </li>
-                        <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
-                        </li>
-
-
-
-                    <?php } ?>
-
-                    <li class="nav-item mx-0 mx-lg-1">
-                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
-                    </li>
-
-                </ul>
+                <?php require 'navigation.php';?>
             </div>
         </div>
     </nav>
@@ -221,80 +126,7 @@ else {
 
                                 </div>
                             <?php }else{ ?>
-<!--
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
 
-                                        <h5>Facebook.com </h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Instagram.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-danger badge-pill">Inactive <i class="fa fa-times" style="color: red"></i></span>
-                                    </div>
-                                </div>
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Vevo.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Vimeo.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Dailymotion.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Soundcloud.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xl-8 col-xs-8">
-
-                                        <h5>Abcnews.co.com</h5>
-
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xl-4 col-xs-4 text-center">
-                                        <span style="width: 80px" class="badge badge-success badge-pill">Active <i class="fa fa-check" style="color: green"></i></span>
-                                    </div>
-                                </div>-->
                         <?php } ?>
 
                         </div>

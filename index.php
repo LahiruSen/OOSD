@@ -41,10 +41,6 @@ if(isset($_SESSION['logged_in'])) {
         $_SESSION['message'] = "You must log in before viewing your profile page!";
         header("location: error.php");
     }
-}else
-{
-    $_SESSION['message'] = "No session fund according to your account";
-    header("location: error.php");
 }
 ?>
 <body>
@@ -151,7 +147,7 @@ if(isset($_SESSION['logged_in'])) {
     </div><!-- tab-content -->
 
 </div> <!-- /form -->
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='js/jquery.min.js'></script>
 
 <script src="js/index.js"></script>
 
