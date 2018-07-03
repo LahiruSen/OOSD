@@ -36,51 +36,133 @@ if($types == 0)
 }
 
 
+// accept = 1; reject = 2
+if(isset($_POST))
+{
+   if(isset($_POST['accept']))
+   {
+       if(isset($_POST['leave_id']))
+       {
+           $leave_id = $_POST['leave_id'];
+           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = '$leave_id'"); //or die($mysqli->error());
 
-$i=0;
-    $uploadok = false;
-foreach ($records  as $r) {
-    $id = $r->id;
-    // not checked = Rejected;
-    if (empty($_POST["$id"])) {
-        $sql = "UPDATE leave_submission SET approved_by_principal = 2  WHERE id= $id";
-        if ($mysqli->query($sql)) {
-            $uploadok = true;
-        } else {
-            $_SESSION['message'] = "Sorry. Error occured during submitting aprovals.";
-            header("location: ../error.php");
-            die();
-        }
+           if($leave_result->num_rows>0)
+           {
+                $sql = "UPDATE leave_submission SET approved_by_principal = '1' WHERE id = '$leave_id'";
 
-    }
-    // checked = accepted
-    else {
-        $sql = "UPDATE leave_submission SET approved_by_principal = 1 WHERE id= $id";
-        if ($mysqli->query($sql)) {
-            $uploadok = true;
-        } else {
+                if($mysqli->query($sql)) {
+                    header("location:approve_leave_application.php");
+                }
+                else{
+                    $_SESSION['message']="Sorry. Action was unsuccessful.";
+                    header("location: ../error.php");
+                    die();
+                }
 
-            $_SESSION['message'] = "Sorry. Error occured during submitting aprovals.";
-            header("location: ../error.php");
-            die();
-        }
 
-    }
+           }else
+               {
+                   $_SESSION['message'] = "Not a valid leave Id ";
+                   header("location: ../error.php");
+                   die();
+               }
+
+
+
+
+       }else
+       {
+           $_SESSION['message'] = "No Leave Id detect";
+           header("location: ../error.php");
+           die();
+       }
+
+   }
+   elseif(isset($_POST['reject']))
+   {
+       if(isset($_POST['leave_id']))
+       {
+           $leave_id = $_POST['leave_id'];
+           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = $leave_id") or die($mysqli->error());
+
+           if($leave_result->num_rows>0)
+           {
+               $sql = "UPDATE leave_submission SET approved_by_principal = '2' WHERE id = $leave_id";
+
+               if($mysqli->query($sql)) {
+                   header("location:approve_leave_application.php");
+               }
+               else{
+                   $_SESSION['message']="Sorry. Action was unsuccessful.";
+                   header("location: ../error.php");
+                   die();
+               }
+
+
+           }else
+           {
+               $_SESSION['message'] = "Not a valid leave Id ";
+               header("location: ../error.php");
+               die();
+           }
+       }else
+       {
+           $_SESSION['message'] = "No Leave Id detect";
+           header("location: ../error.php");
+           die();
+       }
+   }elseif (isset($_POST['delete']))
+   {
+       if(isset($_POST['leave_id']))
+       {
+           $leave_id = $_POST['leave_id'];
+           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = $leave_id") or die($mysqli->error());
+
+           if($leave_result->num_rows>0)
+           {
+               $sql = "DELETE FROM leave_submission WHERE id= $leave_id";
+               if($mysqli->query($sql)){
+                   header("location:approve_leave_application.php");
+               }
+               else{
+                   $_SESSION['message']="Sorry. Action was unsuccessful.";
+                   header("location: ../error.php");
+                   die();
+               }
+
+
+
+
+           }
+
+           else
+           {
+               $_SESSION['message'] = "Not a valid leave Id ";
+               header("location: ../error.php");
+               die();
+           }
+       }else
+       {
+           $_SESSION['message'] = "No Leave Id detect";
+           header("location: ../error.php");
+           die();
+       }
+
+   }else
+       {
+
+           header("location: approve_leave_application_form.php");
+           die();
+       }
+
 }
+else
+    {
+    $_SESSION['message'] = "Invalid request";
+    header("location: ../error.php");
+    die();
 
-    if ($uploadok ) {
-
-        $_SESSION['message']="Your approvals was submitted successfully";
-        header("location: ../success.php");
-        die();
-
-    }
-    else{
-        echo "wrong";
-    }
-
-
-
+}
 
 
 }
