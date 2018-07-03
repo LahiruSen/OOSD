@@ -227,9 +227,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                         </div>
                                         <div class="row m-2">
 
+
+                                            <div class="form-group col-lg-6 col-md-6">
+                                                <div class="input-group date">
+                                                    <label class="text-dark" for="academic_year_id">Academic Year</label>
+                                                    <select id="academic_year_id" name="academic_year_id">
+
+                                                        <?php for ( $i=0;$i<count($all_accedemic_years_data);$i++ ) {  ?>
+
+
+                                                            <option value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?></option>
+
+                                                        <?php } ?>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group col-lg-6 col-md-6" >
                                                 <label class="text-dark" for="deadline">Course Registration Deadline</label>
-                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here">
+                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here" disabled>
 
                                                 <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  {?>
                                                     <div class="row">
@@ -243,21 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                             </div>
 
-                                            <div class="form-group col-lg-6 col-md-6">
-                                                <div class="input-group date">
-                                                    <label class="text-dark" for="status">Academic Year</label>
-                                                    <select id="academic_year_id" name="academic_year_id">
 
-                                                        <?php for ( $i=0;$i<count($all_accedemic_years_data);$i++ ) {  ?>
-
-
-                                                            <option value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?></option>
-
-                                                        <?php } ?>
-
-                                                    </select>
-                                                </div>
-                                            </div>
 
 
                                         </div>
@@ -444,7 +447,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         </div>
     </div>
 
-
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
 <?php } else
@@ -506,84 +508,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($selected)){ ?>
-        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY');
-        to_date = moment('<?=$selected['to_date']?>').format('MM/DD/YYYY');
-        registration_deadline = moment('<?=$selected['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
+        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY h:mm A');
 
     <?php } ?>
 
 
     <?php if(isset($old)){ ?>
-        deadline = moment('<?=$old['deadline']?>').format('MM/DD/YYYY');
-        to_date = moment('<?=$old['to_date']?>').format('MM/DD/YYYY');
-        registration_deadline = moment('<?=$old['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
-
+        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY h:mm A');
     <?php } ?>
-
-
-
-    $('#datetimepicker1').datetimepicker({
-        useCurrent: false,
-        defaultDate: registration_deadline,
-        format: 'YYYY-MM-DD HH:mm:ss'
-
-    });
 
 
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
         defaultDate: deadline,
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD HH:mm:ss'
     });
-    $('#datetimepicker4').datetimepicker({
-        useCurrent: false,
-        defaultDate: to_date,
-        format: 'YYYY-MM-DD'
-    });
-    $("#datetimepicker3").on("change.datetimepicker", function (e) {
-        $('#datetimepicker4').datetimepicker('minDate', e.date);
-        $('#datetimepicker1').datetimepicker('minDate', e.date);
-    });
-    $("#datetimepicker4").on("change.datetimepicker", function (e) {
-        $('#datetimepicker3').datetimepicker('maxDate', e.date);
-        $('#datetimepicker1').datetimepicker('maxDate', e.date);
-    });
+
+
+    $('#academic_year_id').on('change', function() {
+        alert( this.value );
+    })
+
 
     <?php }else { ?>
 
 
-
-    $('#datetimepicker1').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD HH:mm:ss'
-
-    });
-    $('#datetimepicker2').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD HH:mm:ss'
-    });
-    $("#datetimepicker1").on("change.datetimepicker", function (e) {
-        $('#datetimepicker2').datetimepicker('minDate', e.date);
-    });
-    $("#datetimepicker2").on("change.datetimepicker", function (e) {
-        $('#datetimepicker1').datetimepicker('maxDate', e.date);
-    });
-
-
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD HH:mm:ss'
     });
-    $('#datetimepicker4').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD'
-    });
-    $("#datetimepicker3").on("change.datetimepicker", function (e) {
-        $('#datetimepicker4').datetimepicker('minDate', e.date);
-    });
-    $("#datetimepicker4").on("change.datetimepicker", function (e) {
-        $('#datetimepicker3').datetimepicker('maxDate', e.date);
-    });
+
 
 
     <?php
@@ -629,10 +583,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     });
 
     <?php } ?>
-
-//    $( document ).ready(function() {
-//        $('#academic_year_view').modal('show');
-//    });
 
 
     $(document.body).on('click', '.ay_view' ,function()
