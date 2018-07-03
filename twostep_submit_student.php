@@ -9,35 +9,25 @@
 
 require 'validator.php';
 
-// all the input name
+if(isset($_SESSION['email']))
+{
 
-/* student
+    $email = $_SESSION['email'];
+    $sql ="SELECT * FROM users WHERE email='$email'";
 
-first_name
-last_name
-email
-title
-sex
-full_name
-dob
-civil_status
-nic
-is_physical
-father_full_name
-mother_full_name
-add_line_1
-add_line_2
-postal_code
-city
-phone_number
-cp_full_name
-cp_phone_number
-al_index_number
-user_id
-type
+    $user_result = $mysqli->query($sql);
 
-*/
+    if($user_result->num_rows ==0)
+    {
+        $_SESSION['message'] = "This is invalid submition";
+        header("location:error.php");
+    }
 
+}else
+{
+    $_SESSION['message'] = "This session has expired. Please login again!!!";
+    header("location:error.php");
+}
 
 //This array is useful to get previous value of post if there is validation error(s)
 

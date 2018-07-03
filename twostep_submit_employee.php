@@ -9,6 +9,25 @@
 
 require 'validator.php';
 
+if(isset($_SESSION['email']))
+{
+
+    $email = $_SESSION['email'];
+    $sql ="SELECT * FROM users WHERE email='$email'";
+
+    $user_result = $mysqli->query($sql);
+
+    if($user_result->num_rows ==0)
+    {
+        $_SESSION['message'] = "This is invalid submition";
+        header("location:error.php");
+    }
+
+}else
+{
+    $_SESSION['message'] = "This session has expired. Please login again!!!";
+    header("location:error.php");
+}
 // all the input name
 
 /* student

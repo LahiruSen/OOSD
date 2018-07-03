@@ -45,7 +45,8 @@ else {
         <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
     </div>
 
-<?php } else { if($two_step ==1) {
+<?php } else { if($two_step ==1)
+{
     $current_employee_type_result = $current_user_info_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
     if($current_employee_type_result->num_rows !=0)
     {
@@ -54,18 +55,28 @@ else {
         $type_of_employment = $current_employee_type_data['title'];
     }
 
+    $all_accedemic_levels_result  =  $mysqli->query("select * from level") or die($mysqli->error());
     $all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
 
-    if($all_accedemic_years_result->num_rows !=0) {
+    if($all_accedemic_levels_result->num_rows !=0 && $all_accedemic_years_result->num_rows !=0) {
+        $all_accedemic_levels_data = array();
         $all_accedemic_years_data = array();
 
-        while ($row = $all_accedemic_years_result->fetch_assoc())
+        while ($row = $all_accedemic_levels_result->fetch_assoc())
         {
-            $all_accedemic_years_data[] = $row;
+            $all_accedemic_levels_data[] = $row;
         }
 
+        while ($row2 = $all_accedemic_years_result->fetch_assoc())
+        {
+            $all_accedemic_years_data[] = $row2;
+        }
+
+
+        $all_accedemic_levels_result->free();
         $all_accedemic_years_result->free();
     }
+
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET')
@@ -76,25 +87,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         if((is_int($_GET['id']) || ctype_digit($_GET['id'])) && (int)$_GET['id'] > 0)
         {
-            $ay_id = $_GET['id'];
+            $level_id = $_GET['id'];
 
-            $selceted_accedemic_years_result  =  $mysqli->query("select * from academic_year where id='$ay_id'") or die($mysqli->error());
+            $selceted_accedemic_level_result  =  $mysqli->query("select * from level where id='$level_id'") or die($mysqli->error());
 
-            if($selceted_accedemic_years_result->num_rows !=0)
+            if($selceted_accedemic_level_result->num_rows !=0)
             {
 
-                $selceted_accedemic_years_data=$selceted_accedemic_years_result->fetch_assoc();
+                $selceted_accedemic_level_data=$selceted_accedemic_level_result->fetch_assoc();
 
-                $selceted_accedemic_years_result->free();
+                $selceted_accedemic_level_result->free();
 
-                if(isset($selceted_accedemic_years_data))
+                if(isset($selceted_accedemic_level_data))
                 {
 
-                    $selected = $selceted_accedemic_years_data;
+                    $selected = $selceted_accedemic_level_data;
 
                 }else
                     {
                         header("location: create_academic_year.php");
+
+
+                        //should set error in here
                     }
 
 
@@ -102,12 +116,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
             }else
                 {
                     header("location: create_academic_year.php");
+
+                    //should set error in here
                 }
 
 
         }else
             {
                 header("location: create_academic_year.php");
+
+                //should set error in here
             }
 
     }
@@ -116,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 }elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
-    require 'academic_year_submit.php';
+    require 'academic_level_submit.php';
 
 }
 
@@ -145,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Academic Years <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Academic Levels <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -205,78 +223,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                             </div>
                                         </div>
                                         <div id="form_section_header" class="bg-topfive">
-                                            <h2 class="text-white">Academic Year Duration</h2>
+                                            <h2 class="text-white">Academic Year </h2>
                                         </div>
                                         <div class="row m-2">
-                                            <div class="form-group col-lg-6 col-md-6" >
-                                                <label class="text-dark" for="from_date">Start date</label>
-                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('from_date',$error_array))  { echo('text-danger');} ?>"  name="from_date" required  placeholder="from date here">
-
-                                                <?php if(isset($error_array) && array_key_exists('from_date',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['from_date'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-
-                                            </div>
 
                                             <div class="form-group col-lg-6 col-md-6" >
-                                                <label class="text-dark" for="datetimepicker4">End date</label>
-                                                <input  type="text" id="datetimepicker4" data-toggle="datetimepicker" data-target="#datetimepicker4"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('to_date',$error_array))  { echo('text-danger');} ?>"  name="to_date" required  placeholder="End date here">
+                                                <label class="text-dark" for="deadline">Course Registration Deadline</label>
+                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here">
 
-                                                <?php if(isset($error_array) && array_key_exists('to_date',$error_array))  {?>
+                                                <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  {?>
                                                     <div class="row">
                                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
                                                             <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['to_date'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-                                            </div>
-
-                                        </div>
-<!--               Might be usefull                          -->
-<!--                                        --><?php //if(isset($error_array) && array_key_exists('from_to',$error_array))  {?>
-<!--                                            <div class="form-group row m-2">-->
-<!--                                                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">-->
-<!--                                                    <small id="passwordHelp" class="text-danger">-->
-<!--                                                        --><?//= $error_array['from_to'] ?>
-<!--                                                    </small>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        --><?php //} ?>
-
-                                        <div id="form_section_header" class="bg-topfive">
-                                            <h2 class="text-white">Registration Settings</h2>
-                                        </div>
-                                        <div class="row m-2">
-                                            <div class=" form-group col-lg-6 col-md-6">
-
-                                                <div class='input-group date'>
-                                                    <label class="text-dark" for="datetimepicker1">Student registration deadline</label>
-                                                    <input type="text" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('registration_deadline',$error_array))  { echo('text-danger');} ?>"  name="registration_deadline" required  placeholder="Fill here">
-                                                </div>
-
-                                                <?php if(isset($error_array) && array_key_exists('registration_deadline',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['registration_deadline'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-
-                                                <?php if(isset($error_array) && array_key_exists('registration_deadline_not_range',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['registration_deadline_not_range'] ?>
+                                                                <?= $error_array['deadline'] ?>
                                                             </small>
                                                         </div>
                                                     </div>
@@ -286,23 +245,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                             <div class="form-group col-lg-6 col-md-6">
                                                 <div class="input-group date">
-                                                    <label class="text-dark" for="status">Status</label>
-                                                    <select id="status" name="status">
-                                                        <option value="-1" <?php if(isset($old)){if ($old['status'] == '-1') {echo "selected";}}else{if(isset($selected)) {if ($selected['status'] == '-1') {echo "selected";}}} ?> >Ended</option>
-                                                        <option value="1" <?php if(isset($old)){if ($old['status'] == '1') {echo "selected";}}else{if(isset($selected)) {if ($selected['status'] == '1') {echo "selected";}}} ?> >On-going</option>
-                                                        <option value="0" <?php if(isset($old)){if ($old['status'] == '0') {echo "selected";}}else{if(isset($selected)) {if ($selected['status'] == '0') {echo "selected";}}} ?> >Up-coming</option>
+                                                    <label class="text-dark" for="status">Academic Year</label>
+                                                    <select id="academic_year_id" name="academic_year_id">
+
+                                                        <?php for ( $i=0;$i<count($all_accedemic_years_data);$i++ ) {  ?>
+
+
+                                                            <option value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?></option>
+
+                                                        <?php } ?>
+
                                                     </select>
                                                 </div>
                                             </div>
 
 
-                                            <?php if(isset($selected)) {?>
-                                                <input type="hidden" name="id" value="<?=$selected['id']?>">
-                                            <?php }?>
-
                                         </div>
-
-
 
                                         <div class="row m-2">
 
@@ -321,7 +279,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                             </form>
                         </div>
 
-
                         <div class="col-lg-4  col-xl-4">
                             <h3 class="text-center text-uppercase text-secondary mb-0">List</h3>
                             <hr class="star-dark mb-5">
@@ -336,34 +293,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
                                     <?php }?>
-                                    <?php if(isset($all_accedemic_years_data)) { ?>
-
-                                         <?php for($t=0;$t< count($all_accedemic_years_data);$t++){ ?>
-                                            <?php if($all_accedemic_years_data[$t]['status'] == 1) {?>
-
-                                                <div class="jumbotron jumbotron-fluid bg-topfive">
-                                                    <div class="container">
-                                                        <h1>Current Academic years</h1>
-                                                        <div class="card" style="width:100%">
-                                                            <div class="container text-center w-100">
-                                                                <i style="font-size: 100px" class="fa fa-graduation-cap"></i>
-                                                            </div>
-
-                                                            <div class="card-body">
-                                                                <h4 class="card-title"><?= $all_accedemic_years_data[$t]['title']?></h4>
-                                                                <h5 class="card-title"><strong>Period : </strong><?= $all_accedemic_years_data[$t]['from_date']?> - <?= $all_accedemic_years_data[$t]['to_date']?></h5>
-                                                                <p class="card-text"><?= $all_accedemic_years_data[$t]['description']?></p>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            <?php } ?>
-                                        <?php } ?>
+                                    <?php if(isset($all_accedemic_levels_data)) { ?>
 
                                         <button id="academic_year_togal" type="button" class="btn btn-primary w-100">
-                                            Academic Years
+                                            Academic levels
                                         </button>
 
 
@@ -385,8 +318,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                         <div class="jumbotron jumbotron-fluid bg-topfive">
                                             <div class="container">
-                                                <h1>Can't Find Any Academic years</h1>
-                                                <p>Please create a new academic year!</p>
+                                                <h1>Can't Find Any Academic Levels</h1>
+                                                <p>Please create a new academic level!</p>
                                             </div>
                                         </div>
                                    <?php } ?>
@@ -573,7 +506,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($selected)){ ?>
-        from_date = moment('<?=$selected['from_date']?>').format('MM/DD/YYYY');
+        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY');
         to_date = moment('<?=$selected['to_date']?>').format('MM/DD/YYYY');
         registration_deadline = moment('<?=$selected['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
 
@@ -581,7 +514,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($old)){ ?>
-        from_date = moment('<?=$old['from_date']?>').format('MM/DD/YYYY');
+        deadline = moment('<?=$old['deadline']?>').format('MM/DD/YYYY');
         to_date = moment('<?=$old['to_date']?>').format('MM/DD/YYYY');
         registration_deadline = moment('<?=$old['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
 
@@ -599,7 +532,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
-        defaultDate: from_date,
+        defaultDate: deadline,
         format: 'YYYY-MM-DD'
     });
     $('#datetimepicker4').datetimepicker({
@@ -657,17 +590,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     }
     $body ='';
 
-    if(isset($all_accedemic_years_data)) {
+    if(isset($all_accedemic_levels_data)) {
 
-        for ($k = 0; $k < count($all_accedemic_years_data); $k++) {
+        for ($k = 0; $k < count($all_accedemic_levels_data); $k++) {
 
-            $body = $body . '<a  data-id="'.$all_accedemic_years_data[$k]['id'] .'" data-title="'.$all_accedemic_years_data[$k]['title'] .'" data-deadline="'.$all_accedemic_years_data[$k]['registration_deadline'] .'" data-status="'.$all_accedemic_years_data[$k]['status'] .'" data-description="'.$all_accedemic_years_data[$k]['description'] .'" class=" ay_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_years_data[$k]['title'] . '<i class="';
+            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['registration_deadline'] .'" data-status="'.$all_accedemic_levels_data[$k]['status'] .'" data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" ay_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . '<i class="';
 
-            if ($all_accedemic_years_data[$k]['status'] == -1) {
+            if ($all_accedemic_levels_data[$k]['status'] == -1) {
                 $body = $body . 'text-warning';
-            } elseif ($all_accedemic_years_data[$k]['status'] == 1) {
+            } elseif ($all_accedemic_levels_data[$k]['status'] == 1) {
                 $body = $body . 'text-success';
-            } elseif ($all_accedemic_years_data[$k]['status'] == 0) {
+            } elseif ($all_accedemic_levels_data[$k]['status'] == 0) {
                 $body = $body . 'text-dark';
             }
 
