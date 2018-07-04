@@ -1,19 +1,18 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/3/2018
+ * Time: 7:58 PM
+ */
 session_start();
 require "connection.php";
 
-$user_id=$_SESSION['user_id'];
-$result1=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
-$student=$result1->fetch_assoc();
-$_SESSION['reg_no']=$student['registration_number'];
+$course_id=$_GET['id'];
+$name=$_SESSION['name'];
 
-$reg_no=$_SESSION['reg_no'];
+$result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' ORDER BY date_of_update DESC");
 
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
-
-$result2=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
-$no_of_rows=$result2->num_rows;
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +23,7 @@ $no_of_rows=$result2->num_rows;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
@@ -43,15 +42,13 @@ $no_of_rows=$result2->num_rows;
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="home_student.php">BACK</a>
-                </li>
+
 
             </ul>
         </div>
@@ -74,51 +71,48 @@ $no_of_rows=$result2->num_rows;
     <div class="">
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
+        <div class="container">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Assignment Title</th>
+                    <th>Date of Create</th>
+                    <th>Deadline</th>
+                    <th>Assignment Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
 
-        <?php
-        $today = date("Y-m-d H:i:s");
-
-
-        while ($row1 = mysqli_fetch_array($result2,MYSQLI_NUM)) {
-            $course_id= $row1[5];
-            $result4=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
-            $course=$result4->fetch_assoc();
-            ?>
-            <h3 class="text-center text-uppercase text-success mb-0"><?php echo $course['title']?></h3 class="text-center text-uppercase text-secondary mb-0"><br>
-            <?php
-            $result3=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-            while ($row2 = mysqli_fetch_array($result3,MYSQLI_NUM)) {
-                $deadline=$row2[7];
-                ?>
-                <!-- <form action="create_submissions.php" method="post">-->
                 <?php
-                if($today<$deadline){
-                    ?>
-                    <!--<input class="button button-block" type="submit" value="<?php echo $row2[5];?>" name="<?php echo $row2[0];?>" >-->
-                    <div class="container">
-                        <a class="text-dark" href="create_submissions.php?assignment_id=<?php echo $row2[0];?>&assignment_title=<?php echo $row2[5];?>"> <input class="button button-block" type="submit" value="<?php echo $row2[5];?>"></a>
-                        <br>
-                    </div>
+                $today = date("Y-m-d H:i:s");
+                while ($row = mysqli_fetch_array($result,MYSQLI_NUM)) {
+                    $deadline=$row[7];
 
-                    <?php
-                }else {
                     ?>
-                    <!--  <input class="button button-block btn-danger" type="submit" value="<?php echo $row2[5]; ?> - Overdue" name="<?php echo $row2[0]; ?>">-->
-                    <div class="container">
-                        <a class="text-dark" href="create_submissions.php?assignment_id=<?php echo $row2[0];?>&assignment_title=<?php echo $row2[5];?>"> <input class="button button-block btn-danger" type="submit" value="<?php echo $row2[5];?>-Overdue"></a>
-                        <br>
-                    </div>
-
+                    <tr>
+                        <td><?php echo $row[5]?></td>
+                        <td><?php echo $row[6]?></td>
+                        <td><?php echo $row[7]?></td>
+                        <?php
+                        if($today<=$deadline){   ?>
+                            <td class="text-success font-weight-bold"> ONGOING</td>
+                            <?php
+                        }else{?>
+                            <td class="text-danger font-weight-bold">
+                                EXPIRED
+                            </td> <?php } ?>
+                        <td>
+                            <a class="text-dark" href="assignment_details.php?assignment_id=<?php echo $row[0]?>&assignment_title=<?php echo $row[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                        </td>
+                    </tr>
                     <?php
                 }
-                ?>
-                <!-- </form>-->
-                <br>
-                <?php
-            }
-        }
-        ?>
 
+                ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

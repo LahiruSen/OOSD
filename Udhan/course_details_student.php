@@ -2,25 +2,19 @@
 session_start();
 require 'connection.php';
 
-
-
-
 $course_id=$_GET['id'];
 $course_title=$_GET['title'];
-//$result=$mysqli->query("SELECT * FROM courses");
-//while ($row = mysqli_fetch_array($result, $result->num_rows)) {
-//    if (isset($_POST[$row[0]])) {
-//        $course_id= $row[0];
-//        $course_title=$row[1];
-//        break;
-//    }
-//}
-#$_SESSION['course_id']=$course_id;
-#$_SESSION['course_title']=$course_title;
+$result=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
+$course=$result->fetch_assoc();
+$field=$course['field'];
+$credit=$course['credits'];
+$description=$course['description'];
+$level_id=$course['level_id'];
+
 $name=$_SESSION['name'];
+$_SESSION['course_title']=$course_title;
+$_SESSION['course_id']=$course_id;
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +27,7 @@ $name=$_SESSION['name'];
     <meta name="author" content="G27">
     <title>My Home : <?= $name?></title>
     <?php include 'css/css.html'; ?>
+    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
@@ -59,10 +54,6 @@ $name=$_SESSION['name'];
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="courses.php">BACK</a>
-                </li>
-
             </ul>
         </div>
     </div>
@@ -85,25 +76,25 @@ $name=$_SESSION['name'];
         <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_title?></h2>
         <hr class="star-dark mb-5">
         <div class="row">
+            <div class="col-md-6">
+                <p>Course Id : <?php echo $course_id?></p>
+                <p>Field : <?php echo $field?></p>
+                <p>Description : <?php echo $description?></p>
+                <p>Credits : <?php echo $credit?></p>
+            </div>
+            <div class="col-md-6">
+                <div class="container">
+                    <button type="button" style="width: 80%;" class="btn btn-success" >Schedule</a></button>
+                </div>
 
-            <div class="col-lg-6 ">
+                <div class="container">
+                    <br><a href="view_assignments_student.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
+                </div>
 
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Grades</a></button>
+                </div>
 
-                <li class="button button-block">
-                    <a href="create_assignments.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Create Assignments</a>
-                </li><br>
-                <li class="button button-block">
-                    <a href="view_assignments_teacher.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>" class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">View  Submissions</a>
-                </li><br>
-                <li class="button button-block">
-                    <a class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
-                </li><br>
-                <li class="button button-block">
-                    <a class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
-                </li><br>
-                <li class="button button-block">
-                    <a class="nav-link py-0 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
-                </li>
 
 
             </div>

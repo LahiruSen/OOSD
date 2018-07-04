@@ -10,18 +10,19 @@ require 'connection.php';
 
 $name=$_SESSION['name'];
 $assignment_id=$_GET['assignment_id'];
-//$result=$mysqli->query("SELECT * FROM assignments");
-//while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-//   if(isset($_POST[$row[0]])){
-//       $assignment_id=$row[0];
-//   }
-//}
+$assignment_title=$_GET['assignment_title'];
+
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
 
 $_SESSION['assignment_id']=$assignment_id;
 $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id'");
-//$no_of_rows=$result2->num_rows;
+
+$today = date("Y-m-d H:i:s");
+$result3=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
+$course=$result3->fetch_assoc();
+$deadline=$course['date_of_update'];
+
 ?>
 
 <!DOCTYPE html>
@@ -59,10 +60,6 @@ $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_i
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_teacher.php?id=<?php echo $course_id?>&title=<?php echo $course_title?>">BACK</a>
-                </li>
-
             </ul>
         </div>
     </div>
@@ -92,22 +89,74 @@ $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_i
             </div>
             <?php
         }else{
-            while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
-                ?>
-                <div class="col-lg-6 ">
-                    <!--  <form action="submit_marks.php" method="POST">
-                        <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[2];?>" name="<?php echo $row[2];?>">
-                    </form><br>-->
-                    <a class="text-dark" href="submit_marks.php?registration_number=<?php echo $row[2];?>"> <input class="btn btn-success btn-lg-0"  type="submit" value="<?php echo $row[2];?>"></a>
-                    <br>
-
-                </div>
-
+        ?>
+        <div class="container">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Registration id</th>
+                    <th>Submission File</th>
+                    <th>Marks</th>
+                </tr>
+                </thead>
+                <tbody>
 
                 <?php
-            }}
-        ?>
+                while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
+                    ?>
+                    <tr>
+                        <td><?php echo $row[2];?></td>
+                        <td> <a href="<?php echo $row[4];?>" target="_blank"><li class="badge badge-pill badge-light"><?php echo $row[4];?></li></a></td>
 
+                        <?php if($today<=$deadline){?>
+                            <td><?php $mark=$row[3];
+                            if($mark>=0){
+                                echo $mark;
+                            }else{
+                                echo "Not Graded";
+                            }
+                            ?>
+                            <div class="container">
+
+                                <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow<?php echo $row[0]?>">Edit Marks</button>
+                                <div class="modal fade" id="popUpWindow<?php echo $row[0]?>">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Grading</h3>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body" >
+                                                <form role="form" action="upload_marks.php?id=<?php echo $row[0]?>&assignment_id=<?php echo $row[1]?>&assignment_title=<?php echo $assignment_title ?>" method="POST" enctype="multipart/form-data">
+                                                    <p><?php echo $row[2]?></p>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" placeholder="Marks" name="marks">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary btn-block">Submit</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            </td><?php }else {?>
+                            <td class="text-success">Not Graded-Ongoing</td>
+                        <?php } ?>
+
+                    </tr>
+
+
+
+                    <?php
+                }}
+                ?>
+                </tbody>
+            </table></div>
     </div>
 </section>
 
@@ -208,7 +257,6 @@ $result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_i
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
-
 
 
 </body>

@@ -14,10 +14,12 @@ $course_id=$_GET['id'];
 $course_title=$_GET['title'];
 
 $result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-$no_of_rows=$result->num_rows;
+$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+
 
 $_SESSION['course_id']=$course_id;
 $_SESSION['course_title']=$course_title;
+
 ?>
 
 <!DOCTYPE html>
@@ -55,10 +57,6 @@ $_SESSION['course_title']=$course_title;
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="course_details.php?id=<?php echo $course_id;?>&title=<?php echo $course_title;?>">BACK</a>
-                </li>
-
             </ul>
         </div>
     </div>
@@ -80,45 +78,56 @@ $_SESSION['course_title']=$course_title;
     <div class="">
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
-        <?php
-
-        while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-            $deadline = $row[7];
-            $today = date("Y-m-d H:i:s");
-            if ($deadline < $today) {
-
-                ?>
-                <div class="col-lg-6 ">
-                    <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
-                    </li>
-                    <!--              <form action="view_submissions.php" method="post">
-                    <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
-                           name="<?php echo $row[0]; ?>"><label  class="text-center text-danger mb-0">Overdue</label>
-                </form>-->
-                    <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
-                    <label  class="text-center text-danger mb-0">Overdue</label>
-                    <br>
-                    <br>
-                </div>
-
+        <div class="row">
+            <div class="col-md-6" align="center">
+                <h3 align="center">OVERDUE</h3>
                 <?php
-            }else{ ?>
-                <div class="col-lg-6 ">
-                    <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
-                    </li>
-                    <!--       <form action="view_submissions.php" method="post">
-                <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5]; ?>"
-                       name="<?php echo $row[0]; ?>"><label  class="text-center text-success mb-0">Ongoing</label>
-            </form>-->
-                    <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
-                    <label  class="text-center text-success mb-0">Ongoing</label>
 
-                    <br>
-                </div>
+                while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+                    $deadline = $row[7];
+                    $today = date("Y-m-d H:i:s");
+                    if ($deadline < $today) {
+
+                        ?>
+                        <div class="col-lg-6 " align="center">
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
+                            </li>
+
+                            <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+
+                            <br>
+                            <br>
+                        </div>
+
+                        <?php
+                    }
+                }?>
+            </div>
+            <div class="col-md-6" align="center">
+                <h3 align="center">ONGOING</h3>
                 <?php
-            }
-        }
-        ?>
+                while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
+                    $deadline = $row[7];
+                    $today = date("Y-m-d H:i:s");
+
+                    if ($deadline >= $today) {
+
+                        ?>
+                        <div class="col-lg-6 " align="center">
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
+                            </li>
+
+                            <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+
+                            <br>
+                            <br>
+                        </div>
+
+                        <?php
+                    }
+                }?></div></div>
+
+
 
     </div>
 </section>
