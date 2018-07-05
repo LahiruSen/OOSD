@@ -1,55 +1,30 @@
 <?php
 session_start();
-require 'connection.php';
-/**
- * Created by PhpStorm.
- * User: Udhan
- * Date: 4/1/2018
- * Time: 2:33 PM
- */
-$name=$_SESSION['name'];
-$assignment_id=$_SESSION['assignment_id'];
-$result=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
-$entry=$result->fetch_assoc();
-$deadline=$entry['date_of_update'];
-$title=$entry['title'];
-$_SESSION['title']=$title;
+require "connection.php";
 
-$course_id=$entry['course_id'];
-$_SESSION['course_id']=$course_id;
+$user_id=$_SESSION['user_id'];
+$result1=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
+$student=$result1->fetch_assoc();
+$_SESSION['reg_no']=$student['registration_number'];
 
-$result2=$mysqli->query("SELECT * FROM course_registration WHERE course_id='$course_id' AND is_approved='1'");
+$reg_no=$_SESSION['reg_no'];
+
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+
+$result2=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
 $no_of_rows=$result2->num_rows;
-
-$registration_number=$_GET['registration_number'];
-
-//    while ($row = mysqli_fetch_array($result2,MYSQLI_NUM)) {
-//        if(isset($_POST[$row[1]])){
-//            $registration_number=$row[1];
-//            break;
-//        }
-//
-//    }
-
-$_SESSION['reg_no']=$registration_number;
-
-$result3=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$registration_number'");
-$submission=$result3->fetch_assoc();
-
-$_SESSION['id']=$submission['id'];
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
@@ -68,16 +43,13 @@ $_SESSION['id']=$submission['id'];
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_submissions.php?assignment_id=<?php echo $assignment_id?>">BACK</a>
-                </li>
 
             </ul>
         </div>
@@ -89,7 +61,7 @@ $_SESSION['id']=$submission['id'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
         <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
@@ -98,28 +70,73 @@ $_SESSION['id']=$submission['id'];
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
     <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $registration_number?></h2 class="text-center text-uppercase text-secondary mb-0">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
+        <div class="container">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Assignment Title</th>
+                    <th>Course</th>
+                    <th>Deadline</th>
+                    <th>Submission Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
 
-        <div class="text-center text-secondary mb-0">
-            <a href="<?php echo $submission['pdf_link'];?>" target="_blank"><li class="badge badge-pill badge-success "><?php echo $submission['pdf_link'];?></li></a><br><br>
+                <?php
+                $today = date("Y-m-d H:i:s");
+
+
+                while ($row1 = mysqli_fetch_array($result2,MYSQLI_NUM)) {
+                    $course_id= $row1[5];
+                    $result4=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
+                    $course=$result4->fetch_assoc();
+
+
+
+                    $result3=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+                    while ($row2 = mysqli_fetch_array($result3,MYSQLI_NUM)) {
+                        $deadline=$row2[7];
+
+                        if($today<=$deadline){
+                            ?>
+                            <tr>
+                                <td><?php echo $row2[5]?></td>
+                                <td><?php echo $course['title']?></td>
+                                <td><?php echo $row2[7]?></td>
+                                <?php
+                                $result5=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$row2[0]' AND student_id='$reg_no' ");
+                                $no_of_submissions=$result5->num_rows;
+
+
+                                if($no_of_submissions==1){ ?>
+                                    <td class="text-success font-weight-bold"><?php
+                                    echo "SUBMITTED";
+                                    $submission=$result5->fetch_assoc();
+                                    ?>
+                                    </td><?php
+                                }else{?>
+                                    <td class="text-danger font-weight-bold">
+                                        <?php
+                                        echo "NO SUBMISSION YET";
+
+                                        ?>
+
+                                    </td> <?php } ?>
+                                <td>
+                                    <a class="text-dark" href="assignment_details.php?assignment_id=<?php echo $row2[0]?>&assignment_title=<?php echo $row2[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
         </div>
-
-        <?php
-        $today = date("Y-m-d H:i:s");
-        if($today>$deadline){
-            ?>
-            <form action="upload_marks.php" method="post">
-                <div class="text-center text-secondary mb-0">
-                    <li class="badge"><input class="btn btn-success btn-lg-0" style="height:55px;" type="text" name="mark">
-                        <input class="btn btn-primary btn-lg-0" type="submit" style="height:55px;" value="submit mark"></li>
-                </div>
-            </form>
-            <?php
-        }
-        ?>
-
-    </div>
     </div>
 </section>
 
@@ -220,6 +237,18 @@ $_SESSION['id']=$submission['id'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <script >
+        $( document ).ready(function() {
+            $('#completeProfile').modal('show');
+        });
+
+    </script>
+
+<?php } ?>
+
 </body>
 
 </html>
+

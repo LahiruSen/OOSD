@@ -1,42 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Udhan
- * Date: 3/31/2018
- * Time: 6:16 PM
- */
 session_start();
-require "connection.php";
+require 'connection.php';
 
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
-$reg_no=$_SESSION['reg_no'];
-$result1=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
-$no_of_rows=$result1->num_rows;
-$assignment_id=$_GET['assignment_id'];
-$assignment_title=$_GET['assignment_title'];
-//    $val=false;
-//    while ($row1 = mysqli_fetch_array($result1, MYSQLI_NUM)) {
-//        $course_id= $row1[5];
-//        $result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-//        while ($row2 = mysqli_fetch_array($result2,MYSQLI_NUM)) {
-//            if(isset($_POST[$row2[0]])){
-//                $assignment_id=$row2[0];
-//                $val=true;
-//                break;
-//            }
-//            if($val){break;}
-//        }
-//    }
+$course_id=$_GET['id'];
+$course_title=$_GET['title'];
+$result=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
+$course=$result->fetch_assoc();
+$field=$course['field'];
+$credit=$course['credits'];
+$description=$course['description'];
+$level_id=$course['level_id'];
+$no_of_working_hours=$course['no_of_working_hours'];
 
-$result=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
-$assignment=$result->fetch_assoc();
-
-$_SESSION['assignment_id']=$assignment_id;
-//$assignment_title=$assignment['title'];
-$_SESSION['assignment_title']=$assignment_title;
-$deadline=$assignment['date_of_update'];
-
+$name=$_SESSION['name'];
+$_SESSION['course_title']=$course_title;
+$_SESSION['course_id']=$course_id;
 ?>
 
 <!DOCTYPE html>
@@ -48,8 +26,9 @@ $deadline=$assignment['date_of_update'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $name?></title>
     <?php include 'css/css.html'; ?>
+    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
@@ -66,16 +45,14 @@ $deadline=$assignment['date_of_update'];
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
 
+                <!-- Navigation menu-->
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
+
 
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
-                </li>
-
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="view_assignments_student.php">BACK</a>
                 </li>
 
             </ul>
@@ -88,96 +65,79 @@ $deadline=$assignment['date_of_update'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
-        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
 </header>
 
 <!-- Dashboard Section -->
-
-
-
 <section class="" id="portfolio">
-    <div class="container  ">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $assignment_title?></h2>
+    <div class="container ">
+        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_title?></h2>
         <hr class="star-dark mb-5">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Course Id : <?php echo $course_id?></p>
+                <p>Field : <?php echo $field?></p>
+                <p>Description : <?php echo $description?></p>
+                <p>Credits : <?php echo $credit?></p>
+                <p>No of Working Hours: <?php echo $course_id?> </p>
+            </div>
+            <div class="col-md-6">
+                <div class="container">
 
-        <div class="text-center text-secondary mb-0">
-            <li class="badge badge-danger"><?php echo $assignment['description'];?></li><br>
-            <a href="<?php echo $assignment['attachment_link'];?>" target="_blank"> <li class="badge badge-pill badge-success "><?php echo $assignment['attachment_link'];?></li></a>
+                    <button type="button" style="width: 80%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">Create Assignment</button>
+                    <div class="modal fade" id="popUpWindow">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Create Assignment</h3>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body" >
+                                    <form role="form" action="upload_assignment.php" method="POST" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Title" name="title">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Description" name="description">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="file" class="form-control" placeholder="Attachment" name="file">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="datetime-local" class="form-control" placeholder="Deadline" name="deadline">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-primary btn-block">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="container">
+                    <br><a href="view_assignments_teacher.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>"> <button class="btn btn-success" style="width: 80%" type="button">View Assignments&Submissions</button></a>
+
+                </div>
+
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 3</a></button>
+                </div>
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 4</a></button>
+                </div>
+
+
+
+            </div>
+
         </div>
-        <br>
-
-        <?php
-
-        $today = date("Y-m-d H:i:s");
-        $result4=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$reg_no' ");
-        $no_of_submissions=$result4->num_rows;
-
-        if($today<$deadline){
-            if($no_of_submissions==0){
-                ?>
-
-
-                <div class="text-center text-secondary mb-0">
-                    <form action="upload_submission.php" method="POST" enctype="multipart/form-data">
-                        <li class="badge"><input class="btn btn-danger btn-lg" style="height:55px;" type="file" name="file"/></li>
-                        <li class="badge"><input class="btn btn-dark btn-lg" style="height:55px;" type="submit" value="Submit"/></li>
-                    </form>
-                </div>
-                <br>
-
-            <?php }else{
-                $previous_submission=$result4->fetch_assoc();
-                ?>
-
-                <div class="text-center text-secondary mb-0">
-                    <li class="badge badge-danger">You have already submitted !!</li><br>
-                    <li class="badge badge-dark">Your submission</li>
-                    <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
-                </div>
-
-                <div class="text-center text-uppercase text-secondary mb-0">
-                    <form action="delete_submissions.php" method="POST">
-                        <li class="badge"><input class="btn btn-primary btn-lg" style="height:55px;" type="submit" value="Delete"></li>
-                    </form>
-                </div>
-
-            <?php  }}else
-
-            if($no_of_submissions==0){
-                ?>
-
-
-                <div class="text-center text-secondary mb-0">
-
-                    <li class="badge badge-danger">NO sumissions !!</li><br>
-
-                </div>
-                <br>
-
-                <div class="text-center text-uppercase text-secondary mb-0">
-                    <li class="badge"><label  class="btn btn-danger btn-lg">ASSIGNMENT IS EXPIRED</label>
-                </div>
-
-            <?php }else{
-                $previous_submission=$result4->fetch_assoc();
-                ?>
-
-                <div class="text-center text-secondary mb-0">
-                    <li class="badge badge-danger">You have already submitted !!</li><br>
-                    <li class="badge badge-dark">Your submission</li>
-                    <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
-                </div>
-
-                <div class="text-center text-uppercase text-secondary mb-0">
-                    <li class="badge"><label  class="btn btn-danger btn-lg">ASSIGNMENT IS EXPIRED</label>
-                </div>
-
-                <?php
-            } ?>
-
     </div>
 </section>
 
