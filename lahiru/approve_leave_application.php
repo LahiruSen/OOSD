@@ -17,6 +17,8 @@ else {
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
 
+    $user_type = $_SESSION['types'];
+
     $leave_result = $mysqli->query("SELECT * FROM leave_submission ");
 
     if ($leave_result->num_rows) {
@@ -44,11 +46,22 @@ if(isset($_POST))
        if(isset($_POST['leave_id']))
        {
            $leave_id = $_POST['leave_id'];
-           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = '$leave_id'"); //or die($mysqli->error());
+
+
+           $leave_result = $mysqli->query("select id,approved_by_principal,approved_by_hr,approved_by_admin from leave_submission where id = '$leave_id'"); //or die($mysqli->error());
 
            if($leave_result->num_rows>0)
-           {
-                $sql = "UPDATE leave_submission SET approved_by_principal = '1' WHERE id = '$leave_id'";
+           {    //principal
+               if($user_type==2){
+                $sql = "UPDATE leave_submission SET approved_by_principal = '1' WHERE id = '$leave_id'";}
+                //hr Manager
+                elseif ($user_type==3){
+                    $sql = "UPDATE leave_submission SET approved_by_hr = '1' WHERE id = '$leave_id'";
+                }
+                elseif($user_type==4){
+                    $sql = "UPDATE leave_submission SET approved_by_admin = '1' WHERE id = '$leave_id'";
+                }
+
 
                 if($mysqli->query($sql)) {
                     header("location:approve_leave_application.php");
@@ -83,11 +96,21 @@ if(isset($_POST))
        if(isset($_POST['leave_id']))
        {
            $leave_id = $_POST['leave_id'];
-           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = $leave_id") or die($mysqli->error());
+           var_dump($leave_id);
+           die();
+           $leave_result = $mysqli->query("select id,approved_by_principal,approved_by_hr,approved_by_admin from leave_submission where id = $leave_id"); //or die($mysqli->error());
 
            if($leave_result->num_rows>0)
            {
-               $sql = "UPDATE leave_submission SET approved_by_principal = '2' WHERE id = $leave_id";
+               if($user_type==2){
+                   $sql = "UPDATE leave_submission SET approved_by_principal = '2' WHERE id = '$leave_id'";}
+               //hr Manager
+               elseif ($user_type==3){
+                   $sql = "UPDATE leave_submission SET approved_by_hr = '2' WHERE id = '$leave_id'";
+               }
+               elseif($user_type==4){
+                   $sql = "UPDATE leave_submission SET approved_by_admin = '2' WHERE id = '$leave_id'";
+               }
 
                if($mysqli->query($sql)) {
                    header("location:approve_leave_application.php");
@@ -116,10 +139,11 @@ if(isset($_POST))
        if(isset($_POST['leave_id']))
        {
            $leave_id = $_POST['leave_id'];
-           $leave_result = $mysqli->query("select id,approved_by_principal from leave_submission where id = $leave_id") or die($mysqli->error());
+
+           $leave_result = $mysqli->query("select id,approved_by_principal,approved_by_hr,approved_by_admin from leave_submission where id = $leave_id") ;//or die($mysqli->error());
 
            if($leave_result->num_rows>0)
-           {
+           {    
                $sql = "DELETE FROM leave_submission WHERE id= $leave_id";
                if($mysqli->query($sql)){
                    header("location:approve_leave_application.php");
