@@ -56,7 +56,7 @@ else {
     }
 
     $all_accedemic_levels_result  =  $mysqli->query("select * from level") or die($mysqli->error());
-    $all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
+    $all_accedemic_years_result  =  $mysqli->query("select * from academic_year where status <> -1 ") or die($mysqli->error());
 
     if($all_accedemic_levels_result->num_rows !=0 && $all_accedemic_years_result->num_rows !=0) {
         $all_accedemic_levels_data = array();
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                 }else
                     {
-                        header("location: create_academic_year.php");
+                        header("location: create_academic_level.php");
 
 
                         //should set error in here
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
             }else
                 {
-                    header("location: create_academic_year.php");
+                    header("location: create_academic_level.php");
 
                     //should set error in here
                 }
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         }else
             {
-                header("location: create_academic_year.php");
+                header("location: create_academic_level.php");
 
                 //should set error in here
             }
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                 <h3 class="text-center text-uppercase text-secondary mb-0">Create New</h3>
                             <?php } ?>
                             <hr class="star-dark mb-5">
-                            <form id="two_step_submission_form" class="two_step_form" action="#" method="post">
+                            <form id="two_step_submission_form" class="two_step_form" <?php if(isset($_GET['id'])){ ?>action="create_academic_level.php?id=<?php echo $_GET['id'] ?>" <?php }else{ ?> action="create_academic_level.php" <?php } ?> method="post">
                                 <div class="container">
                                     <div class="text-left ">
                                         <div id="form_section_header" class="bg-topfive">
@@ -233,10 +233,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                     <label class="text-dark" for="academic_year_id">Academic Year</label>
                                                     <select id="academic_year_id" name="academic_year_id">
 
+
+                                                        <option value="0">Select an academic year</option>
+
                                                         <?php for ( $i=0;$i<count($all_accedemic_years_data);$i++ ) {  ?>
 
 
-                                                            <option value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?></option>
+                                                            <option data-fromdate="<?php echo($all_accedemic_years_data[$i]['registration_deadline']) ?>" data-todate="<?php echo($all_accedemic_years_data[$i]['to_date']) ?>" value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?> </option>
 
                                                         <?php } ?>
 
@@ -246,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                             <div class="form-group col-lg-6 col-md-6" >
                                                 <label class="text-dark" for="deadline">Course Registration Deadline</label>
-                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here" disabled>
+                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here" disabled >
 
                                                 <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  {?>
                                                     <div class="row">
@@ -269,11 +272,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                             <?php if(isset($selected)) {?>
                                                 <div class="text-center mt-4 w-100">
-                                                    <button name="update_ay" type="submit" class="btn btn-xl btn-outline-primary" >Update</button>
+                                                    <button name="update_al" type="submit" class="btn btn-xl btn-outline-primary" >Update</button>
                                                 </div>
                                             <?php }else{?>
                                                 <div class="text-center mt-4 w-100">
-                                                    <button name="create_new_ay" type="submit" class="btn btn-xl btn-outline-success" >Create</button>
+                                                    <button name="create_new_al" type="submit" class="btn btn-xl btn-outline-success" >Create</button>
                                                 </div>
                                             <?php } ?>
                                         </div>
@@ -290,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                     <?php if(isset($_GET['id'])){ ?>
                                         <div class="form-group text-center">
 
-                                                <a href="create_academic_year.php" class="btn btn-xl btn-outline-success" >Create New</a>
+                                                <a href="create_academic_level.php" class="btn btn-xl btn-outline-success" >Create New</a>
 
                                         </div>
 
@@ -298,13 +301,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                     <?php }?>
                                     <?php if(isset($all_accedemic_levels_data)) { ?>
 
-                                        <button id="academic_year_togal" type="button" class="btn btn-primary w-100">
+                                        <button id="academic_level_togal" type="button" class="btn btn-primary w-100">
                                             Academic levels
                                         </button>
 
 
                                         <div  class="container w-100 text-center">
-                                            <ul id="academic_year_div" class="list-group  w-100 text-center">
+                                            <ul id="academic_level_div" class="list-group  w-100 text-center">
 
                                             </ul>
                                         </div>
@@ -315,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                         <?php if(isset($_GET['id'])){ ?>
 
                                             <div class="text-center mt-4 w-100">
-                                                <a href="create_academic_year.php" class="btn btn-xl btn-outline-primary" >Create New</a>
+                                                <a href="create_academic_level.php" class="btn btn-xl btn-outline-primary" >Create New</a>
                                             </div>
                                         <?php }?>
 
@@ -394,15 +397,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         </a>
     </div>
 
-
     <!-- Model -->
-    <div class="modal fade" id="academic_year_view">
+    <div class="modal fade" id="academic_level_view">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
 
                 <!-- Modal Header -->
                 <div id="modal_head_div" class="modal-header">
-                    <h4 id="ay_title" class="modal-title"></h4>
+                    <h4 id="al_title" class="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -410,19 +412,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                 <div class="modal-body">
                     <div class="m-2">
                         <div class="row ">
-                            <label class="text-dark" for="ay_description">Description</label>
+                            <label class="text-dark" for="al_description">Description</label>
                         </div>
                         <div class="row">
-                            <p id="ay_description"></p>
+                            <p id="al_description"></p>
                         </div>
 
                     </div>
                     <div class="m-2">
                         <div class="row">
-                                <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
+                                <label class="text-dark" for="al_registration_deadline">Registration deadline</label>
                         </div>
                         <div class="row">
-                                <p style="font-size: 20px" id="ay_registration_deadline"></p>
+                                <p style="font-size: 20px" id="al_registration_deadline"></p>
                         </div>
                     </div>
                 </div>
@@ -431,10 +433,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-lg-4">
-                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
+                            <a href="" id="al_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
                         </div>
                         <div class="col-lg-4">
-                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
                         <div class="col-lg-4 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -508,26 +510,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($selected)){ ?>
-        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY h:mm A');
+        deadline = moment('<?php echo $selected['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
 
     <?php } ?>
 
 
     <?php if(isset($old)){ ?>
-        deadline = moment('<?=$selected['deadline']?>').format('MM/DD/YYYY h:mm A');
+        deadline = moment('<?php echo $selected['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
     <?php } ?>
+
+    $('#datetimepicker3').attr('disabled',false);
+
 
 
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
         defaultDate: deadline,
+        minDate: moment($('#academic_year_id').find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss'),
+        maxDate: moment($('#academic_year_id').find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss'),
         format: 'YYYY-MM-DD HH:mm:ss'
     });
 
 
     $('#academic_year_id').on('change', function() {
-        alert( this.value );
-    })
+
+        if(this.value != 0)
+        {
+            $('#datetimepicker3').attr('disabled',false);
+
+
+            Selected_from_date = moment($(this).find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss');
+            Selected_to_date = moment($(this).find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss');
+
+            set_from_date = moment($('#datetimepicker3').datetimepicker('minDate')).format('YYYY-MM-DD HH:mm:ss');
+            set_to_date = moment($('#datetimepicker3').datetimepicker('maxDate')).format('YYYY-MM-DD HH:mm:ss');
+
+            if(Selected_to_date>set_to_date)
+            {
+                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
+                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
+
+            }else
+            {
+
+                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
+                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
+            }
+        }
+        else
+        {
+
+            $('#datetimepicker3').attr('disabled',true);
+            $('#datetimepicker3').val('');
+
+            $('#datetimepicker3').datetimepicker(
+                {
+                    useCurrent: false,
+                    format: 'YYYY-MM-DD HH:mm:ss'
+
+                });
+
+        }
+    });
 
 
     <?php }else { ?>
@@ -539,26 +583,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     });
 
 
+    $('#academic_year_id').on('change', function() {
+
+        if(this.value != 0)
+        {
+            $('#datetimepicker3').attr('disabled',false);
+
+
+            Selected_from_date = moment($(this).find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss');
+            Selected_to_date = moment($(this).find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss');
+
+            set_from_date = moment($('#datetimepicker3').datetimepicker('minDate')).format('YYYY-MM-DD HH:mm:ss');
+            set_to_date = moment($('#datetimepicker3').datetimepicker('maxDate')).format('YYYY-MM-DD HH:mm:ss');
+
+            if(Selected_to_date>set_to_date)
+            {
+                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
+                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
+
+            }else
+                {
+
+                    $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
+                    $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
+                }
+        }
+        else
+            {
+
+                $('#datetimepicker3').attr('disabled',true);
+                $('#datetimepicker3').val('');
+
+                $('#datetimepicker3').datetimepicker(
+                    {
+                        useCurrent: false,
+                        format: 'YYYY-MM-DD HH:mm:ss'
+
+                    });
+
+            }
+    });
+
 
     <?php
     }
+
     $body ='';
 
     if(isset($all_accedemic_levels_data)) {
 
         for ($k = 0; $k < count($all_accedemic_levels_data); $k++) {
 
-            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['registration_deadline'] .'" data-status="'.$all_accedemic_levels_data[$k]['status'] .'" data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" ay_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . '<i class="';
+            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['deadline'] .'"  data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" al_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . ' <i class="text-dark ';
 
-            if ($all_accedemic_levels_data[$k]['status'] == -1) {
-                $body = $body . 'text-warning';
-            } elseif ($all_accedemic_levels_data[$k]['status'] == 1) {
-                $body = $body . 'text-success';
-            } elseif ($all_accedemic_levels_data[$k]['status'] == 0) {
-                $body = $body . 'text-dark';
-            }
 
-            $body = $body . ' fa fa-graduation-cap"></i></a>';
+            $body = $body . ' fa fa-book"></i></a>';
 
         }
     }
@@ -567,16 +646,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
     ?>
 
-    $('#academic_year_togal').on('click',function (e)
+    $('#academic_level_togal').on('click',function (e)
     {
         if(btnClick == 0)
         {
-            $('#academic_year_div').append('<?=$body?>');
+            $('#academic_level_div').append('<?=$body?>');
             btnClick++;
 
         }else if(btnClick == 1)
         {
-            $('#academic_year_div').empty();
+            $('#academic_level_div').empty();
             btnClick--;
         }
 
@@ -585,54 +664,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     <?php } ?>
 
 
-    $(document.body).on('click', '.ay_view' ,function()
+    $(document.body).on('click', '.al_view' ,function()
     {
 
         id = $(this).data('id');
         title = $(this).data('title');
         description = $(this).data('description');
         deadline = $(this).data('deadline');
-        status = $(this).data('status');
 
 
 
 
-        $('#academic_year_view #ay_title').text(title);
-        $('#academic_year_view #ay_description').text(description);
-        $('#academic_year_view #ay_registration_deadline').text(deadline);
 
-        if(status == 1)
-        {
-            $('#academic_year_view #modal_head_div').addClass('bg-success');
-            $('#academic_year_view #modal_head_div').removeClass('bg-warning');
-            $('#academic_year_view #modal_head_div').removeClass('bg-dark');
-            $('#academic_year_view #modal_head_div').removeClass('text-white');
+        $('#academic_level_view #al_title').text(title);
+        $('#academic_level_view #al_description').text(description);
+        $('#academic_level_view #al_registration_deadline').text(deadline);
 
-        }else if(status == -1)
-        {
-            $('#academic_year_view #modal_head_div').addClass('bg-warning');
-            $('#academic_year_view #modal_head_div').removeClass('bg-success');
-            $('#academic_year_view #modal_head_div').removeClass('bg-dark');
-            $('#academic_year_view #modal_head_div').removeClass('text-white');
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
 
-        }else if(status == 0)
-        {
-            $('#academic_year_view #modal_head_div').addClass('text-white');
-            $('#academic_year_view #modal_head_div').addClass('bg-dark');
-            $('#academic_year_view #modal_head_div').removeClass('bg-warning');
-            $('#academic_year_view #modal_head_div').removeClass('bg-success');
 
-        }
 
-        $('#academic_year_view #ay_update_btn').click(function(){
-            window.location.href='create_academic_year.php?id='+id;
+        $('#academic_level_view #al_update_btn').click(function(){
+            window.location.href='create_academic_level.php?id='+id;
         });
 
-        $('#academic_year_view #ay_delete_btn').click(function(){
-            window.location.href='academic_year_delete.php?id='+id;
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='academic_level_delete.php?id='+id;
         });
 
-        $('#academic_year_view').modal('show');
+        $('#academic_level_view').modal('show');
 
 
     });

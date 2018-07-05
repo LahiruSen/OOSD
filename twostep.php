@@ -392,6 +392,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Miss" <?php if(isset($old)){if ($old['title'] == 'Miss') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['title'] == 'Miss') {echo "selected";}}} ?> >Miss</option>
                                     <option value="Mrs" <?php if(isset($old)){if ($old['title'] == 'Mrs') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['title'] == 'Mrs') {echo "selected";}}} ?> >Mrs</option>
                                 </select>
+
+
+                                <?php if(isset($error_array) && array_key_exists('title',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['title'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="sex">Sex</label>
@@ -399,6 +411,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Male" <?php if(isset($old)){if ($old['sex'] == 'Male') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['sex'] == 'Male') {echo "selected";}}} ?> >Male</option>
                                     <option value="Female" <?php if(isset($old)){if ($old['sex'] == 'Female') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['sex'] == 'Female') {echo "selected";}}} ?> >Female</option>
                                 </select>
+
+
+                                <?php if(isset($error_array) && array_key_exists('sex',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['sex'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
                             </div>
                         </div>
 
@@ -441,6 +464,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Single" <?php if(isset($old)){if ($old['civil_status'] == 'Single') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Single') {echo "selected";}}} ?> >Single</option>
                                     <option value="Married" <?php if(isset($old)){if ($old['civil_status'] == 'Married') {echo "selected";}}else{if(isset($employee_data)) {if ($employee_data['civil_status'] == 'Married') {echo "selected";}}} ?> >Married</option>
                                 </select>
+
+
+                                <?php if(isset($error_array) && array_key_exists('civil_status',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['civil_status'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                         </div>
 
@@ -579,6 +614,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                     <?php } ?>
                                 </select>
+
+
+                                <?php if(isset($error_array) && array_key_exists('employee_type_id',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['employee_type_id'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                         </div>
                     </div>
@@ -652,6 +699,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Miss" <?php if(isset($old)){if ($old['title'] == 'Miss') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['title'] == 'Miss') {echo "selected";}}} ?> >Miss</option>
                                     <option value="Mrs" <?php if(isset($old)){if ($old['title'] == 'Mrs') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['title'] == 'Mrs') {echo "selected";}}} ?> >Mrs</option>
                                 </select>
+
+                                <?php if(isset($error_array) && array_key_exists('title',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['title'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="sex">Sex</label>
@@ -659,6 +716,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Male" <?php if(isset($old)){if ($old['sex'] == 'Male') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['sex'] == 'Male') {echo "selected";}}} ?> >Male</option>
                                     <option value="Female" <?php if(isset($old)){if ($old['sex'] == 'Female') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['sex'] == 'Female') {echo "selected";}}} ?> >Female</option>
                                 </select>
+
+
+                                <?php if(isset($error_array) && array_key_exists('sex',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['sex'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                         </div>
 
@@ -698,6 +767,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <option value="Single" <?php if(isset($old)){if ($old['civil_status'] == 'Single') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_status'] == 'Single') {echo "selected";}}} ?> >Single</option>
                                     <option value="Married" <?php if(isset($old)){if ($old['civil_status'] == 'Married') {echo "selected";}}else{if(isset($student_data)) {if ($student_data['civil_status'] == 'Married') {echo "selected";}}} ?> >Married</option>
                                 </select>
+
+                                <?php if(isset($error_array) && array_key_exists('civil_status',$error_array))  {?>
+                                    <div class="row">
+                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                            <small id="passwordHelp" class="text-danger">
+                                                <?= $error_array['civil_status'] ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             </div>
                         </div>
 

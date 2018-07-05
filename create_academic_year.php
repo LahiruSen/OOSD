@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                 <h3 class="text-center text-uppercase text-secondary mb-0">Create New</h3>
                             <?php } ?>
                             <hr class="star-dark mb-5">
-                            <form id="two_step_submission_form" class="two_step_form" action="#" method="post">
+                            <form id="two_step_submission_form" class="two_step_form" <?php if(isset($_GET['id'])){ ?>action="create_academic_year.php?id=<?php echo $_GET['id'] ?>" <?php }else{ ?> action="create_academic_year.php" <?php } ?> method="post">
                                 <div class="container">
                                     <div class="text-left ">
                                         <div id="form_section_header" class="bg-topfive">
@@ -240,16 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                             </div>
 
                                         </div>
-<!--               Might be usefull                          -->
-<!--                                        --><?php //if(isset($error_array) && array_key_exists('from_to',$error_array))  {?>
-<!--                                            <div class="form-group row m-2">-->
-<!--                                                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">-->
-<!--                                                    <small id="passwordHelp" class="text-danger">-->
-<!--                                                        --><?//= $error_array['from_to'] ?>
-<!--                                                    </small>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        --><?php //} ?>
+
 
                                         <div id="form_section_header" class="bg-topfive">
                                             <h2 class="text-white">Registration Settings</h2>
@@ -573,17 +564,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($selected)){ ?>
-        from_date = moment('<?=$selected['from_date']?>').format('MM/DD/YYYY');
-        to_date = moment('<?=$selected['to_date']?>').format('MM/DD/YYYY');
-        registration_deadline = moment('<?=$selected['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
+        from_date = moment('<?=$selected['from_date']?>').format('YYYY-MM-DD');
+        to_date = moment('<?=$selected['to_date']?>').format('YYYY-MM-DD');
+        registration_deadline = moment('<?=$selected['registration_deadline']?>').format('YYYY-MM-DD HH:mm:ss');
 
     <?php } ?>
 
 
     <?php if(isset($old)){ ?>
-        from_date = moment('<?=$old['from_date']?>').format('MM/DD/YYYY');
-        to_date = moment('<?=$old['to_date']?>').format('MM/DD/YYYY');
-        registration_deadline = moment('<?=$old['registration_deadline']?>').format('MM/DD/YYYY h:mm A');
+        from_date = moment('<?=$old['from_date']?>').format('YYYY-MM-DD');
+        to_date = moment('<?=$old['to_date']?>').format('YYYY-MM-DD');
+        registration_deadline = moment('<?=$old['registration_deadline']?>').format('YYYY-MM-DD HH:mm:ss');
 
     <?php } ?>
 
@@ -592,28 +583,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     $('#datetimepicker1').datetimepicker({
         useCurrent: false,
         defaultDate: registration_deadline,
+        minDate:from_date,
+        maxDate:to_date,
         format: 'YYYY-MM-DD HH:mm:ss'
 
     });
 
-
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
         defaultDate: from_date,
+        maxDate: to_date,
         format: 'YYYY-MM-DD'
     });
     $('#datetimepicker4').datetimepicker({
         useCurrent: false,
         defaultDate: to_date,
+        minDate: from_date,
         format: 'YYYY-MM-DD'
     });
+
     $("#datetimepicker3").on("change.datetimepicker", function (e) {
         $('#datetimepicker4').datetimepicker('minDate', e.date);
-        $('#datetimepicker1').datetimepicker('minDate', e.date);
+        $('#datetimepicker1').datetimepicker('minDate', moment(e.date).format('YYYY-MM-DD HH:mm:ss'));
     });
     $("#datetimepicker4").on("change.datetimepicker", function (e) {
         $('#datetimepicker3').datetimepicker('maxDate', e.date);
-        $('#datetimepicker1').datetimepicker('maxDate', e.date);
+        $('#datetimepicker1').datetimepicker('maxDate', moment(e.date).format('YYYY-MM-DD HH:mm:ss'));
     });
 
     <?php }else { ?>
@@ -625,17 +620,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         format: 'YYYY-MM-DD HH:mm:ss'
 
     });
-    $('#datetimepicker2').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD HH:mm:ss'
-    });
-    $("#datetimepicker1").on("change.datetimepicker", function (e) {
-        $('#datetimepicker2').datetimepicker('minDate', e.date);
-    });
-    $("#datetimepicker2").on("change.datetimepicker", function (e) {
-        $('#datetimepicker1').datetimepicker('maxDate', e.date);
-    });
-
 
     $('#datetimepicker3').datetimepicker({
         useCurrent: false,
@@ -645,11 +629,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         useCurrent: false,
         format: 'YYYY-MM-DD'
     });
+
+
     $("#datetimepicker3").on("change.datetimepicker", function (e) {
         $('#datetimepicker4').datetimepicker('minDate', e.date);
+        $('#datetimepicker1').datetimepicker('minDate', moment(e.date).format('YYYY-MM-DD HH:mm:ss'));
     });
     $("#datetimepicker4").on("change.datetimepicker", function (e) {
         $('#datetimepicker3').datetimepicker('maxDate', e.date);
+        $('#datetimepicker1').datetimepicker('maxDate', moment(e.date).format('YYYY-MM-DD HH:mm:ss'));
     });
 
 
@@ -661,17 +649,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         for ($k = 0; $k < count($all_accedemic_years_data); $k++) {
 
-            $body = $body . '<a  data-id="'.$all_accedemic_years_data[$k]['id'] .'" data-title="'.$all_accedemic_years_data[$k]['title'] .'" data-deadline="'.$all_accedemic_years_data[$k]['registration_deadline'] .'" data-status="'.$all_accedemic_years_data[$k]['status'] .'" data-description="'.$all_accedemic_years_data[$k]['description'] .'" class=" ay_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_years_data[$k]['title'] . '<i class="';
+            $body = $body .'<a  data-id="'.$all_accedemic_years_data[$k]['id'].'" data-title="'.$all_accedemic_years_data[$k]['title'].'" data-deadline="'.$all_accedemic_years_data[$k]['registration_deadline'].'" data-status="'.$all_accedemic_years_data[$k]['status'].'" data-description="'.$all_accedemic_years_data[$k]['description'].'" class=" ay_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">'.$all_accedemic_years_data[$k]['title'].'<i class="';
 
             if ($all_accedemic_years_data[$k]['status'] == -1) {
-                $body = $body . 'text-warning';
+                $body = $body.'text-warning';
             } elseif ($all_accedemic_years_data[$k]['status'] == 1) {
-                $body = $body . 'text-success';
+                $body = $body.'text-success';
             } elseif ($all_accedemic_years_data[$k]['status'] == 0) {
-                $body = $body . 'text-dark';
+                $body = $body.'text-dark';
             }
 
-            $body = $body . ' fa fa-graduation-cap"></i></a>';
+            $body = $body.' fa fa-graduation-cap"></i></a>';
 
         }
     }
@@ -684,7 +672,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
     {
         if(btnClick == 0)
         {
-            $('#academic_year_div').append('<?=$body?>');
+            $('#academic_year_div').html('<?=$body?>');
             btnClick++;
 
         }else if(btnClick == 1)

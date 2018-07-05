@@ -29,16 +29,27 @@ if(isset($_SESSION['email']))
     header("location:error.php");
 }
 
-//This array is useful to get previous value of post if there is validation error(s)
+//Defining validation check and old variable arrays
 
 $old = array();
+$validation_result = array();
 
-$old['title'] = $_POST['title'];
-$old['sex'] = $_POST['sex'];
-$old['full_name'] = $_POST['full_name'];
-$old['dob'] = $_POST['dob'];
-$old['nic'] = $_POST['nic'];
-$old['civil_status'] = $_POST['civil_status'];
+if(isset($_POST['title'])){$old['title'] = $_POST['title'];}else{$validation_result[] = array('title',"Please select a valid title");}
+if(isset($_POST['sex'])){$old['sex'] = $_POST['sex'];}else{$validation_result[] = array('sex',"Please select a valid sex");}
+if(isset($_POST['full_name'])){$old['full_name'] = $_POST['full_name'];$validation_result[] = array('full_name',name_validator($_POST['full_name']));}else{$validation_result[] = array('full_name',"Please put a valid full name");}
+if(isset($_POST['dob'])){$old['dob'] = $_POST['dob'];$validation_result[] = array('dob',dob_validator($_POST['dob']));}else{$validation_result[] = array('dob',"Please put a valid date of birth");}
+if(isset($_POST['nic'])){$old['nic'] = $_POST['nic'];$validation_result[] = array('nic',nic_validator($_POST['nic']));}else{$validation_result[] = array('nic',"Please put a valid national identity card number");}
+if(isset($_POST['civil_status'])){$old['civil_status'] = $_POST['civil_status'];}else{$validation_result[] = array('civil_status',"Please select a valid civil status");}
+if(isset($_POST['father_full_name'])){$old['father_full_name'] = $_POST['father_full_name'];$validation_result[] = array('father_full_name',name_validator($_POST['father_full_name']));}else{$validation_result[] = array('father_full_name',"Please put a valid father's full name");}
+if(isset($_POST['mother_full_name'])){$old['mother_full_name'] = $_POST['mother_full_name'];$validation_result[] = array('mother_full_name',name_validator($_POST['mother_full_name']));}else{$validation_result[] = array('mother_full_name',"Please put a valid mother's full name");}
+if(isset($_POST['add_line_1'])){$old['add_line_1'] = $_POST['add_line_1'];$validation_result[] = array('add_line_1',address_validator($_POST['add_line_1']));}else{$validation_result[] = array('add_line_1',"Please put a valid address line one");}
+if(isset($_POST['add_line_2'])){$old['add_line_2'] = $_POST['add_line_2'];$validation_result[] = array('add_line_2',address_validator($_POST['add_line_2']));}else{$validation_result[] = array('add_line_2',"Please put a valid address line two");}
+if(isset($_POST['postal_code'])){$old['postal_code'] = $_POST['postal_code'];$validation_result[] = array('postal_code',postal_code_validator($_POST['postal_code']));}else{$validation_result[] = array('postal_code',"Please put a valid postal code");}
+if(isset($_POST['city'])){$old['city'] = $_POST['city'];$validation_result[] = array('city',address_validator($_POST['city']));}else{$validation_result[] = array('city',"Please put a valid city");}
+if(isset($_POST['phone_number'])){$old['phone_number'] = $_POST['phone_number'];$validation_result[] = array('phone_number',phone_number_validator($_POST['phone_number']));}else{$validation_result[] = array('phone_number',"Please put a valid phone number");}
+if(isset($_POST['cp_full_name'])){$old['cp_full_name'] = $_POST['cp_full_name'];$validation_result[] = array('cp_full_name',name_validator($_POST['cp_full_name']));}else{$validation_result[] = array('cp_full_name',"Please put a valid contact person's full name");}
+if(isset($_POST['cp_phone_number'])){$old['cp_phone_number'] = $_POST['cp_phone_number'];$validation_result[] = array('cp_phone_number',phone_number_validator($_POST['cp_phone_number']));}else{$validation_result[] = array('cp_phone_number',"Please put a contact person's valid phone number");}
+if(isset($_POST['al_index_number'])){$old['al_index_number'] = $_POST['al_index_number'];$validation_result[] = array('al_index_number',al_index_validator($_POST['al_index_number']));}else{$validation_result[] = array('al_index_number',"Please put your advanced level index number");}
 
 if(isset($_POST['is_physical']))
 {
@@ -49,34 +60,7 @@ else
     $old['is_physical'] = 'off';
 }
 
-$old['father_full_name'] = $_POST['father_full_name'];
-$old['mother_full_name'] = $_POST['mother_full_name'];
-$old['add_line_1'] = $_POST['add_line_1'];
-$old['add_line_2'] = $_POST['add_line_2'];
-$old['postal_code'] = $_POST['postal_code'];
-$old['city'] = $_POST['city'];
-$old['phone_number'] = $_POST['phone_number'];
-$old['cp_full_name'] = $_POST['cp_full_name'];
-$old['cp_phone_number'] = $_POST['cp_phone_number'];
-$old['al_index_number'] = $_POST['al_index_number'];
 
-
-//validate post inputs
-$validation_result = array();
-
-$validation_result[] = array('full_name',name_validator($_POST['full_name']));
-$validation_result[] = array('dob',dob_validator($_POST['dob']));
-$validation_result[] = array('nic',nic_validator($_POST['nic']));
-$validation_result[] = array('father_full_name',name_validator($_POST['father_full_name']));
-$validation_result[] = array('mother_full_name',name_validator($_POST['mother_full_name']));
-$validation_result[] = array('add_line_1',address_validator($_POST['add_line_1']));
-$validation_result[] = array('add_line_2',address_validator($_POST['add_line_2']));
-$validation_result[] = array('postal_code',postal_code_validator($_POST['postal_code']));
-$validation_result[] = array('city',address_validator($_POST['city']));
-$validation_result[] = array('phone_number',phone_number_validator($_POST['phone_number']));
-$validation_result[] = array('cp_full_name',name_validator($_POST['cp_full_name']));
-$validation_result[] = array('cp_phone_number',phone_number_validator($_POST['cp_phone_number']));
-$validation_result[] = array('al_index_number',al_index_validator($_POST['al_index_number']));
 
 
 $error_counter = 0;

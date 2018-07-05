@@ -130,11 +130,10 @@
                             Registration
                         </button>
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <h6 class="dropdown-header">Registration</h6>
+                            <h6 class="dropdown-header">Basic</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration</a>
                             <a class="dropdown-item" href="#">Employee Registration</a>
-                            <a class="dropdown-item" href="#">Employee Leave Request</a>
                             <a class="dropdown-item" href="#">User Profiles</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration Setting</a>
@@ -164,11 +163,25 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="create_academic_year.php">Academic Years</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Academic Level</a>
+                            <a class="dropdown-item" href="create_academic_level.php">Academic Level</a>
 
                         </div>
                     </div>
                 </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Employee Leaves
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Employee Leaves</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Employee Leave Request</a>
+
+                        </div>
+                    </div>
+                </li>
+
 
 
             <?php }
