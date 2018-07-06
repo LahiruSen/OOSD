@@ -177,7 +177,7 @@
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">Employee Leaves</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Employee Leave Request</a>
+                            <a class="dropdown-item" href="l_approve_leave_application_form.php">Employee Leave Request</a>
 
                         </div>
                     </div>
@@ -204,8 +204,8 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">My Leave</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Available leave</a>
-                            <a class="dropdown-item" href="#">Submit leave</a>
+                            <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
+                            <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
                         </div>
                     </div>
                 </li>
@@ -309,8 +309,8 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">My Leave</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Available leave</a>
-                            <a class="dropdown-item" href="#">Submit leave</a>
+                            <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
+                            <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
                         </div>
                     </div>
                 </li>
@@ -333,7 +333,7 @@
                             Approve Leave
                         </button>
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="">Approve Leave</a>
+                            <a class="dropdown-item" href="l_approve_leave_application_form.php">Approve Leave</a>
                         </div>
                     </div>
                 </li>
@@ -514,7 +514,7 @@
                 <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                     <h6 class="dropdown-header">Scholarships</h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Submit Scholarship</a>
+                    <a class="dropdown-item" href="l_scholarship_submission_form.php">Submit Scholarship</a>
                 </div>
             </div>
         </li>
@@ -527,7 +527,7 @@
                 <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                     <h6 class="dropdown-header">Grades</h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">View Grades</a>
+                    <a class="dropdown-item" href="l_view_final_grade.php">View Grades</a>
                 </div>
             </div>
         </li>
