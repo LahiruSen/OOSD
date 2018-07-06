@@ -260,8 +260,8 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">My Leave</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/l_check_leave.php">Available leave</a>
-                            <a class="dropdown-item" href="/l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
+                            <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
                         </div>
                     </div>
                 </li>
