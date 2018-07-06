@@ -138,7 +138,7 @@ if($type_of_employment == 'Administrator'){
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Academic Year List</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an academic year</h3>
 
                     <hr class="star-dark mb-5">
                     <div class="container">

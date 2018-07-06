@@ -132,7 +132,7 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">Registration</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Student Registration</a>
+                            <a class="dropdown-item" href="registration_ay_list.php">Student Registration</a>
                             <a class="dropdown-item" href="#">Employee Registration</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration Setting</a>
