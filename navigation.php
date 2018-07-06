@@ -260,8 +260,8 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">My Leave</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Available leave</a>
-                            <a class="dropdown-item" href="#">Submit leave</a>
+                            <a class="dropdown-item" href="/lahiru/check_leave.php">Available leave</a>
+                            <a class="dropdown-item" href="/lahiru/leave_submission.php">Submit leave</a>
                         </div>
                     </div>
                 </li>
@@ -284,7 +284,7 @@
                             Approve Leave
                         </button>
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="">Approve Leave</a>
+                            <a class="dropdown-item" href="lahiru/approve_leave_application_form.php    ">Approve Leave</a>
                         </div>
                     </div>
                 </li>

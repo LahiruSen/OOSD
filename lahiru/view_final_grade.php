@@ -253,19 +253,18 @@ if ($course_result->num_rows > 0){
                                 } else {
                                     echo 'Not Completed';
                                 }
-                                }; ?></td>
+                                ; ?></td>
 
 
                             <td><?php if ($r->status == 1) {
                                     echo $r->mark;
-                                    var_dump($r->mark);
-                                    die();
+
                                 } else {
                                     echo 'Not available';
                                 }
                                 ?></td>
                         </tr>
-
+<?php } ?>
 
                         </tbody>
                     </table>
@@ -417,7 +416,4 @@ if ($course_result->num_rows > 0){
         </body>
 
         </html>
-
-
-
 
