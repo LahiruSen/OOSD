@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                     <div class="text-left ">
                                         <table class="table table-striped">
                                             <thead>
-                                            <tr class="text-white bg-dark" style="border: darkorchid solid 10px; border-radius: 1px">
+                                            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                                                 <th>ID</th>
                                                 <th>Full Name</th>
                                                 <th>NIC</th>
@@ -243,6 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                 </div>
 
                             <?php }elseif(isset($student_data)) { ?>
+
                                 <h3 class="text-center text-uppercase text-secondary mb-0">Student Data</h3>
 
                             <?php } ?>
