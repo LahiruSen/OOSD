@@ -16,6 +16,24 @@
 session_start();
 require 'u_connection.php';
 
+if ( $_SESSION['logged_in'] != 1 ) {
+    $_SESSION['message'] = "You must log in before viewing your profile page!";
+    header("location: error.php");
+}
+else {
+    // Makes it easier to read
+    $first_name = $_SESSION['first_name'];
+    $last_name = $_SESSION['last_name'];
+    $email = $_SESSION['email'];
+    $active = $_SESSION['active'];
+    $types = $_SESSION['types'];
+    $two_step = $_SESSION['two_step'];
+
+    if ($types == 2) {
+        header("location: home_student.php");
+    }
+}
+
 $name=$_SESSION['name'];
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
@@ -45,6 +63,20 @@ $_SESSION['error']=false;
 </head>
 
 <body id="page-top">
+
+
+<?php if(!$active) { ?>
+
+    <div class="form text-center">
+
+        <h4 class="alert-heading">Please verify your account!</h4>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
+        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+
+    </div>
+
+<?php } else { ?>
+
 
 
 <!-- Navigation -->
@@ -170,65 +202,194 @@ $_SESSION['error']=false;
 
 <!--Model-->
 
-<!-- Footer -->
-<footer class="footer text-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-5 mb-lg-0">
-                <h4 class="text-uppercase mb-4">Location</h4>
-                <p class="lead mb-0">University of Moratuwa, <strong>Sri Lanka</strong></p>
-            </div>
-            <div class="col-md-4 mb-5 mb-lg-0">
-                <h4 class="text-uppercase mb-4">Around the EMPLUP</h4>
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                        <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
-                            <i class="fa fa-fw fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
-                            <i class="fa fa-fw fa-google-plus"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
-                            <i class="fa fa-fw fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
-                            <i class="fa fa-fw fa-linkedin"></i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
-                            <i class="fa fa-fw fa-dribbble"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-4">
-                <h4 class="text-uppercase mb-4">Footer Note</h4>
-                <p class="lead mb-0">This is the description of the footer note </p>
+<?php if($_SESSION['two_step'] == 0) {
+
+
+$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+if($user_result->num_rows != 0)
+{
+$user_data = $user_result->fetch_assoc();
+$user_result->free();
+$user_id = $user_data['id'];
+$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+if($employee_result->num_rows != 0)
+{
+$employee_data = $employee_result->fetch_assoc();
+
+$employee_result->free();
+
+if($employee_data['is_locked'] != 1)
+{
+?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Complete Your Profile</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
             </div>
         </div>
     </div>
-</footer>
 
-<div class="copyright py-4 text-center text-white">
-    <div class="container">
-        <small>Copyright &copy; EMPLUP 2018</small>
+    <?php
+}
+else
+{
+    ?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-<div class="scroll-to-top d-lg-none position-fixed ">
-    <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
-        <i class="fa fa-chevron-up"></i>
-    </a>
-</div>
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
+    <?php
+}
+
+}
+else
+{
+
+    ?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Add Profile information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<?php
+
+}
+
+}
+
+else
+{
+
+    $_SESSION['message'] = "You are not a valid user";
+    header("location:error.php");
+}
+
+} ?>
+
+
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Location</h4>
+                    <p class="lead mb-0">University of Moratuwa, <strong>Sri Lanka</strong></p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Around the EMPLUP</h4>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-google-plus"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-dribbble"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-uppercase mb-4">Footer Note</h4>
+                    <p class="lead mb-0">This is the description of the footer note </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="copyright py-4 text-center text-white">
+        <div class="container">
+            <small>Copyright &copy; EMPLUP 2018</small>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-to-top d-lg-none position-fixed ">
+        <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
+
+<?php } ?>
 
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
@@ -244,7 +405,19 @@ $_SESSION['error']=false;
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <script >
+        $( document ).ready(function() {
+            $('#completeProfile').modal('show');
+        });
+
+    </script>
+
+<?php } ?>
+
 
 </body>
 
 </html>
+
+
