@@ -136,8 +136,7 @@
                             <a class="dropdown-item" href="#">Employee Registration</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration Setting</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Add Courses</a>
+
                         </div>
                     </div>
                 </li>
@@ -165,6 +164,10 @@
                             <a class="dropdown-item" href="create_academic_year.php">Academic Years</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="create_academic_level.php">Academic Level</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="A_create_courses.php">Add Courses</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="l_define_scholarship_form.php">Add Scholarship</a>
 
                         </div>
                     </div>
