@@ -1,12 +1,12 @@
 <?php
-require '../db.php';
+require 'db.php';
 /* Displays user information and some useful messages */
 session_start();
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
-    header("location: ../error.php");
+    header("location: error.php");
 }
 else {
     // Makes it easier to read
@@ -34,7 +34,7 @@ else {
     }else
         {
             $_SESSION['message'] = "Invalid Request ";
-            header("location: ../error.php");
+            header("location: error.php");
             die();
 
         }
@@ -52,7 +52,7 @@ else {
 }
 if($types == 0) {
     $_SESSION['message'] = "You(Student) don't have access to this page!";
-    header("location: ../error.php");
+    header("location: error.php");
     die();
 
 
@@ -86,11 +86,11 @@ if(isset($_POST))
 
 
                 if($mysqli->query($sql)) {
-                    header("location:approve_leave_application.php");
+                    header("location:l_approve_leave_application.php");
                 }
                 else{
                     $_SESSION['message']="Sorry. Action was unsuccessful.";
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
                 }
 
@@ -98,7 +98,7 @@ if(isset($_POST))
            }else
                {
                    $_SESSION['message'] = "Not a valid leave Id ";
-                   header("location: ../error.php");
+                   header("location: error.php");
                    die();
                }
 
@@ -108,7 +108,7 @@ if(isset($_POST))
        }else
        {
            $_SESSION['message'] = "No Leave Id detect";
-           header("location: ../error.php");
+           header("location: error.php");
            die();
        }
 
@@ -134,11 +134,11 @@ if(isset($_POST))
                }
 
                if($mysqli->query($sql)) {
-                   header("location:approve_leave_application.php");
+                   header("location:l_approve_leave_application.php");
                }
                else{
                    $_SESSION['message']="Sorry. Action was unsuccessful.";
-                   header("location: ../error.php");
+                   header("location: error.php");
                    die();
                }
 
@@ -146,13 +146,13 @@ if(isset($_POST))
            }else
            {
                $_SESSION['message'] = "Not a valid leave Id ";
-               header("location: ../error.php");
+               header("location: error.php");
                die();
            }
        }else
        {
            $_SESSION['message'] = "No Leave Id detect";
-           header("location: ../error.php");
+           header("location: error.php");
            die();
        }
    }elseif (isset($_POST['delete']))
@@ -168,11 +168,11 @@ if(isset($_POST))
            {
                $sql = "DELETE FROM leave_submission WHERE id= $leave_id";
                if($mysqli->query($sql)){
-                   header("location:approve_leave_application.php");
+                   header("location:l_approve_leave_application.php");
                }
                else{
                    $_SESSION['message']="Sorry. Action was unsuccessful.";
-                   header("location: ../error.php");
+                   header("location: error.php");
                    die();
                }
 
@@ -184,20 +184,20 @@ if(isset($_POST))
            else
            {
                $_SESSION['message'] = "Not a valid leave Id ";
-               header("location: ../error.php");
+               header("location: error.php");
                die();
            }
        }else
        {
            $_SESSION['message'] = "No Leave Id detect";
-           header("location: ../error.php");
+           header("location: error.php");
            die();
        }
 
    }else
        {
 
-           header("location: approve_leave_application_form.php");
+           header("location: l_approve_leave_application_form.php");
            die();
        }
 
@@ -205,7 +205,7 @@ if(isset($_POST))
 else
     {
     $_SESSION['message'] = "Invalid request";
-    header("location: ../error.php");
+    header("location: error.php");
     die();
 
 }

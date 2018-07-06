@@ -10,7 +10,7 @@ $user_type=$_SESSION['type'];
 $_SESSION['course_id']=$_GET['course_id'];
 $_SESSION['course_title']=$_GET['course_title'];
 if($user_type==1) {
-    header("Location:course_details_teacher.php");
+    header("Location:u_course_details_teacher.php");
 }else if($user_type==2){
-    header("Location:course_details_student.php");
+    header("Location:u_course_details_student.php");
 }

@@ -5,7 +5,7 @@
  * Date: 3/29/2018
  * Time: 7:31 PM
  */
-require 'connection.php';
+require 'u_connection.php';
 session_start();
 
 

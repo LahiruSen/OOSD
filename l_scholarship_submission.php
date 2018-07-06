@@ -1,12 +1,12 @@
 <?php
-require '../db.php';
+require 'db.php';
 /* Displays user information and some useful messages */
 session_start();
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
-    header("location: ../error.php");
+    header("location: error.php");
 }
 else {
     // Makes it easier to read
@@ -21,7 +21,7 @@ else {
 if($types == 1)
     {
         $_SESSION['message'] = "Only students can apply for scholarships !";
-        header("location: ../error.php");
+        header("location: error.php");
         die();
 
 
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if (!empty($nameErr) or !empty($regErr) or !empty($fileErr) or!empty($listErr)) {
         $_SESSION['message'] = $nameErr . '<br>' . $regErr.'<br>'.$fileErr.'<br>'.$listErr;
-        header("location: ../error.php");
+        header("location: error.php");
         die();
     }
 
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         if ( $result->num_rows == 0 ) // User doesn't exist
         {
             $_SESSION['message'] = "This user detail doesn't exist in the system.";
-            header("location: ../error.php");
+            header("location: error.php");
             die();
         }
         else { // User exists (num_rows != 0)
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
             if($result_registration_number->num_rows==0){
                 $_SESSION['message']="This student's details doesn't exist in the system.";
-                header("location: ../error.php");
+                header("location: error.php");
                 die();
             }
             else{
@@ -151,14 +151,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 if (file_exists($target_file)) {
                     $_SESSION['message'] = "The file already exists!";
                     $uploadOk = 0;
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
 
                 } // Check file size
                 else if ($_FILES["scholarship_application"]["size"] > 10000000) {
                     $_SESSION['message'] = "Maximum size exceeds. Maximum size is 10 MB";
                     $uploadOk = 0;
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
 
                 } // Allow certain file formats
@@ -166,12 +166,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     $_SESSION['message'] = "Sorry, only pdf files are allowed.";
                     $uploadOk = 0;
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
                 } // Check if $uploadOk is set to 0 by an error
                 else if ($uploadOk == 0) {
                     $_SESSION['message'] = "Sorry your file was not uploaded";
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
                 } // if everything is ok, try to upload file
 
@@ -188,21 +188,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                         if ( $mysqli->query($sql) ) {
 
                             $_SESSION['message']="Your scholarship application is uploaded successfully";
-                            header("location: ../success.php");
+                            header("location: success.php");
                             $uploadOk=1;
                             die();
 
                         }
                         else{
                             $_SESSION['message']="Sorry. Your scholarship application could not be uploaded";
-                            header("location: ../error.php");
+                            header("location: error.php");
                             die();
                         }
 
 
                      } else {
                         $_SESSION['message'] = "Sorry. Error occoured during upload. (During moving file)";
-                        header("location: ../error.php");
+                        header("location: error.php");
                         die();
                     }
                 }

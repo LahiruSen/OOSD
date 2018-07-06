@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "connection.php";
+require "u_connection.php";
 
 $user_id=$_SESSION['user_id'];
 $student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
@@ -126,7 +126,7 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
 
                                     </td> <?php } ?>
                                 <td>
-                                    <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                                    <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
                                 </td>
                             </tr>
                             <?php

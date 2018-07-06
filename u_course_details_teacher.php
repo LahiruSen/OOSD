@@ -1,24 +1,22 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Udhan
- * Date: 3/31/2018
- * Time: 6:16 PM
- */
 session_start();
-require "connection.php";
+require 'u_connection.php';
 
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
-$reg_no=$_SESSION['reg_no'];
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
+$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
+$course=$course_query->fetch_assoc();
+$field=$course['field'];
+$credit=$course['credits'];
+$description=$course['description'];
+$level_id=$course['level_id'];
+$no_of_working_hours=$course['no_of_working_hours'];
 
-$assignment_id=$_SESSION['assignment_id'];
-$assignment_title=$_SESSION['assignment_title'];
-
-$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
-$assignment=$assignment_query->fetch_assoc();
-
-$deadline=$assignment['date_of_deadline'];
+$name=$_SESSION['name'];
+$today=date("Y-m-d H:i:s");
+$datetime="$today";
+list($date,$time)=explode(' ',$datetime);
+list($hour,$min,$dsec)=explode(':',$time);
 
 ?>
 
@@ -31,8 +29,9 @@ $deadline=$assignment['date_of_deadline'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $name?></title>
     <?php include 'css/css.html'; ?>
+    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
@@ -49,9 +48,11 @@ $deadline=$assignment['date_of_deadline'];
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
 
+                <!-- Navigation menu-->
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
+
 
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
@@ -67,160 +68,107 @@ $deadline=$assignment['date_of_deadline'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
-        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
 </header>
 
 <!-- Dashboard Section -->
-
-
-
 <section class="" id="portfolio">
-    <div class="container  ">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $assignment_title?></h2>
+    <div class="container ">
+        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_title?></h2>
         <hr class="star-dark mb-5">
+        <div class="row">
+            <div class="col-md-6">
+                <p>Course Id : <?php echo $course_id?></p>
+                <p>Field : <?php echo $field?></p>
+                <p>Description : <?php echo $description?></p>
+                <p>Credits : <?php echo $credit?></p>
+                <p>No of Working Hours: <?php echo $course_id?> </p>
+            </div>
+            <div class="col-md-6">
+                <div class="container">
 
-        <div class="text-center text-secondary mb-0">
-            <li class="badge"><?php echo $assignment['description'];?></li><br>
-            <a href="<?php echo $assignment['attachment_link'];?>" target="_blank"> <li class="badge badge-pill badge-primary "><?php echo $assignment['attachment_link'];?></li></a>
-        </div>
-        <br>
-
-        <?php
-
-        $today = date("Y-m-d H:i:s");
-        $submission_query=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$reg_no' ");
-        $no_of_submissions=$submission_query->num_rows;
-
-        if($today<=$deadline){
-            if($no_of_submissions==0){
-                ?>
-
-                <div class="container text-center text-uppercase text-secondary mb-0">
-
-                    <button type="button" style="width: 50%;" class="btn btn-danger" data-toggle="modal" data-target="#popUpWindow3">SUBMIT</button>
-                    <div class="modal fade" id="popUpWindow3">
+                    <button type="button" style="width: 80%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">Create Assignment</button>
+                    <div class="modal fade" id="popUpWindow">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">NEW SUBMISSION</h3>
+                                    <h3 class="modal-title">Create Assignment</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-                                    <p><?php echo $assignment_id?></p>
-                                    <form role="form" action="upload_submission.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>" method="POST" enctype="multipart/form-data">
+                                    <form role="form" action="u_upload_assignment.php" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
-                                            <input type="file" class="form-control" placeholder="Title" name="file" required>
+                                            <input type="text" class="form-control" placeholder="Title" name="title" required>
                                         </div>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Description" name="description" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="file" class="form-control" placeholder="Attachment" name="file" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>
+                                        </div>
+
                                         <div class="modal-footer">
                                             <button class="btn btn-primary btn-block">Submit</button>
                                         </div>
+
                                     </form>
-
-
-
                                 </div>
+
+
 
                             </div>
                         </div>
                     </div>
-                </div>
 
-            <?php }else{
-                $previous_submission=$submission_query->fetch_assoc();
-                ?>
-
-                <div class="container text-center text-uppercase text-secondary mb-0">
-
-                    <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">VIEW SUBMISSION</button>
-                    <div class="modal fade" id="popUpWindow">
+                    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title">MY SUBMISSION</h3>
+                                    <h3 class="modal-title">Error</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
 
-                                    <p><?php echo $assignment_id?></p>
-                                    <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
-
-
 
                                 </div>
 
                             </div>
                         </div>
                     </div>
+
+
                 </div>
 
-                <br><div class="container text-center text-uppercase text-secondary mb-0">
 
-                    <button type="button" style="width: 50%;" class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow2">DELETE SUBMISSION</button>
-                    <div class="modal fade" id="popUpWindow2">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">ARE YOU SURE?</h3>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body" >
+                <div class="container">
+                    <br><a href="u_up_del_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Assignments</button></a>
 
-                                    <p><?php echo $assignment_id?></p>
-                                    <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
+                </div>
 
-                                </div>
-                                <div class="modal-footer">
-                                    <a class="text-light btn-block btn btn-primary" href="delete_submissions_student.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">Delete</button></a>
-                                </div>
+                <!--                <div class="container">-->
+                <!--                    <br><a href="view_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Submissions</button></a>-->
+                <!---->
+                <!--                </div>-->
 
-                            </div>
-                        </div>
-                    </div>
+
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 3</a></button>
+                </div>
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 4</a></button>
                 </div>
 
 
 
+            </div>
 
-
-            <?php  }}else{
-
-            if($no_of_submissions==0){
-                ?>
-                <div class="text-center text-uppercase text-danger mb-0">
-                    <li class="badge">No Submission</li>
-                </div>
-            <?php }else{
-                $previous_submission=$submission_query->fetch_assoc();
-                ?>
-
-                <div class="container text-center text-uppercase text-secondary mb-0">
-
-                    <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">VIEW SUBMISSION</button>
-                    <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">MY SUBMISSION</h3>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body" >
-
-                                    <p><?php echo $assignment_id?></p>
-                                    <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            <?php  }
-        }?>
-
+        </div>
     </div>
 </section>
 
@@ -324,6 +272,80 @@ $deadline=$assignment['date_of_deadline'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+<!--<script type="text/javascript">-->
+<!---->
+<!---->
+<!--    $(document).on("click","#mark-model-btn",function () {-->
+<!---->
+<!--        var mark  = $('#mark-model-input').val();-->
+<!--        if(mark!=''){-->
+<!--            mark=Number(mark);-->
+<!--            if(mark>=0 && mark<=100)-->
+<!--            {-->
+<!--                $("#mark-form").submit();-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                $('#pop-error').modal('show');-->
+<!--            }-->
+<!--        }else{-->
+<!--            $('#pop-error').modal('show');-->
+<!--        }-->
+<!---->
+<!---->
+<!--    });-->
+<!---->
+<!--</script>-->
+
 </body>
 
 </html>
+
+
+
+
+<!--<div class="container">-->
+<!--    <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow--><?php //echo $submission[0]?><!--">Edit Marks</button></td>-->
+<!--    <div class="modal fade" id="popUpWindow--><?php //echo $submission[0]?><!--">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h3 class="modal-title">Grading</h3>-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
+<!--                <div class="modal-body" >-->
+<!--                    <form id="mark-form" role="form" action="upload_marks.php?submission_id=--><?php //echo $submission[0]?><!--" method="POST" enctype="multipart/form-data">-->
+<!--                        <p>--><?php //echo $submission[2]?><!--</p>-->
+<!--                        <div class="form-group">-->
+<!--                            <input id="mark-model-input" type="text" class="form-control" placeholder="Marks" name="marks">-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!---->
+<!---->
+<!--                </div>-->
+<!---->
+<!--                <div class="modal-footer" id="mark-model-btn">-->
+<!--                    <button class="btn btn-primary btn-block">Submit</button>-->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!---->
+<!--    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h3 class="modal-title">Error</h3>-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
+<!--                <div class="modal-body" >-->
+<!---->
+<!---->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</div>

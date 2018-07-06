@@ -5,7 +5,7 @@
  * Date: 3/30/2018
  * Time: 3:16 PM
  */
-require 'connection.php';
+require 'u_connection.php';
 
 $user_id=$_SESSION['user_id'];
 $user_type=$_SESSION['type'];

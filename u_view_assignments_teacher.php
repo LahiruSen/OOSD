@@ -2,19 +2,12 @@
 /**
  * Created by PhpStorm.
  * User: Udhan
- * Date: 7/5/2018
- * Time: 9:21 PM
- */
-
-/**
- * Created by PhpStorm.
- * User: Udhan
  * Date: 3/31/2018
  * Time: 11:41 AM
  */
 
 session_start();
-require 'connection.php';
+require 'u_connection.php';
 
 $name=$_SESSION['name'];
 $course_id=$_SESSION['course_id'];
@@ -99,12 +92,11 @@ $_SESSION['error']=false;
 
                         ?>
                         <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
+                            </li>
 
+                            <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
 
-                            <label class="btn btn-danger btn-lg-0" style=""><?php echo $asignment[5];?></label>
-
-                            <a class="text-dark" href="assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
                             <br>
                             <br>
                         </div>
@@ -124,18 +116,14 @@ $_SESSION['error']=false;
 
                         ?>
                         <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
+                            </li>
 
+                            <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
 
-                            <label class="btn btn-success btn-lg-0" style=""><?php echo $asignment[5];?></label>
-
-                            <a class="text-dark" href="assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
                             <br>
                             <br>
                         </div>
-                        <!--                        <div>-->
-                        <!--                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=--><?php //echo $asignment[0]?><!--&assignment_title=--><?php //echo $asignment[5]?><!--"> <input class="btn btn-dark btn-lg-0" type="submit" value="Update Assignment"></a>-->
-                        <!--                        </div>-->
 
                         <?php
                     }

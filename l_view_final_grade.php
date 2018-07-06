@@ -1,6 +1,6 @@
 <?php
 /* Reset your password form, sends reset.php password link */
-require '../db.php';
+require 'db.php';
 session_start();
 
 
@@ -33,7 +33,7 @@ if ($_SESSION['logged_in'] != 1) {
 if ($result->num_rows == 0) // User doesn't exist
 {
     $_SESSION['message'] = "This user detail doesn't exist in the system.";
-    header("location: ../error.php");
+    header("location: error.php");
     die();
 }
 else { // User exists (num_rows != 0)
@@ -45,7 +45,7 @@ $result_new = $mysqli->query("SELECT registration_number FROM student_data WHERE
 
 if ($result_new->num_rows == 0) {
     $_SESSION['message'] = "This student's detail doesn't exist in student data table.";
-    header("location:../error.php");
+    header("location:error.php");
     die();
 }
 
@@ -57,7 +57,7 @@ $final_result = $mysqli->query("SELECT * FROM student_final_grade WHERE registra
 $x = $final_result->num_rows;
 if ($x == 0) {
     $_SESSION['message'] = "Your final grades are not available. Please contact Administration.";
-    header("location:../error.php");
+    header("location:error.php");
     die();
 } else {
     while ($row = $final_result->fetch_object()) {
@@ -88,7 +88,7 @@ if ($course_result->num_rows > 0){
 
 
                 $_SESSION['message'] = "Course Details are not available." . $x;
-                header("location:../error.php");
+                header("location:error.php");
                 die();
             }
             $mark_result = $mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
@@ -101,7 +101,7 @@ if ($course_result->num_rows > 0){
 
 
                 $_SESSION['message'] = "Marks of some modules are not available.";
-                header("location:../error.php");
+                header("location:error.php");
                 die();
 
             }
@@ -116,7 +116,7 @@ if ($course_result->num_rows > 0){
         else {
 
             $_SESSION['message'] = "Your course grades are not available. Please contact Administration.";
-            header("location:../error.php");
+            header("location:error.php");
             die();
         }
 
@@ -178,7 +178,7 @@ if ($course_result->num_rows > 0){
                         <i class="fa fa-bars"></i>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <?php require '../navigation.php'; ?>
+                        <?php require 'navigation.php'; ?>
                     </div>
                 </div>
             </nav>

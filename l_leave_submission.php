@@ -1,6 +1,6 @@
 <?php
 /* Reset your password form, sends reset.php password link */
-require '../db.php';
+require 'db.php';
 session_start();
 
 if ($_SESSION['logged_in'] != 1) {
@@ -41,7 +41,7 @@ if ($_SESSION['logged_in'] != 1) {
             if ($result->num_rows == 0) // User doesn't exist
             {
                 $_SESSION['message'] = "This user detail doesn't exist in the system.";
-                header("location: ../error.php");
+                header("location: error.php");
                 die();
             } else { // User exists (num_rows != 0)
 
@@ -52,7 +52,7 @@ if ($_SESSION['logged_in'] != 1) {
 
                 if ($result_new->num_rows == 0) {
                     $_SESSION['message'] = "This employ detail doesn't exist in the system.";
-                    header("location: ../error.php");
+                    header("location: error.php");
                     die();
                 } else {
                     $employee = $result_new->fetch_assoc(); // employ become arry with employ data
@@ -65,12 +65,12 @@ if ($_SESSION['logged_in'] != 1) {
                     if ($mysqli->query($sql)) {
 
                         $_SESSION['message'] = "Your leave application was uploaded successfully";
-                        header("location: ../success.php");
+                        header("location: success.php");
                         die();
 
                     } else {
                         $_SESSION['message'] = "Sorry. Your application could not be uploaded";
-                        header("location: ../error.php");
+                        header("location: error.php");
                         die();
                     }
 
@@ -118,7 +118,7 @@ if ($_SESSION['logged_in'] != 1) {
             <i class="fa fa-bars"></i>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <?php require '../navigation.php';?>
+            <?php require 'navigation.php';?>
         </div>
     </div>
 </nav>
@@ -141,7 +141,7 @@ if ($_SESSION['logged_in'] != 1) {
 
     <h1>Apply for leave</h1>
 
-    <form action="leave_submission.php" method="post">
+    <form action="l_leave_submission.php" method="post">
         <div class="field-wrap">
 
             <label>

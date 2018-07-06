@@ -6,7 +6,7 @@
  * Time: 11:53 PM
  */
 session_start();
-require 'connection.php';
+require 'u_connection.php';
 
 $name=$_FILES["file"]["name"];
 $tmp_name=$_FILES["file"]["tmp_name"];
@@ -30,6 +30,6 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
 $mysqli->query("INSERT INTO assignments(course_id,description, attachment_link,title,date_of_update) VALUES ('$course_id','$description','$string','$title','$deadline')");
 //$full_name=$_SESSION['name'];
 
-header("Location:course_details_teacher.php");
+header("Location:u_course_details_teacher.php");
 
 ?>

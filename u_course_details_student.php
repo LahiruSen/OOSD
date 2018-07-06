@@ -1,22 +1,18 @@
 <?php
 session_start();
-require 'connection.php';
+require 'u_connection.php';
 
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
+
 $course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
 $course=$course_query->fetch_assoc();
 $field=$course['field'];
 $credit=$course['credits'];
 $description=$course['description'];
 $level_id=$course['level_id'];
-$no_of_working_hours=$course['no_of_working_hours'];
 
 $name=$_SESSION['name'];
-$today=date("Y-m-d H:i:s");
-$datetime="$today";
-list($date,$time)=explode(' ',$datetime);
-list($hour,$min,$dsec)=explode(':',$time);
 
 ?>
 
@@ -47,17 +43,13 @@ list($hour,$min,$dsec)=explode(':',$time);
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-
                 <!-- Navigation menu-->
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
-
-
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
-
             </ul>
         </div>
     </div>
@@ -85,85 +77,18 @@ list($hour,$min,$dsec)=explode(':',$time);
                 <p>Field : <?php echo $field?></p>
                 <p>Description : <?php echo $description?></p>
                 <p>Credits : <?php echo $credit?></p>
-                <p>No of Working Hours: <?php echo $course_id?> </p>
             </div>
             <div class="col-md-6">
                 <div class="container">
-
-                    <button type="button" style="width: 80%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">Create Assignment</button>
-                    <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">Create Assignment</h3>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body" >
-                                    <form role="form" action="upload_assignment.php" method="POST" enctype="multipart/form-data">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Title" name="title" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Description" name="description" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="file" class="form-control" placeholder="Attachment" name="file" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button class="btn btn-primary btn-block">Submit</button>
-                                        </div>
-
-                                    </form>
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title">Error</h3>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body" >
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
+                    <button type="button" style="width: 80%;" class="btn btn-success" >Schedule</a></button>
                 </div>
-
 
                 <div class="container">
-                    <br><a href="up_del_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Assignments</button></a>
-
-                </div>
-
-                <!--                <div class="container">-->
-                <!--                    <br><a href="view_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Submissions</button></a>-->
-                <!---->
-                <!--                </div>-->
-
-
-                <div class="container">
-                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 3</a></button>
+                    <br><a href="u_view_assignments_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
                 </div>
                 <div class="container">
-                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 4</a></button>
+                    <br><a href="u_view_assignments_marks_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Grades</button></a>
                 </div>
-
 
 
             </div>
@@ -272,80 +197,6 @@ list($hour,$min,$dsec)=explode(':',$time);
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
-<!--<script type="text/javascript">-->
-<!---->
-<!---->
-<!--    $(document).on("click","#mark-model-btn",function () {-->
-<!---->
-<!--        var mark  = $('#mark-model-input').val();-->
-<!--        if(mark!=''){-->
-<!--            mark=Number(mark);-->
-<!--            if(mark>=0 && mark<=100)-->
-<!--            {-->
-<!--                $("#mark-form").submit();-->
-<!--            }-->
-<!--            else-->
-<!--            {-->
-<!--                $('#pop-error').modal('show');-->
-<!--            }-->
-<!--        }else{-->
-<!--            $('#pop-error').modal('show');-->
-<!--        }-->
-<!---->
-<!---->
-<!--    });-->
-<!---->
-<!--</script>-->
-
 </body>
 
 </html>
-
-
-
-
-<!--<div class="container">-->
-<!--    <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow--><?php //echo $submission[0]?><!--">Edit Marks</button></td>-->
-<!--    <div class="modal fade" id="popUpWindow--><?php //echo $submission[0]?><!--">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h3 class="modal-title">Grading</h3>-->
-<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-<!--                </div>-->
-<!--                <div class="modal-body" >-->
-<!--                    <form id="mark-form" role="form" action="upload_marks.php?submission_id=--><?php //echo $submission[0]?><!--" method="POST" enctype="multipart/form-data">-->
-<!--                        <p>--><?php //echo $submission[2]?><!--</p>-->
-<!--                        <div class="form-group">-->
-<!--                            <input id="mark-model-input" type="text" class="form-control" placeholder="Marks" name="marks">-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!---->
-<!---->
-<!--                </div>-->
-<!---->
-<!--                <div class="modal-footer" id="mark-model-btn">-->
-<!--                    <button class="btn btn-primary btn-block">Submit</button>-->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h3 class="modal-title">Error</h3>-->
-<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-<!--                </div>-->
-<!--                <div class="modal-body" >-->
-<!---->
-<!---->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-</div>

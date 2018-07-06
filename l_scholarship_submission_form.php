@@ -1,13 +1,13 @@
 
 <?php
 /* Displays user information and some useful messages */
-require '../db.php';
+require 'db.php';
 session_start();
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
-    header("location: ../error.php");
+    header("location: error.php");
 }
 else {
     // Makes it easier to read
@@ -22,7 +22,7 @@ else {
 
     if($types == 1) {
         $_SESSION['message'] = "Only Students can apply for scholarsips !";
-        header("location: ../error.php");
+        header("location: error.php");
         die();
 
     }
@@ -32,7 +32,7 @@ else {
     if ( $result->num_rows == 0 ) // Scholarships are not available
     {
         $_SESSION['message'] = "Sorry. Currently there is no scholarships available to you !!!";
-        header("location: ../error.php");
+        header("location: error.php");
         die();
     }
     else {
@@ -76,7 +76,7 @@ else {
 <!--content-->
 <div class="form">
     <h1>Submit Scholarship Application</h1>
-    <form action="scholarship_submission.php" method="post" enctype="multipart/form-data">
+    <form action="l_scholarship_submission.php" method="post" enctype="multipart/form-data">
         <div class="field-wrap">
             First Name              :<br>
             <input type="text" name="first_name">

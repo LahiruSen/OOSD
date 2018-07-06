@@ -6,7 +6,7 @@
  * Time: 9:53 PM
  */
 session_start();
-require "connection.php";
+require "u_connection.php";
 
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
@@ -108,7 +108,7 @@ $deadline=$assignment['date_of_deadline'];
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-                                    <form role="form" action="update_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>" method="POST" enctype="multipart/form-data">
+                                    <form role="form" action="u_update_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <li type="text" class="text-dark align-content-lg-start">Previous Name  <?php echo $assignment['title']?></li>
                                             <input type="text" class="form-control" placeholder="New Title" name="title">
@@ -153,7 +153,7 @@ $deadline=$assignment['date_of_deadline'];
 
                                 </div>
                                 <div class="modal-footer">
-                                    <a class="text-light btn-block btn btn-primary" href="delete_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">Delete</button></a>
+                                    <a class="text-light btn-block btn btn-primary" href="u_delete_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">Delete</button></a>
                                 </div>
 
                             </div>
@@ -209,7 +209,7 @@ $deadline=$assignment['date_of_deadline'];
 
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
-                    <a class="text-light btn-block btn btn-primary" href="assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
+                    <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
 
                 </div>
 
@@ -284,7 +284,7 @@ $deadline=$assignment['date_of_deadline'];
 
         <div class="container text-center text-uppercase text-secondary mb-0">
 
-            <a class="text-light btn-block btn btn-primary" href="assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
+            <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
 
         </div>
     </div>

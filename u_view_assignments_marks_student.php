@@ -2,23 +2,25 @@
 /**
  * Created by PhpStorm.
  * User: Udhan
- * Date: 7/6/2018
- * Time: 1:22 PM
+ * Date: 7/5/2018
+ * Time: 11:16 AM
  */
-
 session_start();
-require "connection.php";
+require "u_connection.php";
 
-//$user_id=$_SESSION['user_id'];
-//$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
-//$student=$student_query->fetch_assoc();
-//
-//$reg_no=$student['registration_number'];
-//$_SESSION['reg_no']=$reg_no;
-//
+$user_id=$_SESSION['user_id'];
+$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
+$student=$student_query->fetch_assoc();
+
+$reg_no=$student['registration_number'];
+$_SESSION['reg_no']=$reg_no;
+
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
-//
+
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
+
 //$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
 //$no_of_courses=$courrse_query->num_rows;
 ?>
@@ -77,40 +79,70 @@ $last_name = $_SESSION['last_name'];
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
     <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0">My Courses</h2 class="text-center text-uppercase text-secondary mb-0">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
         <div class="container">
             <table class="table table-condensed">
                 <thead>
                 <tr>
-                    <th>Course Title</th>
-                    <th>Course Id</th>
-                    <th></th>
+                    <th>Assignment Title</th>
+                    <th>Course</th>
+                    <th>Submission Status</th>
+                    <th>Date of Submission</th>
+                    <th>Marks</th>
+                    <!--<th></th>-->
                 </tr>
                 </thead>
                 <tbody>
 
+                <?php
+                $today = date("Y-m-d H:i:s");
+
+                $assignment_query = $mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+                while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
+
+                    if ($today > $deadline) {
+                        ?>
+                        <tr>
+                            <td><?php echo $asignment[5] ?></td>
+                            <td><?php echo $course_title?></td>
+                            <?php
+                            $submissions_query = $mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$asignment[0]' AND student_id='$reg_no' ");
+                            $no_of_submissions = $submissions_query->num_rows;
 
 
-                <?php require "search_courses.php";
-                while ($course = mysqli_fetch_array($course_query_teacher,MYSQLI_NUM)) {
-                    $course_id=$course[0];
-                    //    $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
-                    //    $my_course=$result5->fetch_assoc();//course2
-                    ?>
-                    <td class="text-success font-weight-bold"><?php echo $course[1];?></td>
-                    <td class="text-success font-weight-bold"><?php echo $course_id;?></td>
-                    <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->
-                    <td>
-                        <a class="text-dark" href="course_session_setup.php?course_id=<?php echo $course_id;?>&course_title=<?php echo $course[1];?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Course"></a>
-                    </td>
-                    </tr>
-                    <?php
+                            if ($no_of_submissions == 1) { ?>
+                                <td class="text-success font-weight-bold">SUBMITTED</td>
+                                <?php
+                                $submission = $submissions_query->fetch_assoc();
+                                $marks = $submission['mark'];
+                                $date_of_submission = $submission['date_of_create']; ?>
+                                <td><?php echo $date_of_submission ?></td><?php
+                                if ($marks >= 0) {
+                                    ?>
+                                    <td><?php echo $marks ?></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td class="text-success font-weight-bold">Not Graded yet</td>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <td class="text-danger font-weight-bold">NO SUBMISSION</td>
+                                <td>-</td>
+                                <td>0</td>
+                            <?php } ?>
+                            <!--      <td>
+                                                   <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0] ?>&assignment_title=<?php echo $asignment[5] ?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                                               </td>-->
+                        </tr>
+                        <?php
+                    }
                 }
 
                 ?>
-
-
                 </tbody>
             </table>
         </div>

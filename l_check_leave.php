@@ -1,6 +1,6 @@
 <?php
 /* Reset your password form, sends reset.php password link */
-require '../db.php';
+require 'db.php';
 session_start();
 
 
@@ -18,7 +18,7 @@ if ($_SESSION['logged_in'] != 1) {
     $two_step = $_SESSION['two_step'];
 
     if ($types == 2) {
-        header("location: ../home_student.php");
+        header("location: home_student.php");
         die();
     } else {
 
@@ -28,7 +28,7 @@ if ($_SESSION['logged_in'] != 1) {
         if ($result->num_rows == 0) // User doesn't exist
         {
             $_SESSION['message'] = "This user detail doesn't exist in the system.";
-            header("location: ../error.php");
+            header("location: error.php");
             die();
         } else { // User exists (num_rows != 0)
 
@@ -39,7 +39,7 @@ if ($_SESSION['logged_in'] != 1) {
 
             if ($result_new->num_rows == 0) {
                 $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
-                header("location:../error.php");
+                header("location:error.php");
                 die();
             } else {
                 $employee = $result_new->fetch_assoc(); // employ become arry with employ data
@@ -49,7 +49,7 @@ if ($_SESSION['logged_in'] != 1) {
 
                 if ($date_result->num_rows == 0) {
                     $_SESSION['message'] = "This employ detail doesn't exist in employ_data table*.";
-                    header("location:../error.php");
+                    header("location:error.php");
                     die();
                 } else {
                     $date_result1 = $date_result->fetch_assoc();
@@ -112,7 +112,7 @@ if ($_SESSION['logged_in'] != 1) {
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require '../navigation.php'; ?>
+                <?php require 'navigation.php'; ?>
             </div>
         </div>
     </nav>

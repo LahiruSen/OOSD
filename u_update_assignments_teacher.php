@@ -7,7 +7,7 @@
  */
 
 session_start();
-require "connection.php";
+require "u_connection.php";
 //$student_id=$_SESSION['reg_no'];
 $assignment_id=$_GET['assignment_id'];
 
@@ -47,5 +47,5 @@ if(!empty($_POST['deadline'])){
 $today = date("Y-m-d H:i:s");
 
 $mysqli->query("UPDATE assignments SET title='$title',description='$description',attachment_link='$string',date_of_deadline='$deadline' ,date_of_update='$today' WHERE id=$assignment_id");
-header("location: up_del_assignments_teacher.php");
+header("location: u_up_del_assignments_teacher.php");
 ?>

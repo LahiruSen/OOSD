@@ -6,7 +6,7 @@
  * Time: 4:50 PM
  */
 session_start();
-require 'connection.php';
+require 'u_connection.php';
 
 //$full_name=$_SESSION['name'];
 $submission_id=$_GET['submission_id'];
@@ -22,7 +22,7 @@ if($mark>=0 && $mark<=100) {
 //}
 
 
-header("Location:view_submissions_teacher.php");
+header("Location:u_view_submissions_teacher.php");
 
 
 ?>

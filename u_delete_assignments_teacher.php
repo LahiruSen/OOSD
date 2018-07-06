@@ -7,7 +7,7 @@
  */
 
 session_start();
-require "connection.php";
+require "u_connection.php";
 //$student_id=$_SESSION['reg_no'];
 $assignment_id=$_GET['assignment_id'];
 $mysqli->query("DELETE FROM assignments WHERE id='$assignment_id'");
@@ -15,5 +15,5 @@ $mysqli->query("DELETE FROM assignments WHERE id='$assignment_id'");
 //$last_name = $_SESSION['last_name'];
 //$assignment_title=$_GET['assignment_title'];
 
-header("location: up_del_assignments_teacher.php");
+header("location: u_up_del_assignments_teacher.php");
 ?>

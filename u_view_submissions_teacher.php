@@ -6,7 +6,7 @@
  * Time: 11:57 AM
  */
 session_start();
-require 'connection.php';
+require 'u_connection.php';
 
 $name=$_SESSION['name'];
 $assignment_id=$_SESSION['assignment_id'];
@@ -127,7 +127,7 @@ $deadline=$assignment['date_of_deadline'];
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body" >
-                                                <form id="mark-form" role="form" action="upload_marks.php?submission_id=<?php echo $submission[0]?>" method="POST" enctype="multipart/form-data">
+                                                <form id="mark-form" role="form" action="u_upload_marks.php?submission_id=<?php echo $submission[0]?>" method="POST" enctype="multipart/form-data">
                                                     <p><?php echo $submission[2]?></p>
                                                     <div class="form-group">
                                                         <input id="mark-model-input" type="number" min="0" max="100" class="form-control" placeholder="Marks" name="marks" required>

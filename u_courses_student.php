@@ -1,33 +1,38 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/6/2018
+ * Time: 12:44 PM
+ */
+
 session_start();
-require 'connection.php';
+require "u_connection.php";
 
-$course_id=$_SESSION['course_id'];
-$course_title=$_SESSION['course_title'];
-
-$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$course_query->fetch_assoc();
-$field=$course['field'];
-$credit=$course['credits'];
-$description=$course['description'];
-$level_id=$course['level_id'];
-
-$name=$_SESSION['name'];
-
+//$user_id=$_SESSION['user_id'];
+//$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
+//$student=$student_query->fetch_assoc();
+//
+//$reg_no=$student['registration_number'];
+//$_SESSION['reg_no']=$reg_no;
+//
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+//
+//$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
+//$no_of_courses=$courrse_query->num_rows;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
-    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
@@ -43,13 +48,16 @@ $name=$_SESSION['name'];
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <!-- Navigation menu-->
+
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
                 </li>
+
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
+
+
             </ul>
         </div>
     </div>
@@ -60,39 +68,51 @@ $name=$_SESSION['name'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
 </header>
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="container ">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_title?></h2>
+    <div class="">
+        <h2 class="text-center text-uppercase text-secondary mb-0">My Courses</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
-        <div class="row">
-            <div class="col-md-6">
-                <p>Course Id : <?php echo $course_id?></p>
-                <p>Field : <?php echo $field?></p>
-                <p>Description : <?php echo $description?></p>
-                <p>Credits : <?php echo $credit?></p>
-            </div>
-            <div class="col-md-6">
-                <div class="container">
-                    <button type="button" style="width: 80%;" class="btn btn-success" >Schedule</a></button>
-                </div>
-
-                <div class="container">
-                    <br><a href="view_assignments_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
-                </div>
-                <div class="container">
-                    <br><a href="view_assignments_marks_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Grades</button></a>
-                </div>
+        <div class="container">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Course Title</th>
+                    <th>Course Id</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
 
 
-            </div>
 
+                <?php require "u_search_courses.php";
+                while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
+                    $course_id=$course[5];
+                    $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
+                    $my_course=$result5->fetch_assoc();//course2
+                    ?>
+                    <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
+                    <td class="text-success font-weight-bold"><?php echo $my_course['course_id'];?></td>
+                    <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->
+                    <td>
+                        <a class="text-dark" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Course"></a>
+                    </td>
+                    </tr>
+                    <?php
+                }
+
+                ?>
+
+
+                </tbody>
+            </table>
         </div>
     </div>
 </section>
@@ -180,9 +200,6 @@ $name=$_SESSION['name'];
 </div>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-
-
-
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
@@ -197,6 +214,18 @@ $name=$_SESSION['name'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <script >
+        $( document ).ready(function() {
+            $('#completeProfile').modal('show');
+        });
+
+    </script>
+
+<?php } ?>
+
 </body>
 
 </html>
+

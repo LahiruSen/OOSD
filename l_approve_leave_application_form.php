@@ -1,6 +1,6 @@
 <?php
 /* Reset your password form, sends reset.php password link */
-require '../db.php';
+require 'db.php';
 session_start();
 
 // Check if user is logged in using the session variable
@@ -27,7 +27,7 @@ if ($_SESSION['logged_in'] != 1) {
     if ($result->num_rows == 0) // User doesn't exist
     {
         $_SESSION['message'] = "This user detail doesn't exist in the system.";
-        header("location: ../error.php");
+        header("location: error.php");
         die();
     } else { // User exists (num_rows != 0)
 
@@ -39,7 +39,7 @@ if ($_SESSION['logged_in'] != 1) {
 
         if ($result_new->num_rows == 0) {
             $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
-            header("location:../error.php");
+            header("location:error.php");
             die();
         } else {
             $employee = $result_new->fetch_assoc(); // employ become arry with employ data
@@ -57,7 +57,7 @@ if ($_SESSION['logged_in'] != 1) {
                 $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
             } else {
                 $_SESSION['message'] = "You have no administrative priviledges";
-                header("location:../error.php");
+                header("location:error.php");
                 die();
             }
 
@@ -109,7 +109,7 @@ if ($_SESSION['logged_in'] != 1) {
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require '../navigation.php';?>
+                <?php require 'navigation.php';?>
             </div>
         </div>
     </nav>
@@ -185,7 +185,7 @@ if ($_SESSION['logged_in'] != 1) {
 
 
                                 <tr>
-                                    <form action="approve_leave_application.php" method="post">
+                                    <form action="l_approve_leave_application.php" method="post">
 
                                         <td><?php echo $r->employ_id; ?></td>
                                         <td><?php echo $r->reason_for_leave; ?></td>
