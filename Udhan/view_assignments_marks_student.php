@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/5/2018
+ * Time: 11:16 AM
+ */
 session_start();
 require "connection.php";
 
@@ -12,7 +18,10 @@ $_SESSION['reg_no']=$reg_no;
 $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 
-$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
+
+//$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
 //$no_of_courses=$courrse_query->num_rows;
 ?>
 
@@ -78,9 +87,10 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
                 <tr>
                     <th>Assignment Title</th>
                     <th>Course</th>
-                    <th>Deadline</th>
                     <th>Submission Status</th>
-                    <th></th>
+                    <th>Date of Submission</th>
+                    <th>Marks</th>
+                    <!--<th></th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -88,51 +98,50 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
                 <?php
                 $today = date("Y-m-d H:i:s");
 
+                $assignment_query = $mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+                while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
 
-                while ($course = mysqli_fetch_array($course_query,MYSQLI_NUM)) {
-                    $course_id= $course[5];
-                    $course_query_2=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
-                    $_course_=$course_query_2->fetch_assoc();
-
-
-
-                    $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-                    while ($asignment = mysqli_fetch_array($assignment_query,MYSQLI_NUM)) {
-                        $deadline=$asignment[7];
-
-                        if($today<=$deadline){
-                            ?>
-                            <tr>
-                                <td><?php echo $asignment[5]?></td>
-                                <td><?php echo $_course_['title']?></td>
-                                <td><?php echo $asignment[7]?></td>
-                                <?php
-                                $submissions_query=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$asignment[0]' AND student_id='$reg_no' ");
-                                $no_of_submissions=$submissions_query->num_rows;
-
-
-                                if($no_of_submissions==1){ ?>
-                                    <td class="text-success font-weight-bold"><?php
-                                    echo "SUBMITTED";
-                                    $submission=$submissions_query->fetch_assoc();
-                                    ?>
-                                    </td><?php
-                                }else{?>
-                                    <td class="text-danger font-weight-bold">
-                                        <?php
-                                        echo "NO SUBMISSION YET";
-
-                                        ?>
-
-                                    </td> <?php } ?>
-                                <td>
-                                    <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
-                                </td>
-                            </tr>
+                    if ($today > $deadline) {
+                        ?>
+                        <tr>
+                            <td><?php echo $asignment[5] ?></td>
+                            <td><?php echo $course_title?></td>
                             <?php
-                        }
+                            $submissions_query = $mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$asignment[0]' AND student_id='$reg_no' ");
+                            $no_of_submissions = $submissions_query->num_rows;
+
+
+                            if ($no_of_submissions == 1) { ?>
+                                <td class="text-success font-weight-bold">SUBMITTED</td>
+                                <?php
+                                $submission = $submissions_query->fetch_assoc();
+                                $marks = $submission['mark'];
+                                $date_of_submission = $submission['date_of_create']; ?>
+                                <td><?php echo $date_of_submission ?></td><?php
+                                if ($marks >= 0) {
+                                    ?>
+                                    <td><?php echo $marks ?></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td class="text-success font-weight-bold">Not Graded yet</td>
+                                    <?php
+                                }
+                            } else {
+                                ?>
+                                <td class="text-danger font-weight-bold">NO SUBMISSION</td>
+                                <td>-</td>
+                                <td>0</td>
+                            <?php } ?>
+                            <!--      <td>
+                                                   <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0] ?>&assignment_title=<?php echo $asignment[5] ?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                                               </td>-->
+                        </tr>
+                        <?php
                     }
                 }
+
                 ?>
                 </tbody>
             </table>

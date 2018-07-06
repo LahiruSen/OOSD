@@ -2,18 +2,18 @@
 session_start();
 require 'connection.php';
 
-$course_id=$_GET['id'];
-$course_title=$_GET['title'];
-$result=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$result->fetch_assoc();
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
+
+$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
+$course=$course_query->fetch_assoc();
 $field=$course['field'];
 $credit=$course['credits'];
 $description=$course['description'];
 $level_id=$course['level_id'];
 
 $name=$_SESSION['name'];
-$_SESSION['course_title']=$course_title;
-$_SESSION['course_id']=$course_id;
+
 ?>
 
 <!DOCTYPE html>
@@ -43,17 +43,13 @@ $_SESSION['course_id']=$course_id;
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-
                 <!-- Navigation menu-->
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
-
-
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
-
             </ul>
         </div>
     </div>
@@ -88,13 +84,11 @@ $_SESSION['course_id']=$course_id;
                 </div>
 
                 <div class="container">
-                    <br><a href="view_assignments_student.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
+                    <br><a href="view_assignments_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
                 </div>
-
                 <div class="container">
-                    <br><button type="button" style="width: 80%;" class="btn btn-success" >Grades</a></button>
+                    <br><a href="view_assignments_marks_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Grades</button></a>
                 </div>
-
 
 
             </div>

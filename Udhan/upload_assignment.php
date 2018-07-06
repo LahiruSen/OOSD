@@ -24,12 +24,12 @@ $string = "$location.$name";
 $lastDot = strrpos($string, ".");
 $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $lastDot);
 
-$_GET["course_id"]=$course_id;
-$_GET["course_title"]=$course_title;
+//$_GET["course_id"]=$course_id;
+//$_GET["course_title"]=$course_title;
 
 $mysqli->query("INSERT INTO assignments(course_id,description, attachment_link,title,date_of_update) VALUES ('$course_id','$description','$string','$title','$deadline')");
-$full_name=$_SESSION['name'];
+//$full_name=$_SESSION['name'];
 
-header("Location:course_details_teacher.php?id=$course_id&title=$course_title");
+header("Location:course_details_teacher.php");
 
 ?>

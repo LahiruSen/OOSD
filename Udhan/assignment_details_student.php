@@ -12,13 +12,13 @@ $first_name = $_SESSION['first_name'];
 $last_name = $_SESSION['last_name'];
 $reg_no=$_SESSION['reg_no'];
 
-$assignment_id=$_GET['assignment_id'];
-$assignment_title=$_GET['assignment_title'];
+$assignment_id=$_SESSION['assignment_id'];
+$assignment_title=$_SESSION['assignment_title'];
 
-$result=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
-$assignment=$result->fetch_assoc();
+$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
+$assignment=$assignment_query->fetch_assoc();
 
-$deadline=$assignment['date_of_update'];
+$deadline=$assignment['date_of_deadline'];
 
 ?>
 
@@ -91,8 +91,8 @@ $deadline=$assignment['date_of_update'];
         <?php
 
         $today = date("Y-m-d H:i:s");
-        $result4=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$reg_no' ");
-        $no_of_submissions=$result4->num_rows;
+        $submission_query=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$reg_no' ");
+        $no_of_submissions=$submission_query->num_rows;
 
         if($today<=$deadline){
             if($no_of_submissions==0){
@@ -112,7 +112,7 @@ $deadline=$assignment['date_of_update'];
                                     <p><?php echo $assignment_id?></p>
                                     <form role="form" action="upload_submission.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
-                                            <input type="file" class="form-control" placeholder="Title" name="file">
+                                            <input type="file" class="form-control" placeholder="Title" name="file" required>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-primary btn-block">Submit</button>
@@ -129,7 +129,7 @@ $deadline=$assignment['date_of_update'];
                 </div>
 
             <?php }else{
-                $previous_submission=$result4->fetch_assoc();
+                $previous_submission=$submission_query->fetch_assoc();
                 ?>
 
                 <div class="container text-center text-uppercase text-secondary mb-0">
@@ -173,7 +173,7 @@ $deadline=$assignment['date_of_update'];
 
                                 </div>
                                 <div class="modal-footer">
-                                    <a class="text-light btn-block btn btn-primary" href="delete_submissions.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">Delete</button></a>
+                                    <a class="text-light btn-block btn btn-primary" href="delete_submissions_student.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">Delete</button></a>
                                 </div>
 
                             </div>
@@ -189,11 +189,11 @@ $deadline=$assignment['date_of_update'];
 
             if($no_of_submissions==0){
                 ?>
-
-
-
+                <div class="text-center text-uppercase text-danger mb-0">
+                    <li class="badge">No Submission</li>
+                </div>
             <?php }else{
-                $previous_submission=$result4->fetch_assoc();
+                $previous_submission=$submission_query->fetch_assoc();
                 ?>
 
                 <div class="container text-center text-uppercase text-secondary mb-0">

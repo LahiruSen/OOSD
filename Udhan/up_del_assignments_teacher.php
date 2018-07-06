@@ -1,30 +1,46 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/5/2018
+ * Time: 9:21 PM
+ */
+
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 3/31/2018
+ * Time: 11:41 AM
+ */
+
 session_start();
-require "connection.php";
+require 'connection.php';
 
-$user_id=$_SESSION['user_id'];
-$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
-$student=$student_query->fetch_assoc();
+$name=$_SESSION['name'];
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
 
-$reg_no=$student['registration_number'];
-$_SESSION['reg_no']=$reg_no;
+$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+$assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+//$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
 
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
 
-$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
-//$no_of_courses=$courrse_query->num_rows;
+//$_SESSION['course_id']=$course_id;
+//$_SESSION['course_title']=$course_title;
+$_SESSION['error']=false;
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
@@ -43,13 +59,12 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $first_name.' '.$last_name?></a>
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about"><?php echo $name?></a>
                 </li>
 
                 <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="logout.php">Logout</a>
                 </li>
-
 
             </ul>
         </div>
@@ -61,7 +76,7 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
         <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
@@ -72,71 +87,62 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
     <div class="">
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
-        <div class="container">
-            <table class="table table-condensed">
-                <thead>
-                <tr>
-                    <th>Assignment Title</th>
-                    <th>Course</th>
-                    <th>Deadline</th>
-                    <th>Submission Status</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-
+        <div class="row">
+            <div class="col-md-6" align="center">
+                <h3 align="center">OVERDUE</h3>
                 <?php
-                $today = date("Y-m-d H:i:s");
+
+                while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
+                    $today = date("Y-m-d H:i:s");
+                    if ($deadline < $today) {
+
+                        ?>
+                        <div class="col-lg-6 " align="center">
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
 
 
-                while ($course = mysqli_fetch_array($course_query,MYSQLI_NUM)) {
-                    $course_id= $course[5];
-                    $course_query_2=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
-                    $_course_=$course_query_2->fetch_assoc();
+                            <label class="btn btn-danger btn-lg-0" style=""><?php echo $asignment[5];?></label>
 
+                            <a class="text-dark" href="assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                            <br>
+                            <br>
+                        </div>
 
-
-                    $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-                    while ($asignment = mysqli_fetch_array($assignment_query,MYSQLI_NUM)) {
-                        $deadline=$asignment[7];
-
-                        if($today<=$deadline){
-                            ?>
-                            <tr>
-                                <td><?php echo $asignment[5]?></td>
-                                <td><?php echo $_course_['title']?></td>
-                                <td><?php echo $asignment[7]?></td>
-                                <?php
-                                $submissions_query=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$asignment[0]' AND student_id='$reg_no' ");
-                                $no_of_submissions=$submissions_query->num_rows;
-
-
-                                if($no_of_submissions==1){ ?>
-                                    <td class="text-success font-weight-bold"><?php
-                                    echo "SUBMITTED";
-                                    $submission=$submissions_query->fetch_assoc();
-                                    ?>
-                                    </td><?php
-                                }else{?>
-                                    <td class="text-danger font-weight-bold">
-                                        <?php
-                                        echo "NO SUBMISSION YET";
-
-                                        ?>
-
-                                    </td> <?php } ?>
-                                <td>
-                                    <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
-                                </td>
-                            </tr>
-                            <?php
-                        }
+                        <?php
                     }
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
+                }?>
+            </div>
+            <div class="col-md-6" align="center">
+                <h3 align="center">ONGOING</h3>
+                <?php
+                while ($asignment = mysqli_fetch_array($assignment_query_2, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
+                    $today = date("Y-m-d H:i:s");
+
+                    if ($deadline >= $today) {
+
+                        ?>
+                        <div class="col-lg-6 " align="center">
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
+
+
+                            <label class="btn btn-success btn-lg-0" style=""><?php echo $asignment[5];?></label>
+
+                            <a class="text-dark" href="assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                            <br>
+                            <br>
+                        </div>
+                        <!--                        <div>-->
+                        <!--                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=--><?php //echo $asignment[0]?><!--&assignment_title=--><?php //echo $asignment[5]?><!--"> <input class="btn btn-dark btn-lg-0" type="submit" value="Update Assignment"></a>-->
+                        <!--                        </div>-->
+
+                        <?php
+                    }
+                }?></div></div>
+
+
+
     </div>
 </section>
 
@@ -163,6 +169,7 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
 </section>
 
 <!--Model-->
+
 <!-- Footer -->
 <footer class="footer text-center">
     <div class="container">
@@ -238,17 +245,6 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
 <script src="js/freelancer.js"></script>
 
 
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
-            $('#completeProfile').modal('show');
-        });
-
-    </script>
-
-<?php } ?>
-
 </body>
 
 </html>
-

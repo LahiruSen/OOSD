@@ -2,10 +2,10 @@
 session_start();
 require 'connection.php';
 
-$course_id=$_GET['id'];
-$course_title=$_GET['title'];
-$result=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$result->fetch_assoc();
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
+$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
+$course=$course_query->fetch_assoc();
 $field=$course['field'];
 $credit=$course['credits'];
 $description=$course['description'];
@@ -13,8 +13,11 @@ $level_id=$course['level_id'];
 $no_of_working_hours=$course['no_of_working_hours'];
 
 $name=$_SESSION['name'];
-$_SESSION['course_title']=$course_title;
-$_SESSION['course_id']=$course_id;
+$today=date("Y-m-d H:i:s");
+$datetime="$today";
+list($date,$time)=explode(' ',$datetime);
+list($hour,$min,$dsec)=explode(':',$time);
+
 ?>
 
 <!DOCTYPE html>
@@ -98,33 +101,61 @@ $_SESSION['course_id']=$course_id;
                                 <div class="modal-body" >
                                     <form role="form" action="upload_assignment.php" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Title" name="title">
+                                            <input type="text" class="form-control" placeholder="Title" name="title" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Description" name="description">
+                                            <input type="text" class="form-control" placeholder="Description" name="description" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="file" class="form-control" placeholder="Attachment" name="file">
+                                            <input type="file" class="form-control" placeholder="Attachment" name="file" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="datetime-local" class="form-control" placeholder="Deadline" name="deadline">
+                                            <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>
                                         </div>
+
                                         <div class="modal-footer">
                                             <button class="btn btn-primary btn-block">Submit</button>
                                         </div>
+
                                     </form>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">Error</h3>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body" >
+
+
                                 </div>
 
                             </div>
                         </div>
                     </div>
+
+
                 </div>
 
 
                 <div class="container">
-                    <br><a href="view_assignments_teacher.php?title=<?php echo $course_title;?>&id=<?php echo $course_id?>"> <button class="btn btn-success" style="width: 80%" type="button">View Assignments&Submissions</button></a>
+                    <br><a href="up_del_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Assignments</button></a>
 
                 </div>
+
+                <!--                <div class="container">-->
+                <!--                    <br><a href="view_assignments_teacher.php"> <button class="btn btn-success" style="width: 80%" type="button">View Submissions</button></a>-->
+                <!---->
+                <!--                </div>-->
+
 
                 <div class="container">
                     <br><button type="button" style="width: 80%;" class="btn btn-success" >Option 3</a></button>
@@ -241,6 +272,80 @@ $_SESSION['course_id']=$course_id;
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+<!--<script type="text/javascript">-->
+<!---->
+<!---->
+<!--    $(document).on("click","#mark-model-btn",function () {-->
+<!---->
+<!--        var mark  = $('#mark-model-input').val();-->
+<!--        if(mark!=''){-->
+<!--            mark=Number(mark);-->
+<!--            if(mark>=0 && mark<=100)-->
+<!--            {-->
+<!--                $("#mark-form").submit();-->
+<!--            }-->
+<!--            else-->
+<!--            {-->
+<!--                $('#pop-error').modal('show');-->
+<!--            }-->
+<!--        }else{-->
+<!--            $('#pop-error').modal('show');-->
+<!--        }-->
+<!---->
+<!---->
+<!--    });-->
+<!---->
+<!--</script>-->
+
 </body>
 
 </html>
+
+
+
+
+<!--<div class="container">-->
+<!--    <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow--><?php //echo $submission[0]?><!--">Edit Marks</button></td>-->
+<!--    <div class="modal fade" id="popUpWindow--><?php //echo $submission[0]?><!--">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h3 class="modal-title">Grading</h3>-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
+<!--                <div class="modal-body" >-->
+<!--                    <form id="mark-form" role="form" action="upload_marks.php?submission_id=--><?php //echo $submission[0]?><!--" method="POST" enctype="multipart/form-data">-->
+<!--                        <p>--><?php //echo $submission[2]?><!--</p>-->
+<!--                        <div class="form-group">-->
+<!--                            <input id="mark-model-input" type="text" class="form-control" placeholder="Marks" name="marks">-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!---->
+<!---->
+<!--                </div>-->
+<!---->
+<!--                <div class="modal-footer" id="mark-model-btn">-->
+<!--                    <button class="btn btn-primary btn-block">Submit</button>-->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!---->
+<!--    <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h3 class="modal-title">Error</h3>-->
+<!--                    <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                </div>-->
+<!--                <div class="modal-body" >-->
+<!---->
+<!---->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</div>

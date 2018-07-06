@@ -10,15 +10,17 @@ session_start();
 require 'connection.php';
 
 $name=$_SESSION['name'];
-$course_id=$_GET['id'];
-$course_title=$_GET['title'];
+$course_id=$_SESSION['course_id'];
+$course_title=$_SESSION['course_title'];
 
-$result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+$assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+//$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
 
 
-$_SESSION['course_id']=$course_id;
-$_SESSION['course_title']=$course_title;
+//$_SESSION['course_id']=$course_id;
+//$_SESSION['course_title']=$course_title;
+$_SESSION['error']=false;
 
 ?>
 
@@ -83,17 +85,17 @@ $_SESSION['course_title']=$course_title;
                 <h3 align="center">OVERDUE</h3>
                 <?php
 
-                while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
-                    $deadline = $row[7];
+                while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
                     $today = date("Y-m-d H:i:s");
                     if ($deadline < $today) {
 
                         ?>
                         <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
                             </li>
 
-                            <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
 
                             <br>
                             <br>
@@ -106,18 +108,18 @@ $_SESSION['course_title']=$course_title;
             <div class="col-md-6" align="center">
                 <h3 align="center">ONGOING</h3>
                 <?php
-                while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
-                    $deadline = $row[7];
+                while ($asignment = mysqli_fetch_array($assignment_query_2, MYSQLI_NUM)) {
+                    $deadline = $asignment[7];
                     $today = date("Y-m-d H:i:s");
 
                     if ($deadline >= $today) {
 
                         ?>
                         <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $row[0]; ?></label>
+                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
                             </li>
 
-                            <a class="text-dark" href="view_submissions.php?assignment_id=<?php echo $row[0];?>&assignment_title=<?php echo $row[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $row[5];?>"></a>
+                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
 
                             <br>
                             <br>

@@ -9,19 +9,19 @@ session_start();
 require 'connection.php';
 
 $name=$_SESSION['name'];
-$assignment_id=$_GET['assignment_id'];
-$assignment_title=$_GET['assignment_title'];
+$assignment_id=$_SESSION['assignment_id'];
+$assignment_title=$_SESSION['assignment_title'];
 
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
 
-$_SESSION['assignment_id']=$assignment_id;
-$result2=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id'");
+//$_SESSION['assignment_id']=$assignment_id;
+$submission_query=$mysqli->query("SELECT * FROM assignment_submissions WHERE assignment_id='$assignment_id'");
 
 $today = date("Y-m-d H:i:s");
-$result3=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
-$course=$result3->fetch_assoc();
-$deadline=$course['date_of_update'];
+$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
+$assignment=$assignment_query->fetch_assoc();
+$deadline=$assignment['date_of_deadline'];
 
 ?>
 
@@ -82,7 +82,7 @@ $deadline=$course['date_of_update'];
         <h2 class="text-center text-uppercase text-secondary mb-0">Submissions</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
         <?php
-        $no_of_submits=$result2->num_rows;
+        $no_of_submits=$submission_query->num_rows;
         if($no_of_submits==0){ ?>
             <div class="text-center text-secondary mb-0">
                 <li class="badge"><label  class="text-center text-secondary mb-0">No Submissions Yet !</label></li><br>
@@ -97,29 +97,29 @@ $deadline=$course['date_of_update'];
                     <th>Registration id</th>
                     <th>Submission File</th>
                     <th>Marks</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
 
                 <?php
-                while ($row = mysqli_fetch_array($result2, MYSQLI_NUM)) {
+                while ($submission = mysqli_fetch_array($submission_query, MYSQLI_NUM)) {
                     ?>
                     <tr>
-                        <td><?php echo $row[2];?></td>
-                        <td> <a href="<?php echo $row[4];?>" target="_blank"><li class="badge badge-pill badge-light"><?php echo $row[4];?></li></a></td>
+                        <td><?php echo $submission[2];?></td>
+                        <td> <a href="<?php echo $submission[4];?>" target="_blank"><li class="badge badge-pill badge-light"><?php echo $submission[4];?></li></a></td>
 
-                        <?php if($today<=$deadline){?>
-                            <td><?php $mark=$row[3];
+                        <?php if($today>$deadline){?>
+                            <td><?php $mark=$submission[3];
                             if($mark>=0){
                                 echo $mark;
                             }else{
                                 echo "Not Graded";
-                            }
+                            }?></td><?php
                             ?>
                             <div class="container">
-
-                                <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow<?php echo $row[0]?>">Edit Marks</button>
-                                <div class="modal fade" id="popUpWindow<?php echo $row[0]?>">
+                                <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow<?php echo $submission[0]?>">Edit Marks</button></td>
+                                <div class="modal fade" id="popUpWindow<?php echo $submission[0]?>">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -127,25 +127,48 @@ $deadline=$course['date_of_update'];
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body" >
-                                                <form role="form" action="upload_marks.php?id=<?php echo $row[0]?>&assignment_id=<?php echo $row[1]?>&assignment_title=<?php echo $assignment_title ?>" method="POST" enctype="multipart/form-data">
-                                                    <p><?php echo $row[2]?></p>
+                                                <form id="mark-form" role="form" action="upload_marks.php?submission_id=<?php echo $submission[0]?>" method="POST" enctype="multipart/form-data">
+                                                    <p><?php echo $submission[2]?></p>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" placeholder="Marks" name="marks">
+                                                        <input id="mark-model-input" type="number" min="0" max="100" class="form-control" placeholder="Marks" name="marks" required>
                                                     </div>
-                                                    <div class="modal-footer">
+                                                    <div class="modal-footer" id="mark-model-btn">
                                                         <button class="btn btn-primary btn-block">Submit</button>
                                                     </div>
                                                 </form>
                                             </div>
 
+                                            <!--                                            <div class="modal-footer" id="mark-model-btn">-->
+                                            <!--                                                <button class="btn btn-primary btn-block">Submit</button>-->
+                                            <!--                                            </div>-->
+
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title">Error</h3>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body" >
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+
 
 
                             </td><?php }else {?>
                             <td class="text-success">Not Graded-Ongoing</td>
+                            <td></td>
                         <?php } ?>
 
                     </tr>
@@ -159,6 +182,7 @@ $deadline=$course['date_of_update'];
             </table></div>
     </div>
 </section>
+
 
 <!-- About Section -->
 <section class="bg-primary text-white mb-0" id="about">
@@ -258,6 +282,72 @@ $deadline=$course['date_of_update'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+
+<!--<script type="text/javascript">-->
+<!---->
+<!---->
+<!--   $(document).on("click","#mark-model-btn",function () {-->
+<!---->
+<!--        var mark  = $('#mark-model-input').val();-->
+<!--        if(mark!=''){-->
+<!--            mark=Number(mark);-->
+<!--        if(mark>=0 && mark<=100)-->
+<!--        {-->
+<!--            $("#mark-form").submit();-->
+<!--        }-->
+<!--        else-->
+<!--            {-->
+<!--             $('#pop-error').modal('show');-->
+<!--            }-->
+<!--        }else{-->
+<!--            $('#pop-error').modal('show');-->
+<!--        }-->
+<!---->
+<!---->
+<!--    })
+
+   // $('#mark-form').submit(function () {
+   //     //   e.preventDefault();
+   //         return false;}
+   // })
+
+
+   // var mark_input = document.getElementById("mark-model-input");
+
+   // $(document).onkeypress(function (e)
+   // {
+   //     e.preventDefault();
+   //     if(e.keyCode === 13)
+   //     {
+   //
+   //         alert('asdasdasd');
+   //
+   //
+   //         var mark  = $('#mark-model-input').val();
+   //         if(mark!=null){
+   //             mark=Number(mark);
+   //             if(mark>=0 && mark<=100)
+   //             {
+   //                 $("#mark-form").submit();
+   //
+   //
+   //             }
+   //             else
+   //             {
+   //                 $('#pop-error').modal('show');
+   //
+   //
+   //             }}else{
+   //             $('#pop-error').modal('show');
+   //         }
+   //
+   //
+   //     }
+   // });
+
+
+// </script>-->
 
 </body>
 

@@ -8,10 +8,10 @@
 session_start();
 require "connection.php";
 
-$course_id=$_GET['id'];
+$course_id=$_SESSION['course_id'];
 $name=$_SESSION['name'];
 
-$result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' ORDER BY date_of_update DESC");
+$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' ORDER BY date_of_deadline DESC");
 
 ?>
 
@@ -86,14 +86,14 @@ $result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' O
 
                 <?php
                 $today = date("Y-m-d H:i:s");
-                while ($row = mysqli_fetch_array($result,MYSQLI_NUM)) {
-                    $deadline=$row[7];
+                while ($assignment = mysqli_fetch_array($assignment_query,MYSQLI_NUM)) {
+                    $deadline=$assignment[7];
 
                     ?>
                     <tr>
-                        <td><?php echo $row[5]?></td>
-                        <td><?php echo $row[6]?></td>
-                        <td><?php echo $row[7]?></td>
+                        <td><?php echo $assignment[5]?></td>
+                        <td><?php echo $assignment[6]?></td>
+                        <td><?php echo $assignment[7]?></td>
                         <?php
                         if($today<=$deadline){   ?>
                             <td class="text-success font-weight-bold"> ONGOING</td>
@@ -103,7 +103,7 @@ $result=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' O
                                 EXPIRED
                             </td> <?php } ?>
                         <td>
-                            <a class="text-dark" href="assignment_details.php?assignment_id=<?php echo $row[0]?>&assignment_title=<?php echo $row[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=<?php echo $assignment[0]?>&assignment_title=<?php echo $assignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
                         </td>
                     </tr>
                     <?php
