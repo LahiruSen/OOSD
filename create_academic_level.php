@@ -270,6 +270,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                         <div class="row m-2">
 
+                                            <div class="form-group col-lg-6 col-md-6">
+                                                <div class="input-group date">
+                                                    <label class="text-dark" for="type">Academic Year</label>
+                                                    <select id="type" name="type">
+
+
+                                                        <option value="0">Select an academic year</option>
+
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row m-2">
+
                                             <?php if(isset($selected)) {?>
                                                 <div class="text-center mt-4 w-100">
                                                     <button name="update_al" type="submit" class="btn btn-xl btn-outline-primary" >Update</button>
