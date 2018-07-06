@@ -46,14 +46,21 @@ if ($result->num_rows == 0) // User doesn't exist
         $employee_title = $employee['title'];
 
 
+
+
+
         // if user is a principal
-        if (strcasecmp($employee_title, "principal")) {
+        if (strcasecmp($employee_title, "Principal")==0) {
             $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
 
-        } else if (strcasecmp($employee_title, "HR Manager")) {
+
+
+
+
+        } elseif (strcasecmp($employee_title, "HR Manager")==0) {
             $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0");
         }
-        else if (strcasecmp($employee_title, "Administrator")) {
+        elseif (strcasecmp($employee_title, "Administrator")==0) {
             $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
         }
         else {
@@ -61,6 +68,7 @@ if ($result->num_rows == 0) // User doesn't exist
             header("location:../error.php");
             die();
         }
+
 
     }
 
@@ -145,10 +153,38 @@ if ($result->num_rows == 0) // User doesn't exist
 
                 <?php if ($_SESSION['two_step'] != 0) { ?>
                     <div class="container">
-                        <form action="approve_leave_application.php" method="post">
+
 
                     <table class="table-active">
-                        <tr>
+                        <tbody>
+
+
+
+                        <?php
+
+                        if ($leave_result->num_rows!=0) {
+                            while ($row = $leave_result->fetch_object()) {
+                                $records[] = $row;
+                            }
+
+
+                            $leave_result->free();
+
+
+                        }
+                        else{ ?>
+
+                            <div class="container ">
+                                <h1>No Requests are pending for approval.</h1>
+
+                            </div>
+
+
+
+                            <?php
+                            die();
+                        }?>
+                                   <tr>
                             <th>Employee ID</th>
                             <th>Reason</th>
                             <th>Description</th>
@@ -158,28 +194,15 @@ if ($result->num_rows == 0) // User doesn't exist
                             <th>Accept</th>
                             <th>Reject</th>
                             <th>Delete</th>
-                      </tr>
-                        <tbody>
-
+                        </tr>
                         <?php
+                        foreach ($records as $r) { ?>
 
-                        if ($leave_result->num_rows) {
-                            while ($row = $leave_result->fetch_object()) {
-                                $records[] = $row;
-                            }
-                            $leave_result->free();
-                            $i = 0;
 
-                        }
-                        else{
-                            $_SESSION['message'] = "No requests are pending for approval";
-                            header("location:../success.php");
-                            die();
-                        }
-                        foreach ($records as $r) {
-                            $i++;
-                            ?>
+
+
                             <tr>
+                                <form action="approve_leave_application.php" method="post">
 
                                 <td><?php echo $r->employ_id; ?></td>
                                 <td><?php echo $r->reason_for_leave; ?></td>
@@ -191,13 +214,13 @@ if ($result->num_rows == 0) // User doesn't exist
                                 <td><input class="btn btn-dark text-light"  type="submit" value="Reject" name="reject" ></td>
                                 <td><input class="btn btn-dark text-light"  type="submit" value="Delete" name="delete" ></td>
                                 <td><input type="hidden" value="<?php echo $r->id ;?>" name="leave_id"><td>
-
+                                </form>
                             </tr>
-                        <?php } ?>
+                        <?php }?>
 
                         </tbody>
                     </table>
-                        </form>
+
                     </div>
 
                 <?php } ?>

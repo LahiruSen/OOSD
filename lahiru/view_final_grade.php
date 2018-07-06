@@ -12,6 +12,7 @@ $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
+    die();
 }
 else {
     // Makes it easier to read
@@ -26,6 +27,7 @@ else {
     if($types == 1)
     {
         header("location: home_employee.php");
+        die();
     }
 
 }
@@ -52,24 +54,115 @@ else { // User exists (num_rows != 0)
         $student = $result_new->fetch_assoc(); // employ become arry with employ data
         $registration_number = $student['registration_number'];
 
-        $grade_result = $mysqli->query("SELECT * FROM student_final_grade WHERE registration_number='$registration_number'");
-        $x=$grade_result->num_rows;
+        $final_result = $mysqli->query("SELECT * FROM student_final_grade WHERE registration_number='$registration_number'");
+        $x=$final_result->num_rows;
         if($x==0){
-            $_SESSION['message'] = "Your grades are not available. Please contact Administration.";
+            $_SESSION['message'] = "Your final grades are not available. Please contact Administration.";
             header("location:../error.php");
             die();}
 
         else{
-            while ($row = $grade_result->fetch_object()) {
+            while ($row = $final_result->fetch_object()) {
                 $records[] = $row;
             }
-            $grade_result->free();
-            $i = 0;
+            $final_result->free();
+
+        }
+        $course_result = $mysqli->query("SELECT id,course_id FROM course_registration WHERE registration_number='$registration_number'");
+
+
+        if($course_result->num_rows>0){
+                  ?>
+
+                            <div class=" container">
+
+                            <table class ="table table-dark">
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Module Title</th>
+                                    <th>Marks</th>
+                                    <th>Status</th>
+                                </tr>
+                                <tbody>
+              <?php
+            while($row = mysqli_fetch_array($course_result,MYSQLI_NUM)){
+
+                $course_registration_id = $row[0];
+                $course_id = $row[1];
+
+
+
+                $course_title = $mysqli->query("SELECT * FROM courses WHERE course_id= '$course_id'");
+                      
+        
+        
+
+                  
+                  
+                if($x>0){
+                    
+                    
+                    $course_title1 = $course_title->fetch_assoc();
+                    $title = $course_title1['title'];
+                    $level_id = $course_title1['level_id'];
+                }
+                else{
+
+
+                    $_SESSION['message'] = "Course Details are not available.".$x;
+                    header("location:../error.php");
+                    die();
+                }
+                $mark_result = $mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
+
+
+
+
+                if(($mark_result->num_rows)>0){
+                    $mark1  = $mark_result->fetch_assoc();
+                    $mark = $mark1['marks'];
+                }
+                else {
+
+
+
+                    $_SESSION['message'] = "Marks of some modules are not available.";
+                    header("location:../error.php");
+                    die();
+
+                }  ?>
+
+                <tr>
+                    <td><?php echo $level_id ?></td>
+                    <td><?php echo $title ?></td>
+                    <td><?php echo $mark ?></td>   
+
+                </tr>
+
+                     <?php
+
+            }
+
+
+
+
+
+
 
         }
 
 
-    }
+        else{
+
+            $_SESSION['message'] = "Your course grades are not available. Please contact Administration.";
+            header("location:../error.php");
+            die();}
+
+        }
+
+
+
+    
 
 
 }
@@ -134,7 +227,7 @@ else { // User exists (num_rows != 0)
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
         <div class="container ">
-            <h2 class="text-center text-uppercase text-secondary mb-0">My Final Grade</h2>
+            <h2 class="text-center text-uppercase text-secondary mb-0">Final Grade</h2>
             <hr class="star-dark mb-5">
             <div class="row">
 
@@ -157,7 +250,7 @@ else { // User exists (num_rows != 0)
     <?php
 
     foreach($records as $r){
-    $i++;
+
     ?>
     <tr>
         <td><?php echo $r->level_id; ?></td>
