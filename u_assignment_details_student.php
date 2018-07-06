@@ -8,8 +8,29 @@
 session_start();
 require "u_connection.php";
 
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
+if ( $_SESSION['logged_in'] != 1 ) {
+    $_SESSION['message'] = "You must log in before viewing your profile page!";
+    header("location: error.php");
+}
+else {
+    // Makes it easier to read
+    $first_name = $_SESSION['first_name'];
+    $last_name = $_SESSION['last_name'];
+    $email = $_SESSION['email'];
+    $active = $_SESSION['active'];
+    $types = $_SESSION['types'];
+    $two_step= $_SESSION['two_step'];
+
+
+    if($types == 1)
+    {
+        header("location: home_employee.php");
+    }
+
+}
+
+//$first_name = $_SESSION['first_name'];
+//$last_name = $_SESSION['last_name'];
 $reg_no=$_SESSION['reg_no'];
 
 $assignment_id=$_SESSION['assignment_id'];
@@ -37,6 +58,17 @@ $deadline=$assignment['date_of_deadline'];
 
 <body id="page-top">
 
+<?php if(!$active) { ?>
+
+    <div class="form text-center">
+
+        <h4 class="alert-heading">Please verify your account!</h4>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
+        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+
+    </div>
+
+<?php } else { ?>
 
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
@@ -247,6 +279,35 @@ $deadline=$assignment['date_of_deadline'];
 </section>
 
 <!--Model-->
+
+
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+<div class="modal fade" id="completeProfile">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Please Complete Your Profile</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Our system administrator should verify your profile information before giving access to EMPLUP resources.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php } ?>
 <!-- Footer -->
 <footer class="footer text-center">
     <div class="container">
@@ -307,11 +368,11 @@ $deadline=$assignment['date_of_deadline'];
 </div>
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
+<?php } ?>
 
-
-
-<!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
+<script src="js/moment.min.js"></script>
+
 <script src="js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -324,6 +385,28 @@ $deadline=$assignment['date_of_deadline'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+<script >
+    $( document ).ready(function() {
+        $('#completeProfile').modal('show');
+    });
+
+</script>
+
+<?php } ?>
+
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+<!-- Footer -->

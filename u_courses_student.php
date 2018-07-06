@@ -9,6 +9,27 @@
 session_start();
 require "u_connection.php";
 
+if ( $_SESSION['logged_in'] != 1 ) {
+    $_SESSION['message'] = "You must log in before viewing your profile page!";
+    header("location: error.php");
+}
+else {
+    // Makes it easier to read
+    $first_name = $_SESSION['first_name'];
+    $last_name = $_SESSION['last_name'];
+    $email = $_SESSION['email'];
+    $active = $_SESSION['active'];
+    $types = $_SESSION['types'];
+    $two_step= $_SESSION['two_step'];
+
+
+    if($types == 1)
+    {
+        header("location: home_employee.php");
+    }
+
+}
+
 //$user_id=$_SESSION['user_id'];
 //$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
 //$student=$student_query->fetch_assoc();
@@ -36,6 +57,19 @@ $last_name = $_SESSION['last_name'];
 </head>
 
 <body id="page-top">
+
+
+<?php if(!$active) { ?>
+
+    <div class="form text-center">
+
+        <h4 class="alert-heading">Please verify your account!</h4>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
+        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+
+    </div>
+
+<?php } else { ?>
 
 
 <!-- Navigation -->

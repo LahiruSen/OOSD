@@ -50,7 +50,7 @@ else {
         $leave_result->free();
 
 }
-if($types == 0) {
+if($types == 2) {
     $_SESSION['message'] = "You(Student) don't have access to this page!";
     header("location: error.php");
     die();
