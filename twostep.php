@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <?php if($two_step != 1){ ?>
 
-                <h4 style="font-size:50px" class="text-dark mb-2"> <?php if(isset($ayear_data)) { echo('You are registering for '.$ayear_data['title']);} ?>. <strong class="text-white"><?= $first_name.' '.$last_name; ?></strong>, Please complete your student profile</h4>
+                <h4 style="font-size:50px" class="text-dark mb-2"> <?php if(isset($ayear_data)) { echo('You are registering for '.$ayear_data['title']);} ?>. <strong class="text-white"><?= $first_name.' '.$last_name; ?></strong><?php if(isset($student_data)) { if($student_data['is_locked'] != 1){echo (', Please complete your student profile');}}else{echo (', Please complete your student profile');}?></h4>
                 <h5 style="font-size:30px" class="text-white text-uppercase mb-2">Deadline <?=$ayear_data['registration_deadline']?></h5>
 
 
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             <span aria-hidden="true">&times;</span>
                         </button>
 
-                When you save your profile, you only get <strong> one week </strong> period to change your profile information. After one week, our system administrator will lock your profile information and sent it to verification.
+                 You only have <strong><?php $now = date_create(); $doc=date_create($student_data['date_of_create']); date_add($doc,date_interval_create_from_date_string("7 days")); $diff = date_diff($now, $doc); echo($diff->format("%a days %H hours %I minutes")) ?></strong> period to change your profile information. After this period, our system administrator will lock your profile information and sent it to verification.
 
             </div>
                     <?php }else{ ?>
@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                 ?>
 
-                                Registration deadline is exceeded, <strong style="color: indianred"><?= $ayear_data['registration_deadline'] ?></strong> contact administrator!
+                                Registration deadline is exceeded, our system may not add your information <strong style="color: indianred"><?= $ayear_data['registration_deadline'] ?></strong> contact administrator!
 
 
                                 <?php
@@ -981,9 +981,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                     <input name="type" id="type" type="hidden" value="<?= $types ?>">
                     <input name="ayear_id" id="ayear_id" type="hidden" value="<?= $ayear_data['id'] ?>">
 
-                    <div class="text-center mt-4">
-                        <button name="student" type="submit" class="btn btn-xl btn-outline-primary" >Save</button>
-                    </div>
+                    <?php
+
+                    if(isset($student_data)){
+
+                        if($student_data['is_locked'] !=1)
+                        {
+                            ?>
+                            <div class="text-center mt-4">
+                                <button name="student" type="submit" class="btn btn-xl btn-outline-primary" >Save</button>
+                            </div>
+                            <?php
+                        }
+
+                    }else{ ?>
+                        <div class="text-center mt-4">
+                            <button name="student" type="submit" class="btn btn-xl btn-outline-primary" >Save</button>
+                        </div>
+                    <?php } ?>
+
+
                 </div>
 
             </form>
