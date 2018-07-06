@@ -10,19 +10,28 @@ session_start();
 </head>
 <body>
 <div class="form">
-    <h1><?= 'Error'; ?></h1>
-    <p class="text-danger">
-    <?php 
-    if( isset($_SESSION['message']) ):
-        echo $_SESSION['message'];
-        unset($_SESSION['message']);
-    else:
-        header( "location: index.php" );
-    endif;
-    ?>
-    </p>     
+
+    <div class="text-center jumbotron bg-white">
+        <h1><?= 'Error'; ?></h1>
+        <h5 class="text-danger">
+            <?php
+            if( isset($_SESSION['message']) ):
+                echo $_SESSION['message'];
+                unset($_SESSION['message']);
+            else:
+                header( "location: index.php" );
+            endif;
+            ?>
+        </h5>
+    </div>
     <a href="index.php"><button class="button button-block">Home</button></a>
-    <a id="back_btn"><button class="button button-block btn-sm">Back</button></a>
+
+    <div class="m-4">
+        <a id="back_btn"><button class="button button-block">Back</button></a>
+    </div>
+
+
+
 </div>
 
 
