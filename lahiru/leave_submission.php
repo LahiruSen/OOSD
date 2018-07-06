@@ -48,7 +48,7 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
             $employee = $result_new->fetch_assoc(); // employ become arry with employ data
             $employee_id = $employee['employee_id'];
 
-            $sql = "INSERT INTO leave_submission (employee_id, reason, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
+            $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
                 . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update')";
 
 

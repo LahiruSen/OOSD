@@ -23,6 +23,12 @@ if(isset($_SESSION['email']))
         $current_employee_type_result->free();
         $type_of_employment = $current_employee_type_data['title'];
     }
+    else
+    {
+        $_SESSION['message'] = "Not a valid email address";
+        header("location:error.php");
+
+    }
 
    if(isset($type_of_employment))
    {
@@ -51,51 +57,92 @@ academic year
 */
 
 
-//This array is useful to get previous value of post if there is validation error(s)
+//Defining validation check and old variable arrays
 
 $old = array();
-
-$old['title'] = $_POST['title'];
-$old['description'] = $_POST['description'];
-$old['from_date'] = $_POST['from_date'];
-$old['to_date'] = $_POST['to_date'];
-$old['registration_deadline'] = $_POST['registration_deadline'];
-$old['status'] = $_POST['status'];
-
-
-
-//validate post inputs
 $validation_result = array();
 
-$validation_result[] = array('title',address_validator($_POST['title']));
-$validation_result[] = array('description',address_validator($_POST['description']));
-$validation_result[] = array('from_date',address_validator($_POST['from_date']));
-$validation_result[] = array('to_date',address_validator($_POST['to_date']));
-$validation_result[] = array('registration_deadline',address_validator($_POST['registration_deadline']));
+if(isset($_POST['title'])){$old['title'] = $_POST['title'];}else{$validation_result[] = array('title',"Please put a valid title");}
+if(isset($_POST['description'])){$old['description'] = $_POST['description'];}else{$validation_result[] = array('description',"Please put a valid description");}
 
-
-//Might be needed
-
-//if(address_validator($_POST['from_date']) =="Y" && address_validator($_POST['to_date'])  == "Y" && isset($_POST['id']))
-//{
-//    $validation_result[] = array('from_to',date_withing_validator($_POST['from_date'],$_POST['to_date'],$mysqli,$_POST['id']));
-//}
-//else
-//    {
-//        $validation_result[] = array('from_to',date_withing_validator($_POST['from_date'],$_POST['to_date'],$mysqli));
-//    }
-
-$from_date = new DateTime($_POST['from_date']);
-$to_date = new DateTime($_POST['to_date']);
-$registration_deadline = new DateTime($_POST['registration_deadline']);
-
-
-
-if($registration_deadline>$to_date || $registration_deadline <$from_date)
+if(isset($_POST['id']))
 {
-    $validation_result[] = array('registration_deadline_not_range','Registration deadline is not in the academic year period');
+    if(isset($_POST['from_date']))
+    {
+        if(isset($_POST['to_date']))
+        {
+
+            $from_to = date_withing_validator($_POST['from_date'],$_POST['to_date'],$mysqli,$_POST['id']);
+        }else
+            {
+                $from_to = "Please select a valid date range";
+
+            }
+
+    }else
+    {
+        $from_to = "Please select a valid date range";
+    }
+
+}
+else
+{
+
+    if(isset($_POST['from_date']))
+    {
+        if(isset($_POST['to_date']))
+        {
+
+            $from_to = date_withing_validator($_POST['from_date'],$_POST['to_date'],$mysqli);
+        }else
+        {
+            $from_to = "Please select a valid date range";
+
+        }
+
+    }else
+    {
+        $from_to = "Please select a valid date range";
+    }
 }
 
+if(isset($_POST['from_date'])){$old['from_date'] = $_POST['from_date'];$validation_result[] = array('from_date',$from_to);}else{$validation_result[] = array('from_date',"Please put a valid start date");}
+if(isset($_POST['to_date'])){$old['to_date'] = $_POST['to_date'];$validation_result[] = array('to_date',$from_to);}else{$validation_result[] = array('to_date',"Please put a valid start date");}
+
+if(isset($_POST['from_date']))
+{
+    if(isset($_POST['to_date']))
+    {
+        if(isset($_POST['registration_deadline']))
+        {
+            $from_date = new DateTime($_POST['from_date']);
+            $to_date = new DateTime($_POST['to_date']);
+            $registration_deadline = new DateTime($_POST['registration_deadline']);
+
+            $val_deadline = deadline_validator($from_date,$to_date,$registration_deadline);
+
+        }
+        else
+        {
+            $val_deadline = "Please select a valid deadline";
+
+        }
+    }
+    else
+        {
+            $val_deadline = "To define a valid deadline, academic year end date should be defined first";
+
+        }
+}
+else
+    {
+        $val_deadline = "To define a valid deadline, academic year start date should be defined first";
+
+    }
+
+if(isset($_POST['registration_deadline'])){$old['registration_deadline'] = $_POST['registration_deadline'];$validation_result[] = array('registration_deadline',$val_deadline);}else{$validation_result[] = array('registration_deadline',"Please put a valid registration deadline");}
+
+if(isset($_POST['status'])){$old['status'] = $_POST['status'];}else{$validation_result[] = array('status',"Please select a valid title");}
 
 
 
@@ -159,7 +206,9 @@ if($error_counter == 0)
 
         $status = $_POST['status'];
         $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
-        $id = $_POST['id'];
+        $id = $_GET['id'];
+
+
 
         $sql_year = "SELECT * FROM academic_year WHERE id='$id'";
         $year_result = $mysqli->query($sql_year);
@@ -193,7 +242,56 @@ if($error_counter == 0)
     }
 
 
+
 }
+else
+    {
+
+        if(!isset($_POST['create_new_ay']))
+
+            {
+                $id = $_GET['id'];
+
+                if((is_int($id) || ctype_digit($id)) && (int)$id > 0)
+                {
+                    $ay_id = $id;
+
+                    $selceted_accedemic_years_result  =  $mysqli->query("select * from academic_year where id='$ay_id'") or die($mysqli->error());
+
+                    if($selceted_accedemic_years_result->num_rows !=0)
+                    {
+
+                        $selceted_accedemic_years_data=$selceted_accedemic_years_result->fetch_assoc();
+
+                        $selceted_accedemic_years_result->free();
+
+                        if(isset($selceted_accedemic_years_data))
+                        {
+
+                            $selected = $selceted_accedemic_years_data;
+
+                        }else
+                        {
+                            header("location: create_academic_year.php");
+                        }
+
+
+
+                    }else
+                    {
+                        header("location: create_academic_year.php");
+                    }
+
+
+                }else
+                {
+                    header("location: create_academic_year.php");
+                }
+
+            }
+
+
+    }
 
 
 

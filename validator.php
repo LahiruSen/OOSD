@@ -237,33 +237,90 @@ function employee_id_validator($val)
 
 }
 
-//No point to have this validation rule
 
-//function date_withing_validator($from_date,$to_date,$mysqli,$id=0)
-//{
-//
-//        if($id !=0)
-//    {
-//        $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE ('$from_date' <= to_date AND '$to_date' >= from_date AND '$id' <> id)") or die($mysqli->error());
-//    }else
-//        {
-//            $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE ('$from_date' <= to_date AND '$to_date' >= from_date)") or die($mysqli->error());
-//        }
-//
-//    if($academic_years_result->num_rows !=0 )
-//    {
-//        $return_text ="Date range is overlapping! with following academic years: ";
-//
-//
-//        while ($row = $academic_years_result->fetch_assoc())
-//        {
-//            $return_text = $return_text.$row['title'].' ';
-//        }
-//
-//        return $return_text;
-//    }else
-//        {
-//            return "Y";
-//        }
-//
-//}
+
+function date_withing_validator($from_date,$to_date,$mysqli,$id=0)
+{
+
+        if($id !=0)
+    {
+        $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE ((('$from_date' <= to_date AND '$from_date' >= from_date) OR ('$to_date' <= to_date AND '$to_date' >= from_date)) AND '$id' <> id)") or die($mysqli->error());
+    }else
+        {
+            $academic_years_result = $mysqli->query("SELECT * FROM academic_year WHERE (('$from_date' <= to_date AND '$from_date' >= from_date) OR ('$to_date' <= to_date AND '$to_date' >= from_date))") or die($mysqli->error());
+        }
+
+    if($academic_years_result->num_rows !=0 )
+    {
+        $return_text ="Date range is overlapping! with following academic years: ";
+
+
+        while ($row = $academic_years_result->fetch_assoc())
+        {
+            $return_text = $return_text.$row['title'].' ';
+        }
+
+        return $return_text;
+    }else
+        {
+            return "Y";
+        }
+
+}
+
+
+function deadline_validator($from_date,$to_date,$deadline)
+{
+    if($from_date<=$deadline && $deadline<= $to_date)
+    {
+
+        return "Y";
+    }
+    else
+        {
+            return "Deadline is not in the academic year range!";
+
+        }
+
+}
+
+function academic_year_for_level_validator($academic_year_id,$mysqli)
+{
+    if(isset($academic_year_id) )
+    {
+        if($academic_year_id != 0) {
+            $ay_id = $academic_year_id;
+            $ay = $mysqli->query("select * from academic_year where id = '$ay_id' and status <> -1");
+
+            if ($ay->num_rows != 0) {
+                $ay_data = $ay->fetch_assoc();
+
+                if (!isset($ay_data)) {
+
+
+                    return ['Something went wrong while fetching academic year',[]];
+                }else
+                    {
+                        $ay->free();
+
+                        return ['Y',$ay_data];
+
+                    }
+
+            } else {
+
+                return ['This academic year ID is not belongs to valid academic year',[]];
+            }
+        }else
+            {
+                return ['Please select one',[]];
+
+            }
+    }
+    else
+    {
+        return ["Not a valid academic year",[]];
+
+    }
+
+}

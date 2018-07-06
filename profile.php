@@ -126,27 +126,6 @@ elseif($_SESSION['active'] != 1)
 ?>
 
 
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-
-    if (isset($_POST['student'])) {
-
-        require 'twostep_submit_student.php';
-
-    }
-
-    elseif (isset($_POST['employee'])) {
-
-        require 'twostep_submit_employee.php';
-
-    }
-}
-
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -257,7 +236,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="full_name">Full Name</label>
                                 <input  type="text" id="full_name" name="full_name" required <?php if(isset($employee_data)) {echo 'value="'.$employee_data['full_name'].'"';} ?> readonly >
-
                             </div>
                         </div>
 

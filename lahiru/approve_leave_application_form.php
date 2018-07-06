@@ -4,11 +4,10 @@ require '../db.php';
 session_start();
 
 // Check if user is logged in using the session variable
-if ( $_SESSION['logged_in'] != 1 ) {
+if ($_SESSION['logged_in'] != 1) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
-}
-else {
+} else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
     $last_name = $_SESSION['last_name'];
@@ -36,7 +35,7 @@ if ($result->num_rows == 0) // User doesn't exist
     $user = $result->fetch_assoc(); // $user becomes array with user data
 
     $user_id = $user['id'];
-    $result_new = $mysqli->query("SELECT user_type_id FROM employee_data WHERE user_id='$user_id' ");
+    $result_new = $mysqli->query("SELECT employee_types.title FROM employee_types,employee_data WHERE employee_data.user_id = '$user_id' AND employee_types.id = employee_data.employee_type_id ");
 
     if ($result_new->num_rows == 0) {
         $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
@@ -44,20 +43,32 @@ if ($result->num_rows == 0) // User doesn't exist
         die();
     } else {
         $employee = $result_new->fetch_assoc(); // employ become arry with employ data
-        $user_type_id = $employee['user_type_id'];
+        $employee_title = $employee['title'];
+
+
+
 
 
         // if user is a principal
-        if ($user_type_id == 1) {
+        if (strcasecmp($employee_title, "Principal")==0) {
             $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
 
-        } else if ($user_type_id == 2) {
+
+
+
+
+        } elseif (strcasecmp($employee_title, "HR Manager")==0) {
             $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0");
-        } else {
+        }
+        elseif (strcasecmp($employee_title, "Administrator")==0) {
+            $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
+        }
+        else {
             $_SESSION['message'] = "You have no administrative priviledges";
             header("location:../error.php");
             die();
         }
+
 
     }
 
@@ -77,20 +88,23 @@ if ($result->num_rows == 0) // User doesn't exist
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $first_name . ' ' . $last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
 <body id="page-top">
 
 
-<?php if(!$active) { ?>
+<?php if (!$active) { ?>
 
     <div class="form text-center">
 
         <h4 class="alert-heading">Please verify your account!</h4>
-        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
-        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your
+            account!!!</p>
+        <a href="logout.php">
+            <button class="btn btn-group btn-lg">Logout</button>
+        </a>
 
     </div>
 
@@ -131,36 +145,86 @@ if ($result->num_rows == 0) // User doesn't exist
 
 
                 <div class=" col-lg-6">
-                    <div class="card card-style">
-                        <div class="card-header bg-topfive">
-                            <h3 class="card-header-pills">Top Sites</h3>
-                        </div>
-                        <div class="card-body">
-
-                            <?php if($_SESSION['two_step'] == 0) { ?>
-                                <div class="row topfive-margin">
-                                    <div class="col-lg-12">
-
-                                        <h2>This section will automatically enable after getting approval for your profile!</h2>
-
-                                    </div>
-
-                                </div>
-                            <?php }else{ ?>
 
 
-                            <?php } ?>
-
-                        </div>
-
-                        <?php if($_SESSION['two_step'] != 0) { ?>
-                            <div class="card-footer text-muted">
-                                <button class="btn btn-primary text-white btn-md">More</button>
-                            </div>
-                        <?php } ?>
-                    </div>
                 </div>
+
+                <?php if ($_SESSION['two_step'] != 0) { ?>
+                    <div class="container">
+
+
+                    <table class="table-active">
+                        <tbody>
+
+
+
+                        <?php
+
+                        if ($leave_result->num_rows!=0) {
+                            while ($row = $leave_result->fetch_object()) {
+                                $records[] = $row;
+                            }
+
+
+                            $leave_result->free();
+
+
+                        }
+                        else{ ?>
+
+                            <div class="container ">
+                                <h1>No Requests are pending for approval.</h1>
+
+                            </div>
+
+
+
+                            <?php
+                            die();
+                        }?>
+                                   <tr>
+                            <th>Employee ID</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            <th>Number Of Days</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Accept</th>
+                            <th>Reject</th>
+                            <th>Delete</th>
+                        </tr>
+                        <?php
+                        foreach ($records as $r) { ?>
+
+
+
+
+                            <tr>
+                                <form action="approve_leave_application.php" method="post">
+
+                                <td><?php echo $r->employ_id; ?></td>
+                                <td><?php echo $r->reason_for_leave; ?></td>
+                                <td><?php echo $r->description; ?></td>
+                                <td><?php echo $r->number_of_dates; ?></td>
+                                <td><?php echo $r->start_date; ?></td>
+                                <td><?php echo $r->end_date; ?></td>
+                                <td><input class="btn btn-dark text-light"  type="submit" value="Accept" name="accept" ></td>
+                                <td><input class="btn btn-dark text-light"  type="submit" value="Reject" name="reject" ></td>
+                                <td><input class="btn btn-dark text-light"  type="submit" value="Delete" name="delete" ></td>
+                                <td><input type="hidden" value="<?php echo $r->id ;?>" name="leave_id"><td>
+                                </form>
+                            </tr>
+                        <?php }?>
+
+                        </tbody>
+                    </table>
+
+                    </div>
+
+                <?php } ?>
             </div>
+        </div>
+        </div>
 
         </div>
         </div>
@@ -190,26 +254,26 @@ if ($result->num_rows == 0) // User doesn't exist
 
     <!--Model-->
 
-<?php if($_SESSION['two_step'] == 0) {
+<?php if ($_SESSION['two_step'] == 0) {
 
 
-$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+$user_result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 
-if($user_result->num_rows != 0)
+if ($user_result->num_rows != 0)
 {
 $user_data = $user_result->fetch_assoc();
 $user_result->free();
 $user_id = $user_data['id'];
-$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+$employee_result = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
 
 
-if($employee_result->num_rows != 0)
+if ($employee_result->num_rows != 0)
 {
 $employee_data = $employee_result->fetch_assoc();
 
 $employee_result->free();
 
-if($employee_data['is_locked'] != 1)
+if ($employee_data['is_locked'] != 1)
 {
 ?>
 
@@ -225,7 +289,8 @@ if($employee_data['is_locked'] != 1)
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -239,8 +304,7 @@ if($employee_data['is_locked'] != 1)
 
     <?php
 }
-else
-{
+else {
     ?>
 
     <div class="modal fade" id="completeProfile">
@@ -249,13 +313,15 @@ else
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
+                    <h4 class="modal-title text-warning">Activation is pending <i
+                                class="fa fa-exclamation-triangle"></i></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -271,8 +337,7 @@ else
 }
 
 }
-else
-{
+else {
 
     ?>
 
@@ -288,7 +353,8 @@ else
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -306,15 +372,13 @@ else
 
 }
 
-else
-{
+else {
 
     $_SESSION['message'] = "You are not a valid user";
     header("location:error.php");
 }
 
 } ?>
-
 
 
     <!-- Footer -->
@@ -397,10 +461,9 @@ else
 <script src="js/freelancer.js"></script>
 
 
-
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
+<?php if ($_SESSION['two_step'] == 0) { ?>
+    <script>
+        $(document).ready(function () {
             $('#completeProfile').modal('show');
         });
 

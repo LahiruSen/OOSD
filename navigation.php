@@ -132,12 +132,12 @@
                         <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">Registration</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Student Registration</a>
+                            <a class="dropdown-item" href="registration_ay_list.php">Student Registration</a>
                             <a class="dropdown-item" href="#">Employee Registration</a>
-                            <a class="dropdown-item" href="#">Employee Leave Request</a>
-                            <a class="dropdown-item" href="#">User Profiles</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration Setting</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Add Courses</a>
                         </div>
                     </div>
                 </li>
@@ -164,32 +164,80 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="create_academic_year.php">Academic Years</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Academic Level</a>
+                            <a class="dropdown-item" href="create_academic_level.php">Academic Level</a>
+
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Employee Leaves
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Employee Leaves</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Employee Leave Request</a>
 
                         </div>
                     </div>
                 </li>
 
 
+
             <?php }
             elseif ($employee_type_data['title'] == 'Teacher') { ?>
                 <!--FOR Teacher-->
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <a href="home_employee.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
+                            Home
+                        </a>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a href="Udhan/courses.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Courses</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Leave
+                        </button>
+                        <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">My Leave</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Available leave</a>
+                            <a class="dropdown-item" href="#">Submit leave</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notification
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Notification</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Create Notification</a>
+                            <a class="dropdown-item" href="#">Notification List</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Courses
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Courses</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="">Courses list</a>
+                            <a class="dropdown-item" href="">Enter Marks</a>
+                            <a class="dropdown-item" href="create_academic_level.php">Attendance</a>
+
+                        </div>
+                    </div>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
-                </li>
+
 
 
             <?php }
@@ -197,42 +245,98 @@
                 <!--FOR Principal-->
 
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
+                    <div class="dropdown">
+                        <a href="home_employee.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
+                            Home
+                        </a>
+
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a href="Udhan/courses.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Courses</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Leave
+                        </button>
+                        <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">My Leave</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/lahiru/check_leave.php">Available leave</a>
+                            <a class="dropdown-item" href="/lahiru/leave_submission.php">Submit leave</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notification
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Notification</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Create Notification</a>
+                            <a class="dropdown-item" href="#">Notification List</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
-                </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Approve Leave
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="lahiru/approve_leave_application_form.php    ">Approve Leave</a>
+                        </div>
+                    </div>
                 </li>
 
 
             <?php }
             elseif ($employee_type_data['title'] == 'HR Manager') { ?>
                 <!--FOR HR Manager-->
+                <li class="nav-item mx-0 mx-lg-1">
+                    <div class="dropdown">
+                        <a href="home_employee.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
+                            Home
+                        </a>
 
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a href="leave.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#portfolio">Leave</a>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a href="Udhan/courses.php" class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Courses</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Leave
+                        </button>
+                        <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">My Leave</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Available leave</a>
+                            <a class="dropdown-item" href="#">Submit leave</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 3</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Notification
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <h6 class="dropdown-header">Notification</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Create Notification</a>
+                            <a class="dropdown-item" href="#">Notification List</a>
+                        </div>
+                    </div>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">Link 4</a>
+                    <div class="dropdown">
+                        <button style="width: 100%" class="btn  dropdown-toggle btn-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Approve Leave
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="">Approve Leave</a>
+                        </div>
+                    </div>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">Link 5</a>
-                </li>
-
 
             <?php }
 
@@ -367,31 +471,66 @@
 ?>
 
                 <!--FOR Student-->
-                <li class="nav-item mx-0 mx-lg-1">
-                    <div class="dropdown">
-                        <a href="home_student.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
-                            Home
-                        </a>
+        <li class="nav-item mx-0 mx-lg-1">
+            <div class="dropdown">
+                <a href="home_employee.php" style="width: 100%; border-radius: .25rem" class="btn btn-primary text-capitalize"  >
+                    Home
+                </a>
 
-                    </div>
-                </li>
-                <li class="nav-item mx-0 mx-lg-1">
-                    <div class="dropdown">
-                        <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Student Link 1
-                        </button>
-                        <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
-                            <h6 class="dropdown-header">Student Link 1</h6>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Student link 1 sub-link 1</a>
-                            <a class="dropdown-item" href="#">>Student link 1 sub-link 2</a>
-                            <a class="dropdown-item" href="#">>Student link 1 sub-link 3</a>
-                            <a class="dropdown-item" href="#">>Student link 1 sub-link 4</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">>Student link 1 sub-link 5</a>
-                        </div>
-                    </div>
-                </li>
+            </div>
+        </li>
+        <li class="nav-item mx-0 mx-lg-1">
+            <div class="dropdown">
+                <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                   Courses
+                </button>
+                <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                    <h6 class="dropdown-header">Courses</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Enroll Course</a>
+                    <a class="dropdown-item" href="#">Course List</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item mx-0 mx-lg-1">
+            <div class="dropdown">
+                <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Due Assignments
+                </button>
+                <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                    <h6 class="dropdown-header">Due Assignments</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Due Assignments List</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item mx-0 mx-lg-1">
+            <div class="dropdown">
+                <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Scholarships
+                </button>
+                <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                    <h6 class="dropdown-header">Scholarships</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Submit Scholarship</a>
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item mx-0 mx-lg-1">
+            <div class="dropdown">
+                <button style="width: 100%" class="btn dropdown-toggle btn-danger" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Grades
+                </button>
+                <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
+                    <h6 class="dropdown-header">Grades</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">View Grades</a>
+                </div>
+            </div>
+        </li>
 
             <?php
 

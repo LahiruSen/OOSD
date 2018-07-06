@@ -55,27 +55,6 @@ else {
         $type_of_employment = $current_employee_type_data['title'];
     }
 
-    $all_accedemic_levels_result  =  $mysqli->query("select * from level") or die($mysqli->error());
-    $all_accedemic_years_result  =  $mysqli->query("select * from academic_year where status <> -1 ") or die($mysqli->error());
-
-    if($all_accedemic_levels_result->num_rows !=0 && $all_accedemic_years_result->num_rows !=0) {
-        $all_accedemic_levels_data = array();
-        $all_accedemic_years_data = array();
-
-        while ($row = $all_accedemic_levels_result->fetch_assoc())
-        {
-            $all_accedemic_levels_data[] = $row;
-        }
-
-        while ($row2 = $all_accedemic_years_result->fetch_assoc())
-        {
-            $all_accedemic_years_data[] = $row2;
-        }
-
-
-        $all_accedemic_levels_result->free();
-        $all_accedemic_years_result->free();
-    }
 
 
 
@@ -87,62 +66,102 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         if((is_int($_GET['id']) || ctype_digit($_GET['id'])) && (int)$_GET['id'] > 0)
         {
-            $level_id = $_GET['id'];
+            $student_id = $_GET['id'];
 
-            $selceted_accedemic_level_result  =  $mysqli->query("select * from level where id='$level_id'") or die($mysqli->error());
+            $student_data_result =  $mysqli->query("select * from student_data where id='$student_id'") or die($mysqli->error());
 
-            if($selceted_accedemic_level_result->num_rows !=0)
+            if($student_data_result->num_rows !=0)
             {
 
-                $selceted_accedemic_level_data=$selceted_accedemic_level_result->fetch_assoc();
+                $student_data=$student_data_result->fetch_assoc();
 
-                $selceted_accedemic_level_result->free();
-
-                if(isset($selceted_accedemic_level_data))
-                {
-
-                    $selected = $selceted_accedemic_level_data;
-
-                }else
-                    {
-                        header("location: create_academic_level.php");
-
-
-                        //should set error in here
-                    }
-
+                $student_data_result->free();
 
 
             }else
                 {
-                    header("location: create_academic_level.php");
 
-                    //should set error in here
+                    $_SESSION['message'] = "Student id is not a valid id!";
+                    header("location:error.php");
+
                 }
 
 
         }else
             {
-                header("location: create_academic_level.php");
+                $_SESSION['message'] = "Id should be an integer";
+                header("location:error.php");
 
-                //should set error in here
+
             }
 
-    }
+    }elseif (isset($_GET['academic_year_id']))
+    {
+
+        if((is_int($_GET['academic_year_id']) || ctype_digit($_GET['academic_year_id'])) && (int)$_GET['academic_year_id'] > 0)
+        {
+            $student_ayid = $_GET['academic_year_id'];
+
+            $academic_year = $mysqli->query("select title from academic_year where id='$student_ayid'");
+
+            if($academic_year->num_rows !=0)
+            {
+
+                $academic_year_title = $academic_year->fetch_assoc();
+
+                $academic_year_title = $academic_year_title['title'];
+            }else
+                {
+                    $_SESSION['message'] = "Academic year id is not a valid id!";
+                    header("location:error.php");
+
+                }
+
+            $all_student_data_result =  $mysqli->query("select * from student_data where registered_ayear_id='$student_ayid'") or die($mysqli->error());
+
+            if($all_student_data_result->num_rows !=0)
+            {
+
+                $all_student_data= array();
+
+                while($row = $all_student_data_result->fetch_assoc())
+                {
+                    $all_student_data[] = $row;
+
+                }
+                $all_student_data_result->free();
 
 
-}elseif($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+            }else
+            {
 
-    require 'academic_level_submit.php';
+                $_SESSION['message'] = "No student are associated with the academic year";
+                header("location:error.php");
+
+            }
+
+
+        }else
+        {
+            $_SESSION['message'] = "Academic year id should be an integer";
+            header("location:error.php");
+
+
+        }
+
+
+    }else
+        {
+            $_SESSION['message'] = "No valid parameters";
+            header("location:error.php");
+
+        }
+
 
 }
 
-//THE RULE WILL CHANGE IN HERE DUE TO RULES
-
     if($type_of_employment == 'Administrator'){
     ?>
-
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
@@ -163,8 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Academic Levels <i class="fa fa-graduation-cap"></i> </h2>
-
+            <h2 style="font-size:50px" class="text-dark mb-2">Students Registration <i class="fa fa-graduation-cap"></i> </h2>
         </div>
 
     </header>
@@ -175,163 +193,64 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
             <div class="row text-center">
-                        <div class="col-lg-8  col-xl-8">
-                            <?php if(isset($_GET['id'])){?>
-                                <h3 class="text-center text-uppercase text-secondary mb-0">Update</h3>
-                            <?php }else { ?>
-                                <h3 class="text-center text-uppercase text-secondary mb-0">Create New</h3>
-                            <?php } ?>
-                            <hr class="star-dark mb-5">
-                            <form id="two_step_submission_form" class="two_step_form" <?php if(isset($_GET['id'])){ ?>action="create_academic_level.php?id=<?php echo $_GET['id'] ?>" <?php }else{ ?> action="create_academic_level.php" <?php } ?> method="post">
+                        <div class="col-lg-12  col-xl-12">
+                            <?php if(isset($all_student_data)){?>
+                                <h3 class="text-center text-uppercase text-secondary mb-0">All Student List</h3>
+                                <h5 class="text-center text-uppercase text-primary mb-0"><?=$academic_year_title?></h5>
+
+                                <hr class="star-dark mb-5">
                                 <div class="container">
                                     <div class="text-left ">
-                                        <div id="form_section_header" class="bg-topfive">
-                                            <h2 class="text-white"> Basic information </h2>
-                                        </div>
-                                        <div class="row m-2">
-                                            <div class=" form-group col-lg-12 col-md-12">
-                                                <label class="text-dark" for="title">Title</label>
-                                                <input  class="text-dark <?php if(isset($error_array) && array_key_exists('title',$error_array))  { echo('text-danger');} ?>" type="text" id="title" name="title" required <?php if(isset($old)){echo 'value="'.$old['title'].'"';}elseif(isset($selected)){echo 'value="'.$selected['title'].'"';} ?> >
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                                <th>ID</th>
+                                                <th>Full Name</th>
+                                                <th>NIC</th>
+                                                <th>Information status</th>
+                                                <th>Registration Number</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
 
-                                                <?php if(isset($error_array) && array_key_exists('title',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['title'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
+                                            <?php foreach ($all_student_data as $sd){ ?>
+                                                <form id="two_step_submission_form" class="two_step_form" action="student_registrations.php?id=<?= $sd['id'];?>" method="post">
+                                                    <tr>
+                                                        <td><?= $sd['id'] ?></td>
+                                                        <td><?= $sd['full_name'] ?></td>
+                                                        <td><?= $sd['nic'] ?></td>
+                                                        <td><?php if($sd['is_locked'] == 1){echo("Locked");}else{echo("Not locked");} ?></td>
+                                                        <td><?php if($sd['registration_number'] == null){echo("Pending");}else{$sd['registration_number'];} ?></td>
+                                                        <td>
+                                                            <div class="btn-group" role="group" >
+                                                                <button class="btn btn-info m-1" type="submit">View</button>
+                                                                <?php if($sd['is_locked'] == 1){?>
+                                                                    <button class="btn btn-success m-1" type="submit" formaction="student_registrations_approve.php?id=<?= $sd['id'];?>" >Approve</button>
+                                                                <?php } ?>
+                                                                <button class="btn btn-danger m-1" formaction="student_registrations_delete.php?id=<?= $sd['id'];?>" >Delete</button>
+                                                            </div>
+                                                        </td>
 
-                                            </div>
-                                        </div>
-                                        <div class="row m-2">
-                                            <div class=" form-group col-lg-12 col-md-12">
-                                                <label class="text-dark" for="description">Description</label>
-                                                <textarea rows="10" class="textarea_expand text-dark <?php if(isset($error_array) && array_key_exists('description',$error_array))  { echo('text-danger');} ?>" type="text" id="description" name="description" required  ><?php if(isset($old)){echo $old['description'];}elseif(isset($selected)){echo $selected['description'];}?></textarea>
-
-                                                <?php if(isset($error_array) && array_key_exists('description',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['description'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-
-                                            </div>
-                                        </div>
-                                        <div id="form_section_header" class="bg-topfive">
-                                            <h2 class="text-white">Academic Year </h2>
-                                        </div>
-                                        <div class="row m-2">
-
-
-                                            <div class="form-group col-lg-6 col-md-6">
-                                                <div class="input-group date">
-                                                    <label class="text-dark" for="academic_year_id">Academic Year</label>
-                                                    <select id="academic_year_id" name="academic_year_id">
-
-
-                                                        <option value="0">Select an academic year</option>
-
-                                                        <?php for ( $i=0;$i<count($all_accedemic_years_data);$i++ ) {  ?>
-
-
-                                                            <option data-fromdate="<?php echo($all_accedemic_years_data[$i]['registration_deadline']) ?>" data-todate="<?php echo($all_accedemic_years_data[$i]['to_date']) ?>" value="<?php echo($all_accedemic_years_data[$i]['id']) ?>" <?php if(isset($old)){if ($old['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}else{if(isset($selected)) {if ($selected['academic_year_id'] == $all_accedemic_years_data[$i]['id']) {echo "selected";}}} ?> ><?php echo($all_accedemic_years_data[$i]['title']) ?> </option>
-
-                                                        <?php } ?>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-lg-6 col-md-6" >
-                                                <label class="text-dark" for="deadline">Course Registration Deadline</label>
-                                                <input type="text" id="datetimepicker3" data-toggle="datetimepicker" data-target="#datetimepicker3"  class="form-control datetimepicker-input text-dark <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  { echo('text-danger');} ?>"  name="deadline" required  placeholder="Deadline here" disabled >
-
-                                                <?php if(isset($error_array) && array_key_exists('deadline',$error_array))  {?>
-                                                    <div class="row">
-                                                        <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                                                            <small id="passwordHelp" class="text-danger">
-                                                                <?= $error_array['deadline'] ?>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                <?php } ?>
-
-                                            </div>
-
-
-
-
-                                        </div>
-
-                                        <div class="row m-2">
-
-                                            <?php if(isset($selected)) {?>
-                                                <div class="text-center mt-4 w-100">
-                                                    <button name="update_al" type="submit" class="btn btn-xl btn-outline-primary" >Update</button>
-                                                </div>
-                                            <?php }else{?>
-                                                <div class="text-center mt-4 w-100">
-                                                    <button name="create_new_al" type="submit" class="btn btn-xl btn-outline-success" >Create</button>
-                                                </div>
+                                                    </tr>
+                                                </form>
                                             <?php } ?>
-                                        </div>
+
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </form>
+
+                            <?php }elseif(isset($student_data)) { ?>
+
+                                <h3 class="text-center text-uppercase text-secondary mb-0">Student Data</h3>
+
+                            <?php } ?>
+
+
                         </div>
 
-                        <div class="col-lg-4  col-xl-4">
-                            <h3 class="text-center text-uppercase text-secondary mb-0">List</h3>
-                            <hr class="star-dark mb-5">
-                            <div class="container">
-                                <div class="text-left two_step_form">
-                                    <?php if(isset($_GET['id'])){ ?>
-                                        <div class="form-group text-center">
-
-                                                <a href="create_academic_level.php" class="btn btn-xl btn-outline-success" >Create New</a>
-
-                                        </div>
-
-
-                                    <?php }?>
-                                    <?php if(isset($all_accedemic_levels_data)) { ?>
-
-                                        <button id="academic_level_togal" type="button" class="btn btn-primary w-100">
-                                            Academic levels
-                                        </button>
-
-
-                                        <div  class="container w-100 text-center">
-                                            <ul id="academic_level_div" class="list-group  w-100 text-center">
-
-                                            </ul>
-                                        </div>
-
-                                    <?php } else { ?>
-
-
-                                        <?php if(isset($_GET['id'])){ ?>
-
-                                            <div class="text-center mt-4 w-100">
-                                                <a href="create_academic_level.php" class="btn btn-xl btn-outline-primary" >Create New</a>
-                                            </div>
-                                        <?php }?>
-
-                                        <div class="jumbotron jumbotron-fluid bg-topfive">
-                                            <div class="container">
-                                                <h1>Can't Find Any Academic Levels</h1>
-                                                <p>Please create a new academic level!</p>
-                                            </div>
-                                        </div>
-                                   <?php } ?>
-                                </div>
-                            </div>
-                        </div>
             </div>
 
         </div>
