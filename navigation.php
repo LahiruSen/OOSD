@@ -230,7 +230,7 @@
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">Courses</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="">Courses list</a>
+                            <a class="dropdown-item" href="u_courses_teacher.php">Courses list</a>
                             <a class="dropdown-item" href="">Enter Marks</a>
                             <a class="dropdown-item" href="create_academic_level.php">Attendance</a>
 
@@ -488,7 +488,7 @@
                     <h6 class="dropdown-header">Courses</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Enroll Course</a>
-                    <a class="dropdown-item" href="#">Course List</a>
+                    <a class="dropdown-item" href="u_courses_student.php">Course List</a>
                 </div>
             </div>
         </li>
@@ -501,7 +501,7 @@
                 <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                     <h6 class="dropdown-header">Due Assignments</h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Due Assignments List</a>
+                    <a class="dropdown-item" href="u_view_due_assignments_student.php">Due Assignments List</a>
                 </div>
             </div>
         </li>
