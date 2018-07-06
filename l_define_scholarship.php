@@ -20,7 +20,10 @@ else {
 
     if ($types == 2) {
         header("location: home_student.php");
+        die();
     }
+
+    $current_employee_type_result = 
 
 
 
