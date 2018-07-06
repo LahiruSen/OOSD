@@ -19,62 +19,54 @@ if ($_SESSION['logged_in'] != 1) {
     if ($types == 2) {
         header("location: home_student.php");
     }
-}
-
-$email = $_SESSION['email'];
-$result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
-
-if ($result->num_rows == 0) // User doesn't exist
-{
-    $_SESSION['message'] = "This user detail doesn't exist in the system.";
-    header("location: ../error.php");
-    die();
-} else { // User exists (num_rows != 0)
 
 
-    $user = $result->fetch_assoc(); // $user becomes array with user data
+    $email = $_SESSION['email'];
+    $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
 
-    $user_id = $user['id'];
-    $result_new = $mysqli->query("SELECT employee_types.title FROM employee_types,employee_data WHERE employee_data.user_id = '$user_id' AND employee_types.id = employee_data.employee_type_id ");
-
-    if ($result_new->num_rows == 0) {
-        $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
-        header("location:../error.php");
+    if ($result->num_rows == 0) // User doesn't exist
+    {
+        $_SESSION['message'] = "This user detail doesn't exist in the system.";
+        header("location: ../error.php");
         die();
-    } else {
-        $employee = $result_new->fetch_assoc(); // employ become arry with employ data
-        $employee_title = $employee['title'];
+    } else { // User exists (num_rows != 0)
 
 
+        $user = $result->fetch_assoc(); // $user becomes array with user data
 
+        $user_id = $user['id'];
+        $result_new = $mysqli->query("SELECT employee_types.title FROM employee_types,employee_data WHERE employee_data.user_id = '$user_id' AND employee_types.id = employee_data.employee_type_id ");
 
-
-        // if user is a principal
-        if (strcasecmp($employee_title, "Principal")==0) {
-            $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
-
-
-
-
-
-        } elseif (strcasecmp($employee_title, "HR Manager")==0) {
-            $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0");
-        }
-        elseif (strcasecmp($employee_title, "Administrator")==0) {
-            $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
-        }
-        else {
-            $_SESSION['message'] = "You have no administrative priviledges";
+        if ($result_new->num_rows == 0) {
+            $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
             header("location:../error.php");
             die();
+        } else {
+            $employee = $result_new->fetch_assoc(); // employ become arry with employ data
+            $employee_title = $employee['title'];
+
+
+            // if user is a principal
+            if (strcasecmp($employee_title, "Principal") == 0) {
+                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
+
+
+            } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
+                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0");
+            } elseif (strcasecmp($employee_title, "Administrator") == 0) {
+                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
+            } else {
+                $_SESSION['message'] = "You have no administrative priviledges";
+                header("location:../error.php");
+                die();
+            }
+
+
         }
 
 
     }
-
-
 }
-
 
 // Check if form submitted with method="post"
 ?>
@@ -88,23 +80,20 @@ if ($result->num_rows == 0) // User doesn't exist
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name . ' ' . $last_name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
 <body id="page-top">
 
 
-<?php if (!$active) { ?>
+<?php if(!$active) { ?>
 
     <div class="form text-center">
 
         <h4 class="alert-heading">Please verify your account!</h4>
-        <p>We have sent you a verification email to your email account. Please click verification link to verify your
-            account!!!</p>
-        <a href="logout.php">
-            <button class="btn btn-group btn-lg">Logout</button>
-        </a>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
+        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
 
     </div>
 
@@ -136,6 +125,7 @@ if ($result->num_rows == 0) // User doesn't exist
 
     </header>
 
+
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
         <div class="container ">
@@ -153,71 +143,70 @@ if ($result->num_rows == 0) // User doesn't exist
                     <div class="container">
 
 
-                    <table class="table-active">
-                        <tbody>
-
-
-
-                        <?php
-
-                        if ($leave_result->num_rows!=0) {
-                            while ($row = $leave_result->fetch_object()) {
-                                $records[] = $row;
-                            }
-
-
-                            $leave_result->free();
-
-
-                        }
-                        else{ ?>
-
-                            <div class="container ">
-                                <h1>No Requests are pending for approval.</h1>
-
-                            </div>
-
+                        <table class="table-active">
+                            <tbody>
 
 
                             <?php
-                            die();
-                        }?>
-                                   <tr>
-                            <th>Employee ID</th>
-                            <th>Reason</th>
-                            <th>Description</th>
-                            <th>Number Of Days</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Accept</th>
-                            <th>Reject</th>
-                            <th>Delete</th>
-                        </tr>
-                        <?php
-                        foreach ($records as $r) { ?>
+
+                            if ($leave_result->num_rows != 0) {
+                                while ($row = $leave_result->fetch_object()) {
+                                    $records[] = $row;
+                                }
 
 
+                                $leave_result->free();
 
 
+                            } else { ?>
+
+                                <div class="container ">
+                                    <h1>No Requests are pending for approval.</h1>
+
+                                </div>
+
+
+                                <?php
+                                die();
+                            } ?>
                             <tr>
-                                <form action="approve_leave_application.php" method="post">
-
-                                <td><?php echo $r->employ_id; ?></td>
-                                <td><?php echo $r->reason_for_leave; ?></td>
-                                <td><?php echo $r->description; ?></td>
-                                <td><?php echo $r->number_of_dates; ?></td>
-                                <td><?php echo $r->start_date; ?></td>
-                                <td><?php echo $r->end_date; ?></td>
-                                <td><input class="btn btn-dark text-light"  type="submit" value="Accept" name="accept" ></td>
-                                <td><input class="btn btn-dark text-light"  type="submit" value="Reject" name="reject" ></td>
-                                <td><input class="btn btn-dark text-light"  type="submit" value="Delete" name="delete" ></td>
-                                <td><input type="hidden" value="<?php echo $r->id ;?>" name="leave_id"><td>
-                                </form>
+                                <th>Employee ID</th>
+                                <th>Reason</th>
+                                <th>Description</th>
+                                <th>Number Of Days</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Accept</th>
+                                <th>Reject</th>
+                                <th>Delete</th>
                             </tr>
-                        <?php }?>
+                            <?php
+                            foreach ($records as $r) { ?>
 
-                        </tbody>
-                    </table>
+
+                                <tr>
+                                    <form action="approve_leave_application.php" method="post">
+
+                                        <td><?php echo $r->employ_id; ?></td>
+                                        <td><?php echo $r->reason_for_leave; ?></td>
+                                        <td><?php echo $r->description; ?></td>
+                                        <td><?php echo $r->number_of_dates; ?></td>
+                                        <td><?php echo $r->start_date; ?></td>
+                                        <td><?php echo $r->end_date; ?></td>
+                                        <td><input class="btn btn-dark text-light" type="submit" value="Accept"
+                                                   name="accept"></td>
+                                        <td><input class="btn btn-dark text-light" type="submit" value="Reject"
+                                                   name="reject"></td>
+                                        <td><input class="btn btn-dark text-light" type="submit" value="Delete"
+                                                   name="delete"></td>
+                                        <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
+                                        <td>
+                                    </form>
+                                </tr>
+                            <?php } ?>
+
+                            </tbody>
+                        </table>
 
                     </div>
 

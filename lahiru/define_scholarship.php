@@ -1,12 +1,15 @@
+
 <?php
-/* Reset your password form, sends reset.php password link */
-require '../db.php';
+/* Displays user information and some useful messages */
+require 'db.php';
 session_start();
 
-if ($_SESSION['logged_in'] != 1) {
+// Check if user is logged in using the session variable
+if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
-} else {
+}
+else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
     $last_name = $_SESSION['last_name'];
@@ -17,69 +20,33 @@ if ($_SESSION['logged_in'] != 1) {
 
     if ($types == 2) {
         header("location: home_student.php");
-    } else {
-
-// Check if form submitted with method="post"
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {   // set variables to be inserted to database
-
-            $reason = $mysqli->escape_string($_POST['reason']);
-            $description = $mysqli->escape_string($_POST['description']);
-            $start_date = $mysqli->escape_string($_POST['start_date']);
-            $end_date = $mysqli->escape_string($_POST['end_date']);
-            $date_of_create = $mysqli->escape_string(date("Y-m-d H:i:s"));
-            $date_of_update = $mysqli->escape_string(date("Y-m-d H:i:s"));
-
-            $datetime1 = new DateTime($start_date);
-            $datetime2 = new DateTime($end_date);
-
-            $number_of_dates = $datetime2->diff($datetime1)->d;
-
-
-            $email = $_SESSION['email'];
-            $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
-
-            if ($result->num_rows == 0) // User doesn't exist
-            {
-                $_SESSION['message'] = "This user detail doesn't exist in the system.";
-                header("location: ../error.php");
-                die();
-            } else { // User exists (num_rows != 0)
-
-                $user = $result->fetch_assoc(); // $user becomes array with user data
-
-                $user_id = $user['id'];
-                $result_new = $mysqli->query("SELECT employee_id FROM employee_data WHERE user_id='$user_id' ");
-
-                if ($result_new->num_rows == 0) {
-                    $_SESSION['message'] = "This employ detail doesn't exist in the system.";
-                    header("location: ../error.php");
-                    die();
-                } else {
-                    $employee = $result_new->fetch_assoc(); // employ become arry with employ data
-                    $employee_id = $employee['employee_id'];
-
-                    $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
-                        . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update')";
-
-
-                    if ($mysqli->query($sql)) {
-
-                        $_SESSION['message'] = "Your leave application was uploaded successfully";
-                        header("location: ../success.php");
-                        die();
-
-                    } else {
-                        $_SESSION['message'] = "Sorry. Your application could not be uploaded";
-                        header("location: ../error.php");
-                        die();
-                    }
-
-                }
-
-            }
-        }
     }
-} ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -109,68 +76,86 @@ if ($_SESSION['logged_in'] != 1) {
 <?php } else { ?>
 
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
-        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fa fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <?php require '../navigation.php';?>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
+            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <?php require 'navigation.php';?>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Header -->
-<header class="masthead bg-primary text-white text-center ">
+    <!-- Header -->
+    <header class="masthead bg-primary text-white text-center ">
 
-    <div>
-        <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
-    </div>
-
-</header>
-
-
-<body>
-
-<div class="form">
-
-    <h1>Apply for leave</h1>
-
-    <form action="leave_submission.php" method="post">
-        <div class="field-wrap">
-
-            <label>
-                Reason for Leave<span class="req">*</span>
-            </label>
-            <input type="text" name="reason"/>
-            <label>
-                Description<span class="req">*</span>
-            </label>
-            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50"></textarea>
-            <label>
-                Start Date<span class="req">*</span>
-            </label>
-            <input type="date" name="start_date" max='2018-12-31' min= <?php echo date('Y-m-d'); ?>/>
-            <label>
-                End Date<span class="req">*</span>
-            </label>
-            <input type="date" name="end_date" max='2018-12-31' min=  <?php echo date('Y-m-d'); ?>/>
+        <div>
+            <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
+            <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+            <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
         </div>
-        <button class="button button-block"/>
-        Apply </button>
-    </form>
-</div>
 
-<script src='js/jquery.min.js'></script>
-<script src="js/index.js"></script>
-</body>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="" id="portfolio">
+        <div class="container ">
+            <h2 class="text-center text-uppercase text-secondary mb-0">Add new scholarship</h2>
+            <hr class="star-dark mb-5">
+            <div class="row">
+
+                <div class="col-lg-6 ">
 
 
+                    <h1 class="display-4">You're here to add new scholarship type.</h1>
+                    <p class="lead">Please some one give brief introduction in here [TASK]</p>
+
+
+
+
+
+                </div>
+                <div class=" col-lg-6">
+                    <div class="card card-style">
+                        <div class="card-header bg-topfive">
+                            <h3 class="card-header-pills">Top Sites</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <?php if($_SESSION['two_step'] == 0) { ?>
+                                <div class="row topfive-margin">
+                                    <div class="col-lg-12">
+
+                                        <h2>This section will automatically enable after getting approval for your profile!</h2>
+
+                                    </div>
+
+                                </div>
+                            <?php }else{ ?>
+
+
+                            <?php } ?>
+
+                        </div>
+
+                        <?php if($_SESSION['two_step'] != 0) { ?>
+                            <div class="card-footer text-muted">
+                                <button class="btn btn-primary text-white btn-md">More</button>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
     <section class="bg-primary text-white mb-0" id="about">
         <div class="container">
             <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
@@ -414,7 +399,5 @@ else
 
 </body>
 </html>
-
-
 
 

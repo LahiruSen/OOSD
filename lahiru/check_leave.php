@@ -132,9 +132,14 @@ if ($_SESSION['logged_in'] != 1) {
 
 
     <h1>Available Leave</h1>
-    <p>
-        You have total <?php echo $days ?> leave days available for this year.<span class="req"></span>
-    </p>
+    <div class="container" style="height: 25%" >
+        <div style="margin-top: 10%">
+            <h2>
+                You have total <?php echo $days ?> leave days available for this year.<span class="req"></span>
+            </h2>
+        </div>
+
+    </div>
 
 
     <!-- About Section -->
