@@ -8,7 +8,7 @@
 require 'u_connection.php';
 
 $user_id=$_SESSION['user_id'];
-$user_type=$_SESSION['type'];
+$user_type=$_SESSION['types'];
 
 $course_query_teacher='';
 $course_query_student='';

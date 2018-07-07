@@ -1,14 +1,10 @@
+
 <?php
-/**
- * Created by PhpStorm.
- * User: Udhan
- * Date: 3/31/2018
- * Time: 11:41 AM
- */
-
+/* Displays user information and some useful messages */
+require 'db.php';
 session_start();
-require 'u_connection.php';
 
+// Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
@@ -24,23 +20,49 @@ else {
 
     if ($types == 2) {
         header("location: home_student.php");
+        die();
     }
+    else {
+        if (isset($_SESSION['email'])) {
+            $email = $_SESSION['email'];
+            $current_employee_type_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
+            if ($current_employee_type_result->num_rows != 0) {
+                $current_employee_type_data = $current_employee_type_result->fetch_assoc();
+                $current_employee_type_result->free();
+                $type_of_employment = $current_employee_type_data['title'];
+            } else {
+                $_SESSION['message'] = "Not a valid email address";
+                header("location:error.php");
+
+            }
+
+            if (isset($type_of_employment)) {
+                if ($type_of_employment = 'Administrator') {
+
+                }
+
+            } else {
+                $_SESSION['message'] = "Only Administrator have access to this area";
+                header("location:error.php");
+                die();
+            }
+
+        } else {
+            $_SESSION['message'] = "This session has expired. Please login again!!!";
+            header("location:error.php");
+            die();
+        }
+
+
+    }
+
+
+
+
 }
-
-$name=$_SESSION['name'];
-$course_id=$_SESSION['course_id'];
-$course_title=$_SESSION['course_title'];
-
-$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-$assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-//$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-
-
-//$_SESSION['course_id']=$course_id;
-//$_SESSION['course_title']=$course_title;
-$_SESSION['error']=false;
-
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +73,7 @@ $_SESSION['error']=false;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
@@ -71,7 +93,7 @@ $_SESSION['error']=false;
 <?php } else { ?>
 
 
-<!-- Navigation -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
@@ -85,99 +107,78 @@ $_SESSION['error']=false;
         </div>
     </nav>
 
-<!-- Header -->
-<header class="masthead bg-primary text-white text-center ">
+    <!-- Header -->
+    <header class="masthead bg-primary text-white text-center ">
 
-    <div>
-        <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
-    </div>
+        <div>
+            <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
+            <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+            <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        </div>
 
-</header>
+    </header>
 
-<!-- Dashboard Section -->
-<section class="" id="portfolio">
-    <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
-        <hr class="star-dark mb-5">
-        <div class="row">
-            <div class="col-md-6" align="center">
-                <h3 align="center">OVERDUE</h3>
-                <?php
+    <!-- Dashboard Section -->
+    <section class="" id="portfolio">
+        <div class="container ">
+            <h2 class="text-center text-uppercase text-secondary mb-0">Add new scholarship</h2>
+            <hr class="star-dark mb-5">
+            <div class="row">
 
-                while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
-                    $deadline = $asignment[7];
-                    $today = date("Y-m-d H:i:s");
-                    if ($deadline < $today) {
+                <div class="col-lg-6 ">
 
-                        ?>
-                        <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
-                            </li>
 
-                            <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-danger btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
 
-                            <br>
-                            <br>
+
+                    <form action="l_define_scholarship.php" method="post">
+                        <div class="field-wrap">
+                        <label class="text-dark" size="10">
+                            Title<span class="req">*</span>
+                        </label>
+                        <input type="text" class="text-dark border-dark"   name="title"/>
+                        <label class="text-dark">
+                            Description<span class="req">*</span>
+                        </label>
+                        <textarea class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
                         </div>
+                        <button class="btn btn-dark btn-block " />Submit </button>
+                    </form>
 
-                        <?php
-                    }
-                }?>
+
+
+
+
+                </div>
+
             </div>
-            <div class="col-md-6" align="center">
-                <h3 align="center">ONGOING</h3>
-                <?php
-                while ($asignment = mysqli_fetch_array($assignment_query_2, MYSQLI_NUM)) {
-                    $deadline = $asignment[7];
-                    $today = date("Y-m-d H:i:s");
 
-                    if ($deadline >= $today) {
+        </div>
+        </div>
+    </section>
 
-                        ?>
-                        <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label>
-                            </li>
-
-                            <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0];?>&assignment_title=<?php echo $asignment[5];?>"> <input class="btn btn-success btn-lg-0" type="submit" value="<?php echo $asignment[5];?>"></a>
-
-                            <br>
-                            <br>
-                        </div>
-
-                        <?php
-                    }
-                }?></div></div>
-
-
-
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="bg-primary text-white mb-0" id="about">
-    <div class="container">
-        <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
-        <hr class="star-light mb-5">
-        <div class="row">
-            <div class="col-lg-4 ml-auto">
-                <p class="lead">Basic introduction about the web site goes here! {description left]</p>
+    <!-- About Section -->
+    <section class="bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
+            <hr class="star-light mb-5">
+            <div class="row">
+                <div class="col-lg-4 ml-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
+                </div>
+                <div class="col-lg-4 mr-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
+                </div>
             </div>
-            <div class="col-lg-4 mr-auto">
-                <p class="lead">Basic introduction about the web site goes here! {description right</p>
+            <div class="text-center mt-4">
+                <a class="btn btn-xl btn-outline-light" href="#">
+                    <i class="fa fa-info mr-2"></i>
+                    Read More
+                </a>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <a class="btn btn-xl btn-outline-light" href="#">
-                <i class="fa fa-info mr-2"></i>
-                Read More
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
 
-<!--Model-->
+    <!--Model-->
 
 <?php if($_SESSION['two_step'] == 0) {
 
@@ -368,8 +369,11 @@ else
 
 <?php } ?>
 
+
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
+<script src="js/moment.min.js"></script>
+
 <script src="js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -383,6 +387,7 @@ else
 <script src="js/freelancer.js"></script>
 
 
+
 <?php if($_SESSION['two_step'] == 0) { ?>
     <script >
         $( document ).ready(function() {
@@ -393,8 +398,7 @@ else
 
 <?php } ?>
 
-
-
 </body>
-
 </html>
+
+

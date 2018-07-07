@@ -7,7 +7,7 @@
  */
 
 session_start();
-$user_type=$_SESSION['type'];
+$user_type=$_SESSION['types'];
 $_SESSION['assignment_id']=$_GET['assignment_id'];
 $_SESSION['assignment_title']=$_GET['assignment_title'];
 //if($user_type==1) {
