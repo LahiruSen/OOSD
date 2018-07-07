@@ -272,13 +272,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                             <div class="form-group col-lg-6 col-md-6">
                                                 <div class="input-group date">
-                                                    <label class="text-dark" for="type">Academic Year</label>
+                                                    <label class="text-dark" for="type">Academic Type</label>
                                                     <select id="type" name="type">
-
-
-                                                        <option value="0">Select an academic year</option>
-
-
+                                                        <option value="1" <?php if(isset($old)){if ($old['type'] == 1) {echo "selected";}}else{if(isset($selected)) {if ($selected['type'] == 1) {echo "selected";}}} ?> >Level 1</option>
+                                                        <option value="2" <?php if(isset($old)){if ($old['type'] == 2) {echo "selected";}}else{if(isset($selected)) {if ($selected['type'] == 2) {echo "selected";}}} ?> >Level 2</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -441,6 +438,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                         </div>
                         <div class="row">
                                 <p style="font-size: 20px" id="al_registration_deadline"></p>
+                        </div>
+                    </div>
+
+                    <div class="m-2">
+                        <div class="row">
+                            <label class="text-dark" for="al_registration_level_type">Academic Level</label>
+                        </div>
+                        <div class="row">
+                            <p style="font-size: 30px" id="al_registration_level_type"></p>
                         </div>
                     </div>
                 </div>
@@ -650,7 +656,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
         for ($k = 0; $k < count($all_accedemic_levels_data); $k++) {
 
-            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['deadline'] .'"  data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" al_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . ' <i class="text-dark ';
+            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-type="'.$all_accedemic_levels_data[$k]['type'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['deadline'] .'"  data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" al_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . ' <i class="text-dark ';
 
 
             $body = $body . ' fa fa-book"></i></a>';
@@ -687,6 +693,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         title = $(this).data('title');
         description = $(this).data('description');
         deadline = $(this).data('deadline');
+        level_type = $(this).data('type');
 
 
 
@@ -695,6 +702,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         $('#academic_level_view #al_title').text(title);
         $('#academic_level_view #al_description').text(description);
         $('#academic_level_view #al_registration_deadline').text(deadline);
+        $('#academic_level_view #al_registration_level_type').text(level_type);
 
         $('#academic_level_view #modal_head_div').addClass('bg-primary');
 
