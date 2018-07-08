@@ -73,11 +73,12 @@ else { // User exists (num_rows != 0)
 
                     $student_registration_number = $row[1];
                     $pdf_url = $row[2];
-                    $scholarship_id = $row[3];
+                    $scholarship_type_id = $row[3];
+                    $submission_id = $row[0];
 
 
 
-                    $scholarship_title_result = $mysqli->query("SELECT * FROM  scholarships WHERE id= '$scholarship_id'");
+                    $scholarship_title_result = $mysqli->query("SELECT * FROM  scholarships WHERE id= '$scholarship_type_id'");
 
 
                     if ($schol_submission_result->num_rows>0) {
@@ -96,7 +97,7 @@ else { // User exists (num_rows != 0)
 
 
 
-                    $submission_records[] = array($scholarship_title,$student_registration_number, $pdf_url);
+                    $submission_records[] = array($scholarship_title,$student_registration_number, $pdf_url,$submission_id);
 
 
                 }
@@ -213,19 +214,33 @@ else { // User exists (num_rows != 0)
                         <td><?php echo $sr[0] ?></td>
                         <td><?php echo $sr[1] ?></td>
                         <td><button class="btn btn-dark " ><a href="<?php echo $sr[2] ?>" target="_blank">View</a></button></td>
-                        <td><button class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow" >Delete</button>
-                            <div class="modal-fade" id="popUpWindow">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <p>dfghjkl</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </td>
+                        <td><button class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow_<?=$sr[1]?>" >Delete</button></td>
                     </tr>
+
+
+
+                    <div class="modal fade" id="popUpWindow_<?=$sr[1]?>">
+                        <form action="l_delete_submitted_scholarship.php" method="post">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title">ARE YOU SURE?</h3>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body" >
+                                    <input type="hidden" name="scholarship_id" value="<?php echo $sr[3] ?>">
+                                    <p>Select Delete if you want to delete this submission.</p>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <input class='button button-block' type="submit" value="Delete">
+                                </div>
+
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+
                 <?php } ?>
                 </tbody>
             </table>

@@ -1,12 +1,15 @@
 <?php
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
-if (session_status() == PHP_SESSION_NONE) {    session_start();}
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if user is logged in using the session variable
 if ($_SESSION['logged_in'] != 1) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
+    die();
 } else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -18,52 +21,88 @@ if ($_SESSION['logged_in'] != 1) {
 
     if ($types == 2) {
         header("location: home_student.php");
-    }
-
-
-    $email = $_SESSION['email'];
-    $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
-
-    if ($result->num_rows == 0) // User doesn't exist
-    {
-        $_SESSION['message'] = "This user detail doesn't exist in the system.";
-        header("location: error.php");
         die();
-    } else { // User exists (num_rows != 0)
+    } else {
+        $email = $_SESSION['email'];
+        $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
 
-
-        $user = $result->fetch_assoc(); // $user becomes array with user data
-
-        $user_id = $user['id'];
-        $result_new = $mysqli->query("SELECT employee_types.title FROM employee_types,employee_data WHERE employee_data.user_id = '$user_id' AND employee_types.id = employee_data.employee_type_id ");
-
-        if ($result_new->num_rows == 0) {
-            $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
-            header("location:error.php");
+        if ($result->num_rows == 0) // User doesn't exist
+        {
+            $_SESSION['message'] = "This user detail doesn't exist in the system.";
+            header("location: error.php");
             die();
-        } else {
-            $employee = $result_new->fetch_assoc(); // employ become arry with employ data
-            $employee_title = $employee['title'];
+        } else { // User exists (num_rows != 0)
 
 
-            // if user is a principal
-            if (strcasecmp($employee_title, "Principal") == 0) {
-                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
+            $user = $result->fetch_assoc(); // $user becomes array with user data
 
+            $user_id = $user['id'];
+            $result_new = $mysqli->query("SELECT employee_types.title FROM employee_types,employee_data WHERE employee_data.user_id = '$user_id' AND employee_types.id = employee_data.employee_type_id ");
 
-            } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
-                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0 AND approved_by_principal=1");
-            }
-            elseif (strcasecmp($employee_title, "Administrator") == 0) {
-                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0 AND approved_by_hr=1 ");
-            }
-            else {
-                $_SESSION['message'] = "You have no administrative priviledges";
+            if ($result_new->num_rows == 0) {
+                $_SESSION['message'] = "This employ detail doesn't exist in employ_data table.";
                 header("location:error.php");
                 die();
+            } else {
+                $employee = $result_new->fetch_assoc(); // employ become arry with employ data
+                $employee_title = $employee['title'];
+
+
+                // if user is a principal
+                if (strcasecmp($employee_title, "Principal") == 0) {
+                    $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_principal=0");
+
+
+                } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
+                    $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0 AND approved_by_principal=1");
+                } elseif (strcasecmp($employee_title, "Administrator") == 0) {
+                    $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0 AND approved_by_hr=1 ");
+                } else {
+                    $_SESSION['message'] = "You have no administrative priviledges";
+                    header("location:error.php");
+                    die();
+                }
+
+                $records = array();
+
+                if ($leave_result->num_rows > 0) {
+                    while ($row = $leave_result->fetch_object()) {
+                        $records[] = $row;
+                    }
+
+
+                    $leave_result->free();
+
+
+                } else {
+
+                    $ismodel = 0; ?>
+                    <div class="modal fade  hidden" id="popUpWindow2">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">No Requests</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <p>No Requests are pending for approval.</p>
+            </div>
+            <div class="modal-footer">
+                <a class="text-light btn-block btn btn-primary"
+                   href="home_employee.php">
+                    <button class="btn btn-primary btn-block">Home</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<?php
+                }
+
             }
-
-
         }
 
 
@@ -82,145 +121,139 @@ if ($_SESSION['logged_in'] != 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $first_name . ' ' . $last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
 <body id="page-top">
 
 
-<?php if(!$active) { ?>
+<?php if (!$active) { ?>
 
     <div class="form text-center">
 
         <h4 class="alert-heading">Please verify your account!</h4>
-        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
-        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your
+            account!!!</p>
+        <a href="logout.php">
+            <button class="btn btn-group btn-lg">Logout</button>
+        </a>
 
     </div>
 
 <?php } else { ?>
 
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
-            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fa fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require 'navigation.php';?>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+                type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <?php require 'navigation.php'; ?>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="masthead bg-primary text-white text-center ">
+
+    <div>
+        <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+    </div>
+
+</header>
+
+<!-- Dashboard Section -->
+<section class="" id="portfolio">
+    <div class="container ">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Approve Leave Applications</h2>
+        <hr class="star-dark mb-5">
+        <div class="row">
+
+
+            <div class=" col-lg-6">
+
+
             </div>
-        </div>
-    </nav>
 
-    <!-- Header -->
-    <header class="masthead bg-primary text-white text-center ">
-
-        <div>
-            <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-            <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
-        </div>
-
-    </header>
-
-    <!-- Dashboard Section -->
-    <section class="" id="portfolio">
-        <div class="container ">
-            <h2 class="text-center text-uppercase text-secondary mb-0">Approve Leave Applications</h2>
-            <hr class="star-dark mb-5">
-            <div class="row">
+            <?php if ($_SESSION['two_step'] != 0) {
 
 
-                <div class=" col-lg-6">
+
+                ?>
 
 
+                <div class="container">
+                  <?php  if(isset($records)){ ?>
+
+                    <table class="table-active">
+
+
+                        <tbody>
+
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Reason</th>
+                            <th>Description</th>
+                            <th>Number Of Days</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Accept</th>
+                            <th>Reject</th>
+                            <th>Delete</th>
+                        </tr>
+
+
+                        <?php
+
+
+                        foreach ($records as $r) { ?>
+
+
+                            <tr>
+                                <form action="l_approve_leave_application.php" method="post">
+
+                                    <td><?php echo $r->employ_id; ?></td>
+                                    <td><?php echo $r->reason_for_leave; ?></td>
+                                    <td><?php echo $r->description; ?></td>
+                                    <td><?php echo $r->number_of_dates; ?></td>
+                                    <td><?php echo $r->start_date; ?></td>
+                                    <td><?php echo $r->end_date; ?></td>
+                                    <td><input class="btn btn-dark text-light" type="submit" value="Accept"
+                                               name="accept"></td>
+                                    <td><input class="btn btn-dark text-light" type="submit" value="Reject"
+                                               name="reject"></td>
+                                    <td><input class="btn btn-dark text-light" type="submit" value="Delete"
+                                               name="delete"></td>
+                                    <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
+                                    <td>
+                                </form>
+                            </tr>
+                        <?php } ?>
+
+                        </tbody>
+                    </table>
+<?php } ?>
                 </div>
 
-                <?php if ($_SESSION['two_step'] != 0) { ?>
-                    <div class="container">
+            <?php } ?>
+        </div><?php?>
+    </div>
+    </div>
 
+    </div>
+    </div>
+</section>
 
-                        <table class="table-active">
-                            <tbody>
-
-
-                            <?php
-
-                            if ($leave_result->num_rows > 0) {
-                                while ($row = $leave_result->fetch_object()) {
-                                    $records[] = $row;
-                                }
-
-
-                                $leave_result->free();
-
-
-                            } else { ?>
-
-                                <div class="container ">
-                                    <h1>No Requests are pending for approval.</h1>
-
-                                </div>
-
-
-                                <?php
-                                die();
-                            } ?>
-                            <tr>
-                                <th>Employee ID</th>
-                                <th>Reason</th>
-                                <th>Description</th>
-                                <th>Number Of Days</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Accept</th>
-                                <th>Reject</th>
-                                <th>Delete</th>
-                            </tr>
-                            <?php
-                            foreach ($records as $r) { ?>
-
-
-                                <tr>
-                                    <form action="l_approve_leave_application.php" method="post">
-
-                                        <td><?php echo $r->employ_id; ?></td>
-                                        <td><?php echo $r->reason_for_leave; ?></td>
-                                        <td><?php echo $r->description; ?></td>
-                                        <td><?php echo $r->number_of_dates; ?></td>
-                                        <td><?php echo $r->start_date; ?></td>
-                                        <td><?php echo $r->end_date; ?></td>
-                                        <td><input class="btn btn-dark text-light" type="submit" value="Accept"
-                                                   name="accept"></td>
-                                        <td><input class="btn btn-dark text-light" type="submit" value="Reject"
-                                                   name="reject"></td>
-                                        <td><input class="btn btn-dark text-light" type="submit" value="Delete"
-                                                   name="delete"></td>
-                                        <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
-                                        <td>
-                                    </form>
-                                </tr>
-                            <?php } ?>
-
-                            </tbody>
-                        </table>
-
-                    </div>
-
-                <?php } ?>
-            </div>
-        </div>
-        </div>
-
-        </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
+<!-- About Section -->
     <section class="bg-primary text-white mb-0" id="about">
         <div class="container">
             <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
@@ -244,91 +277,92 @@ if ($_SESSION['logged_in'] != 1) {
 
     <!--Model-->
 
-<?php if($_SESSION['two_step'] == 0) {
+<?php if ($_SESSION['two_step'] == 0) {
 
 
-$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+$user_result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 
-if($user_result->num_rows != 0)
+if ($user_result->num_rows != 0)
 {
 $user_data = $user_result->fetch_assoc();
 $user_result->free();
 $user_id = $user_data['id'];
-$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+$employee_result = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
 
 
-if($employee_result->num_rows != 0)
+if ($employee_result->num_rows != 0)
 {
 $employee_data = $employee_result->fetch_assoc();
 
 $employee_result->free();
 
-if($employee_data['is_locked'] != 1)
+if ($employee_data['is_locked'] != 1)
 {
 ?>
 
-    <div class="modal fade" id="completeProfile">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ">
+<div class="modal fade" id="completeProfile">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Please Complete Your Profile</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Please Complete Your Profile</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Our system administrator should verify your profile information before giving access to EMPLUP
+                resources.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <?php
+<?php
 }
-else
-{
-    ?>
+else {
+?>
 
-    <div class="modal fade" id="completeProfile">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ">
+<div class="modal fade" id="completeProfile">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title text-warning">Activation is pending <i
+                            class="fa fa-exclamation-triangle"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Our system administrator should verify your profile information before giving access to EMPLUP
+                resources.
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
         </div>
     </div>
+</div>
 
-    <?php
+<?php
 }
 
 }
-else
-{
+else {
 
-    ?>
+?>
 
     <div class="modal fade" id="completeProfile">
         <div class="modal-dialog modal-dialog-centered">
@@ -342,7 +376,8 @@ else
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -360,15 +395,15 @@ else
 
 }
 
-else
-{
+else {
 
     $_SESSION['message'] = "You are not a valid user";
     header("location:error.php");
+    die();
 }
 
-} ?>
 
+} ?>
 
 
     <!-- Footer -->
@@ -423,7 +458,7 @@ else
         </div>
     </div>
 
-    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-to-top d-lg-none position-fixed ">
         <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
             <i class="fa fa-chevron-up"></i>
@@ -432,6 +467,7 @@ else
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
 <?php } ?>
+
 
 
 <!-- Bootstrap core JavaScript -->
@@ -450,11 +486,29 @@ else
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+<?php
+if ($ismodel == 0) { ?>
 
 
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
+    <script>
+        type = "text/javascript" >
+            $(window).on('load', function () {
+                $('#popUpWindow2').modal('show');
+            });
+    </script>
+
+    <?php
+}
+?>
+
+
+
+<?php
+if ($_SESSION['two_step'] == 0) {
+    ?>
+
+    <script>
+        $(document).ready(function () {
             $('#completeProfile').modal('show');
         });
 
@@ -464,5 +518,3 @@ else
 
 </body>
 </html>
-
-
