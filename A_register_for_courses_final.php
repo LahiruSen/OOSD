@@ -56,18 +56,31 @@ if($current_employee_type_result->num_rows !=0)
     $type_of_employment = $current_employee_type_data['title'];
 }
 
-$records=array();
-$level_id=0;
-
-$results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id}'")
-
-        $row=$results->fetch_object();
-          $row->
-
-        $results->free();
 
 
+if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FROM student_data WHERE user_id='{$id}'")){
+    $output=$result1->fetch_object();
+    $reg_num=$output->registration_number;
+    $ay_id=$output->registered_ayear_id;
 
+}
+$result1->free();
+
+$records2=array();
+
+if($result2 = $mysqli->query("SELECT id FROM level WHERE academic_year_id='{$ay_id}'")){
+    if($result2->num_rows){
+        while($row=$result2->fetch_object()){
+            $records2[]=$row;
+        }
+        $result2->free();
+    }
+}
+
+
+//print_r($records2);
+//die();
+//$level_id_1=
 
     $records=array();
     $level_id=0;
@@ -134,13 +147,13 @@ $results=$mysqli->query("SELECT course_id,title,description,credits,no_of_workin
                         <div class="row">
                             <div class="col-lg-4 col-xl-4" >
 
-                                <form action="course_registration_check.php" method="post">
+                                <form action="A_course_registration_check.php" method="post">
 
 
 
                                             <div class=" row m-2">
                                                 <div class="col-lg-12">
-                                                    <?php $option="<select name='course'>";foreach ($records as $r){  $option.='<option value="'.$r->course_id.'">'.$r->title.'</option>' ;
+                                                    <?php $option="<select name='course_id'>";foreach ($records as $r){  $option.='<option value="'.$r->course_id.'">'.$r->title.'</option>' ;
                                                     } ?>
 
                                                     <?php
@@ -148,7 +161,7 @@ $results=$mysqli->query("SELECT course_id,title,description,credits,no_of_workin
                                                     ?>
                                                 </div>
                                             </div>
-                                    <input type="hidden" name="marks_id" value="<?php echo escape($r->id); ?>" >
+                                    <input type="hidden" name="reg_num" value="<?php  echo $reg_num; ?>" >
                                             <div class="row m-2 ">
                                                 <div class="col-lg-12">
                                                     <button type="submit" class="btn btn-lg btn-success">Register</button>
