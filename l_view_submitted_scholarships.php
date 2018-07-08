@@ -68,6 +68,7 @@ else { // User exists (num_rows != 0)
 
 
                 $submission_records = array();
+
                 while ($row = mysqli_fetch_array($schol_submission_result, MYSQLI_NUM)) {
 
                     $student_registration_number = $row[1];
@@ -82,32 +83,20 @@ else { // User exists (num_rows != 0)
                     if ($schol_submission_result->num_rows>0) {
 
 
-                        $scholarship_title_array = $course_title->fetch_assoc();
-                        $title = $course_title1['title'];
-                        $level_id = $course_title1['level_id'];
+                        $scholarship_title_array = $scholarship_title_result->fetch_assoc();
+
+                        $scholarship_title = $scholarship_title_array['title'];
                     } else {
 
 
-                        $_SESSION['message'] = "Course Details are not available." . $x;
+                        $_SESSION['message'] = "This Scholarship is not available any longer.";
                         header("location:error.php");
                         die();
                     }
-                    $mark_result = $mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
 
 
-                    if (($mark_result->num_rows) > 0) {
-                        $mark1 = $mark_result->fetch_assoc();
-                        $mark = $mark1['marks'];
-                    } else {
 
-
-                        $_SESSION['message'] = "Marks of some modules are not available.";
-                        header("location:error.php");
-                        die();
-
-                    }
-
-                    $mark_records[] = array($title, $level_id, $mark);
+                    $submission_records[] = array($scholarship_title,$student_registration_number, $pdf_url);
 
 
                 }
@@ -197,7 +186,7 @@ else { // User exists (num_rows != 0)
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
         <div class="container ">
-            <h2 class="text-center text-uppercase text-secondary mb-0">Final Grade</h2>
+            <h2 class="text-center text-uppercase text-secondary mb-0">View Scholarship Submissions</h2>
             <hr class="star-dark mb-5">
             <div class="row">
 
@@ -210,65 +199,43 @@ else { // User exists (num_rows != 0)
 
     <div class=" container">
         <div>
-            <h2> Marks by module</h2>
             <table id="level_mark" class="table table-dark">
                 <tr>
-                    <th>Level</th>
-                    <th>Module Title</th>
-                    <th>Marks</th>
+                    <th>Scholarship Title</th>
+                    <th>Registration No. of Student</th>
+                    <th>PDF </th>
+                    <th>Delete</th>
 
                 </tr>
                 <tbody>
-                <?php foreach ($mark_records as $mr){ ?>
+                <?php foreach ($submission_records as $sr){ ?>
                     <tr>
-                        <td><?php echo $mr[1] ?></td>
-                        <td><?php echo $mr[0] ?></td>
-                        <td><?php echo $mr[2] ?></td>
+                        <td><?php echo $sr[0] ?></td>
+                        <td><?php echo $sr[1] ?></td>
+                        <td><button class="btn btn-dark " ><a href="<?php echo $sr[2] ?>" target="_blank">View</a></button></td>
+                        <td><button class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow" >Delete</button>
+                            <div class="modal-fade" id="popUpWindow">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p>dfghjkl</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
                     </tr>
                 <?php } ?>
                 </tbody>
             </table>
 
+
         </div>
-        <div>
-            <h2>Marks by level</h2>
-            <table id="mark_level" class="table table-dark">
-                <tr>
-                    <th>Level</th>
-                    <th>Status</th>
-                    <th>Average Mark</th>
-                </tr>
-                <tbody>
-                <?php
 
-
-                foreach ($records as $r){
-
-                    ?>
-                    <tr>
-                        <td><?php echo $r->level_id; ?></td>
-                        <td><?php if ($r->status == 1) {
-                                echo 'Completed';
-                            } else {
-                                echo 'Not Completed';
-                            }
-                            ; ?></td>
-
-
-                        <td><?php if ($r->status == 1) {
-                                echo $r->mark;
-
-                            } else {
-                                echo 'Not available';
-                            }
-                            ?></td>
-                    </tr>
-                <?php } ?>
-
-                </tbody>
-            </table>
-        </div>
     </div>
+
+
 
     <!-- About Section -->
     <section class="bg-primary text-white mb-0" id="about">
