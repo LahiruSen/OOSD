@@ -27,7 +27,7 @@ else {
 
     }
 
-    $result = $mysqli->query("SELECT id,title FROM scholarships WHERE active=1") ;//or die($mysqli->error());
+    $result = $mysqli->query("SELECT id,title FROM scholarships") ;//or die($mysqli->error());
 
     if ( $result->num_rows == 0 ) // Scholarships are not available
     {

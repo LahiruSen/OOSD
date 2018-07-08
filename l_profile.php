@@ -212,6 +212,40 @@ elseif($_SESSION['active'] != 1)
 
                     <div class="text-left">
                         <div id="form_section_header" class="bg-topfive">
+                            <h2> Reset Password </h2>
+                        </div>
+
+                        <div class="row m-2">
+                            <div class="form-group col-lg-12 col-md-12">
+                                <label class="text-dark" for="email">Old Password</label>
+                                <input type="text" style="background-color: #e6e9ee" id="old_password" name="old_password" class="input-active"  >
+                            </div>
+                        </div>
+
+                        <div class="row m-2">
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label class="text-dark" for="first_name">New Password</label>
+                                <input type="text" style="background-color: #e6e9ee" id="new_paasowrd" name="new_password" class="input-active" >
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6">
+                                <label class="text-dark" for="last_name">Re-Enter New Password</label>
+                                <input type="text" style="background-color: #e6e9ee" id="new_password1" name="new_password1" class="input-active" >
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    <div class="text-left">
+                        <div id="form_section_header" class="bg-topfive">
                             <h2> Personal Information </h2>
                         </div>
                         <div class="row m-2">
@@ -514,7 +548,7 @@ elseif($_SESSION['active'] != 1)
                         <div class="row m-2">
                             <div class="form-group col-lg-4 col-md-4">
                                 <label class="text-dark" for="is_physical">Are you physically okay?</label>
-                                <input  type="checkbox" id="is_physical" name="is_physical" <?php if(isset($old)){if ($old['is_physical'] == 'on') {echo "checked";}}else{if(isset($student_data)) {if ($student_data['is_physically_disabled'] == 'on') {echo "checked";}}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input  disabled type="checkbox" id="is_physical" name="is_physical" <?php if(isset($old)){if ($old['is_physical'] == 'on') {echo "checked";}}else{if(isset($student_data)) {if ($student_data['is_physically_disabled'] == 'on') {echo "checked";}}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                             </div>
                         </div>
 

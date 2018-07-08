@@ -1,15 +1,19 @@
-
 <?php
-/* Displays user information and some useful messages */
+/* Reset your password form, sends reset.php password link */
 require 'db.php';
 session_start();
 
+
+$email = $_SESSION['email'];
+$result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
+
+
 // Check if user is logged in using the session variable
-if ( $_SESSION['logged_in'] != 1 ) {
+if ($_SESSION['logged_in'] != 1) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
-}
-else {
+    die();
+} else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
     $last_name = $_SESSION['last_name'];
@@ -18,52 +22,107 @@ else {
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
 
+
     if ($types == 2) {
         header("location: home_student.php");
         die();
     }
+
+}
+
+if ($result->num_rows == 0) // User doesn't exist
+{
+    $_SESSION['message'] = "This user detail doesn't exist in the system.";
+    header("location: error.php");
+    die();
+}
+else { // User exists (num_rows != 0)
+
+    $user = $result->fetch_assoc(); // $user becomes array with user data
+
+    $user_id = $user['id'];
+    $result_new = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id' ");
+
+    if ($result_new->num_rows == 0) {
+        $_SESSION['message'] = "Not a valid user";
+        header("location:error.php");
+        die();
+    }
+
     else {
-        if (isset($_SESSION['email'])) {
-            $email = $_SESSION['email'];
-            $current_employee_type_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
-            if ($current_employee_type_result->num_rows != 0) {
-                $current_employee_type_data = $current_employee_type_result->fetch_assoc();
-                $current_employee_type_result->free();
-                $type_of_employment = $current_employee_type_data['title'];
-            } else {
-                $_SESSION['message'] = "Not a valid email address";
-                header("location:error.php");
+        $employee = $result_new->fetch_assoc(); // employ become arry with employ data
+        $employee_type_id = $employee['employee_type_id'];
 
-            }
+        if ($employee_type_id == 1) {
 
-            if (isset($type_of_employment)) {
-                if ($type_of_employment = 'Administrator') {
+
+        $schol_submission_result = $mysqli->query("SELECT * FROM scholarship_submissions ORDER BY  scholarship_id");
+
+        if ($schol_submission_result->num_rows==0) {
+            $_SESSION['message'] = "No Scholarship Applications are submmitted yet";
+            header("location:error.php");
+            die();
+        } else {
+
+
+
+
+                $submission_records = array();
+
+                while ($row = mysqli_fetch_array($schol_submission_result, MYSQLI_NUM)) {
+
+                    $student_registration_number = $row[1];
+                    $pdf_url = $row[2];
+                    $scholarship_id = $row[3];
+
+
+
+                    $scholarship_title_result = $mysqli->query("SELECT * FROM  scholarships WHERE id= '$scholarship_id'");
+
+
+                    if ($schol_submission_result->num_rows>0) {
+
+
+                        $scholarship_title_array = $scholarship_title_result->fetch_assoc();
+
+                        $scholarship_title = $scholarship_title_array['title'];
+                    } else {
+
+
+                        $_SESSION['message'] = "This Scholarship is not available any longer.";
+                        header("location:error.php");
+                        die();
+                    }
+
+
+
+                    $submission_records[] = array($scholarship_title,$student_registration_number, $pdf_url);
+
 
                 }
 
-            } else {
-                $_SESSION['message'] = "Only Administrator have access to this area";
-                header("location:error.php");
-                die();
-            }
 
-        } else {
-            $_SESSION['message'] = "This session has expired. Please login again!!!";
-            header("location:error.php");
-            die();
+
+
         }
-
-
+    }
+    else{
+        $_SESSION['message'] = "You are not allowed to view submitted scholarship applications.";
+        header("location:error.php");
+        die();
     }
 
 
 
 
+    }
+
+
 }
+
+
+// Check if form submitted with method="post"
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,20 +132,23 @@ else {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $first_name . ' ' . $last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
 <body id="page-top">
 
 
-<?php if(!$active) { ?>
+<?php if (!$active) { ?>
 
     <div class="form text-center">
 
         <h4 class="alert-heading">Please verify your account!</h4>
-        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
-        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify
+            your account!!!</p>
+        <a href="logout.php">
+            <button class="btn btn-group btn-lg">Logout</button>
+        </a>
 
     </div>
 
@@ -97,12 +159,14 @@ else {
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
-            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+                    type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require 'navigation.php';?>
+                <?php require 'navigation.php'; ?>
             </div>
         </div>
     </nav>
@@ -112,49 +176,66 @@ else {
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-            <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+            <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+            <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee
+                Management</h4>
         </div>
 
     </header>
 
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
-        <div class="container align-content-center" style="width: 50%">
-            <h2 class="text-center text-uppercase text-secondary mb-0">Add new scholarship</h2>
+        <div class="container ">
+            <h2 class="text-center text-uppercase text-secondary mb-0">View Scholarship Submissions</h2>
             <hr class="star-dark mb-5">
-<!--            <div class="row">-->
-<!---->
-<!--<div class="col-md-4">-->
+            <div class="row">
 
 
-
-
-                    <form action="l_define_scholarship.php" method="post">
-                        <div class="field-wrap">
-                        <label class="text-dark" size="10">
-                            Title<span class="req">*</span>
-                        </label>
-                        <input type="text" class="text-dark border-dark"   name="title"/>
-                        <label class="text-dark">
-                            Description<span class="req">*</span>
-                        </label>
-                        <textarea class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
-                        </div>
-                        <button class="btn btn-dark btn-block " />Submit </button>
-                    </form>
-
-
-
-
-
-
-
-<!--        </div>-->
-
+            </div>
         </div>
-        </div>
+
     </section>
+
+
+    <div class=" container">
+        <div>
+            <table id="level_mark" class="table table-dark">
+                <tr>
+                    <th>Scholarship Title</th>
+                    <th>Registration No. of Student</th>
+                    <th>PDF </th>
+                    <th>Delete</th>
+
+                </tr>
+                <tbody>
+                <?php foreach ($submission_records as $sr){ ?>
+                    <tr>
+                        <td><?php echo $sr[0] ?></td>
+                        <td><?php echo $sr[1] ?></td>
+                        <td><button class="btn btn-dark " ><a href="<?php echo $sr[2] ?>" target="_blank">View</a></button></td>
+                        <td><button class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow" >Delete</button>
+                            <div class="modal-fade" id="popUpWindow">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p>dfghjkl</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+
+
 
     <!-- About Section -->
     <section class="bg-primary text-white mb-0" id="about">
@@ -180,29 +261,7 @@ else {
 
     <!--Model-->
 
-<?php if($_SESSION['two_step'] == 0) {
-
-
-$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
-
-if($user_result->num_rows != 0)
-{
-$user_data = $user_result->fetch_assoc();
-$user_result->free();
-$user_id = $user_data['id'];
-$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
-
-
-if($employee_result->num_rows != 0)
-{
-$employee_data = $employee_result->fetch_assoc();
-
-$employee_result->free();
-
-if($employee_data['is_locked'] != 1)
-{
-?>
-
+<?php if ($_SESSION['two_step'] == 0) { ?>
     <div class="modal fade" id="completeProfile">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
@@ -215,7 +274,8 @@ if($employee_data['is_locked'] != 1)
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to
+                    EMPLUP resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -227,86 +287,7 @@ if($employee_data['is_locked'] != 1)
         </div>
     </div>
 
-    <?php
-}
-else
-{
-    ?>
-
-    <div class="modal fade" id="completeProfile">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <?php
-}
-
-}
-else
-{
-
-    ?>
-
-    <div class="modal fade" id="completeProfile">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Please Add Profile information</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-<?php
-
-}
-
-}
-
-else
-{
-
-    $_SESSION['message'] = "You are not a valid user";
-    header("location:error.php");
-}
-
-} ?>
-
-
-
+<?php } ?>
     <!-- Footer -->
     <footer class="footer text-center">
         <div class="container">
@@ -365,7 +346,8 @@ else
             <i class="fa fa-chevron-up"></i>
         </a>
     </div>
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
+    <script type="text/javascript"
+            src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
 <?php } ?>
 
@@ -387,10 +369,9 @@ else
 <script src="js/freelancer.js"></script>
 
 
-
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
+<?php if ($_SESSION['two_step'] == 0) { ?>
+    <script>
+        $(document).ready(function () {
             $('#completeProfile').modal('show');
         });
 
@@ -399,6 +380,6 @@ else
 <?php } ?>
 
 </body>
-</html>
 
+</html>
 
