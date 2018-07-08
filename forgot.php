@@ -1,7 +1,7 @@
 <?php 
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Check if form submitted with method="post"
 if ( $_SERVER['REQUEST_METHOD'] == 'POST' ) 

@@ -1,7 +1,7 @@
 <?php
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Check if user is logged in using the session variable
 if ($_SESSION['logged_in'] != 1) {

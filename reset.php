@@ -3,7 +3,7 @@
    from the forgot.php email message
 */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Make sure email and hash variables aren't empty
 if( isset($_GET['email']) && !empty($_GET['email']) AND isset($_GET['hash']) && !empty($_GET['hash']) )

@@ -5,7 +5,7 @@
  * Date: 3/30/2018
  * Time: 11:53 PM
  */
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
 $name=$_FILES["file"]["name"];

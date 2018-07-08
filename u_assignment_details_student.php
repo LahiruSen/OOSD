@@ -5,7 +5,7 @@
  * Date: 3/31/2018
  * Time: 6:16 PM
  */
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require "u_connection.php";
 
 if ( $_SESSION['logged_in'] != 1 ) {

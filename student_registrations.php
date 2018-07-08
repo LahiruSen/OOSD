@@ -2,13 +2,20 @@
 <?php
 /* Displays user information and some useful messages */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
 }
+elseif($_SESSION['active'] != 1)
+{
+    $_SESSION['message'] = "We have sent you a verification email to your email account. Please click verification link to verify your account!!!";
+    header("location: error.php");
+
+}
+
 else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -22,6 +29,8 @@ else {
         header("location: home_student.php");
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -61,41 +70,7 @@ else {
 if ($_SERVER['REQUEST_METHOD'] == 'GET')
 {
 
-    if(isset($_GET['id']))
-    {
-
-        if((is_int($_GET['id']) || ctype_digit($_GET['id'])) && (int)$_GET['id'] > 0)
-        {
-            $student_id = $_GET['id'];
-
-            $student_data_result =  $mysqli->query("select * from student_data where id='$student_id'") or die($mysqli->error());
-
-            if($student_data_result->num_rows !=0)
-            {
-
-                $student_data=$student_data_result->fetch_assoc();
-
-                $student_data_result->free();
-
-
-            }else
-                {
-
-                    $_SESSION['message'] = "Student id is not a valid id!";
-                    header("location:error.php");
-
-                }
-
-
-        }else
-            {
-                $_SESSION['message'] = "Id should be an integer";
-                header("location:error.php");
-
-
-            }
-
-    }elseif (isset($_GET['academic_year_id']))
+   if (isset($_GET['academic_year_id']))
     {
 
         if((is_int($_GET['academic_year_id']) || ctype_digit($_GET['academic_year_id'])) && (int)$_GET['academic_year_id'] > 0)
@@ -158,7 +133,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
         }
 
 
-}
+}else
+    {
+
+        $_SESSION['message'] = "Invalid request!";
+        header("location:error.php");
+    }
 
     if($type_of_employment == 'Administrator'){
     ?>
@@ -209,31 +189,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                 <th>NIC</th>
                                                 <th>Information status</th>
                                                 <th>Registration Number</th>
+                                                <th>Approved</th>
                                                 <th class="text-center">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
 
                                             <?php foreach ($all_student_data as $sd){ ?>
-                                                <form id="two_step_submission_form" class="two_step_form" action="student_registrations.php?id=<?= $sd['id'];?>" method="post">
+
                                                     <tr>
                                                         <td><?= $sd['id'] ?></td>
                                                         <td><?= $sd['full_name'] ?></td>
                                                         <td><?= $sd['nic'] ?></td>
                                                         <td><?php if($sd['is_locked'] == 1){echo("Locked");}else{echo("Not locked");} ?></td>
-                                                        <td><?php if($sd['registration_number'] == null){echo("Pending");}else{$sd['registration_number'];} ?></td>
+                                                        <td><?php if($sd['registration_number'] == null){echo("Pending");}else{echo $sd['registration_number'];} ?></td>
+                                                        <td><?php if($sd['is_approved'] == 1){echo("Approved");}else{echo("Pending");} ?></td>
                                                         <td>
                                                             <div class="btn-group" role="group" >
-                                                                <button class="btn btn-info m-1" type="submit">View</button>
-                                                                <?php if($sd['is_locked'] == 1){?>
-                                                                    <button class="btn btn-success m-1" type="submit" formaction="student_registrations_approve.php?id=<?= $sd['id'];?>" >Approve</button>
-                                                                <?php } ?>
-                                                                <button class="btn btn-danger m-1" formaction="student_registrations_delete.php?id=<?= $sd['id'];?>" >Delete</button>
+                                                                <a href="student_registration_view.php?id=<?= $sd['id'];?>&ay_id=<?=$student_ayid?>"><button class="btn btn-info m-1" type="submit">View</button></a>
                                                             </div>
                                                         </td>
 
                                                     </tr>
-                                                </form>
+
                                             <?php } ?>
 
 
@@ -241,10 +219,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                         </table>
                                     </div>
                                 </div>
-
-                            <?php }elseif(isset($student_data)) { ?>
-
-                                <h3 class="text-center text-uppercase text-secondary mb-0">Student Data</h3>
 
                             <?php } ?>
 
@@ -417,208 +391,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 <!--custom-->
 
-<script type="text/javascript">
-
-    var btnClick =0;
-
-    $('textarea.textarea_expand').focus(function () {
-        $(this).animate({height: "184px"}, 1000);
-    });
-
-    <?php if(isset($selected) || isset($old)) {?>
-
-
-    <?php if(isset($selected)){ ?>
-        deadline = moment('<?php echo $selected['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
-
-    <?php } ?>
-
-
-    <?php if(isset($old)){ ?>
-        deadline = moment('<?php echo $selected['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
-    <?php } ?>
-
-    $('#datetimepicker3').attr('disabled',false);
-
-
-
-    $('#datetimepicker3').datetimepicker({
-        useCurrent: false,
-        defaultDate: deadline,
-        minDate: moment($('#academic_year_id').find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss'),
-        maxDate: moment($('#academic_year_id').find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss'),
-        format: 'YYYY-MM-DD HH:mm:ss'
-    });
-
-
-    $('#academic_year_id').on('change', function() {
-
-        if(this.value != 0)
-        {
-            $('#datetimepicker3').attr('disabled',false);
-
-
-            Selected_from_date = moment($(this).find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss');
-            Selected_to_date = moment($(this).find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss');
-
-            set_from_date = moment($('#datetimepicker3').datetimepicker('minDate')).format('YYYY-MM-DD HH:mm:ss');
-            set_to_date = moment($('#datetimepicker3').datetimepicker('maxDate')).format('YYYY-MM-DD HH:mm:ss');
-
-            if(Selected_to_date>set_to_date)
-            {
-                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
-                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
-
-            }else
-            {
-
-                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
-                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
-            }
-        }
-        else
-        {
-
-            $('#datetimepicker3').attr('disabled',true);
-            $('#datetimepicker3').val('');
-
-            $('#datetimepicker3').datetimepicker(
-                {
-                    useCurrent: false,
-                    format: 'YYYY-MM-DD HH:mm:ss'
-
-                });
-
-        }
-    });
-
-
-    <?php }else { ?>
-
-
-    $('#datetimepicker3').datetimepicker({
-        useCurrent: false,
-        format: 'YYYY-MM-DD HH:mm:ss'
-    });
-
-
-    $('#academic_year_id').on('change', function() {
-
-        if(this.value != 0)
-        {
-            $('#datetimepicker3').attr('disabled',false);
-
-
-            Selected_from_date = moment($(this).find(':selected').data('fromdate')).format('YYYY-MM-DD HH:mm:ss');
-            Selected_to_date = moment($(this).find(':selected').data('todate')).format('YYYY-MM-DD HH:mm:ss');
-
-            set_from_date = moment($('#datetimepicker3').datetimepicker('minDate')).format('YYYY-MM-DD HH:mm:ss');
-            set_to_date = moment($('#datetimepicker3').datetimepicker('maxDate')).format('YYYY-MM-DD HH:mm:ss');
-
-            if(Selected_to_date>set_to_date)
-            {
-                $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
-                $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
-
-            }else
-                {
-
-                    $('#datetimepicker3').datetimepicker('minDate',Selected_from_date );
-                    $('#datetimepicker3').datetimepicker('maxDate', Selected_to_date);
-                }
-        }
-        else
-            {
-
-                $('#datetimepicker3').attr('disabled',true);
-                $('#datetimepicker3').val('');
-
-                $('#datetimepicker3').datetimepicker(
-                    {
-                        useCurrent: false,
-                        format: 'YYYY-MM-DD HH:mm:ss'
-
-                    });
-
-            }
-    });
-
-
-    <?php
-    }
-
-    $body ='';
-
-    if(isset($all_accedemic_levels_data)) {
-
-        for ($k = 0; $k < count($all_accedemic_levels_data); $k++) {
-
-            $body = $body . '<a  data-id="'.$all_accedemic_levels_data[$k]['id'] .'" data-title="'.$all_accedemic_levels_data[$k]['title'] .'" data-deadline="'.$all_accedemic_levels_data[$k]['deadline'] .'"  data-description="'.$all_accedemic_levels_data[$k]['description'] .'" class=" al_view w-100 btn list-group-item list-group-item-action text-dark  font-weight-bold">' . $all_accedemic_levels_data[$k]['title'] . ' <i class="text-dark ';
-
-
-            $body = $body . ' fa fa-book"></i></a>';
-
-        }
-    }
-
-    if($body !=''){
-
-    ?>
-
-    $('#academic_level_togal').on('click',function (e)
-    {
-        if(btnClick == 0)
-        {
-            $('#academic_level_div').append('<?=$body?>');
-            btnClick++;
-
-        }else if(btnClick == 1)
-        {
-            $('#academic_level_div').empty();
-            btnClick--;
-        }
-
-    });
-
-    <?php } ?>
-
-
-    $(document.body).on('click', '.al_view' ,function()
-    {
-
-        id = $(this).data('id');
-        title = $(this).data('title');
-        description = $(this).data('description');
-        deadline = $(this).data('deadline');
-
-
-
-
-
-        $('#academic_level_view #al_title').text(title);
-        $('#academic_level_view #al_description').text(description);
-        $('#academic_level_view #al_registration_deadline').text(deadline);
-
-        $('#academic_level_view #modal_head_div').addClass('bg-primary');
-
-
-
-        $('#academic_level_view #al_update_btn').click(function(){
-            window.location.href='create_academic_level.php?id='+id;
-        });
-
-        $('#academic_level_view #al_delete_btn').click(function(){
-            window.location.href='academic_level_delete.php?id='+id;
-        });
-
-        $('#academic_level_view').modal('show');
-
-
-    });
-
-
-
-</script>
 
 
 </body>

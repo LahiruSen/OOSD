@@ -5,6 +5,7 @@
  * Date: 3/30/2018
  * Time: 3:16 PM
  */
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
 $user_id=$_SESSION['user_id'];

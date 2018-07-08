@@ -6,7 +6,7 @@
  * Time: 11:26 PM
  */
 
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require "u_connection.php";
 //$student_id=$_SESSION['reg_no'];
 $assignment_id=$_GET['assignment_id'];

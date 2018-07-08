@@ -11,7 +11,7 @@
 require 'validator.php';
 require 'db.php';
 
-
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 // CHECK THERE IS A LOGNG[SESSION VARIABLE WERE ONLY CREATED DURING LOGIN] &&&& CHECK USER TYPE = ADMINISTRATOR
 if(isset($_SESSION['email']))
 {
@@ -67,6 +67,26 @@ if(isset($_POST['description'])){$old['description'] = $_POST['description'];}el
 if(isset($_POST['deadline'])){$old['deadline'] = $_POST['deadline']; if(isset($_POST['academic_year_id'])){  $ayv = academic_year_for_level_validator($_POST['academic_year_id'],$mysqli);  if($ayv[0] =='Y') {$from_date = new DateTime($ayv[1]['from_date']);$to_date = new DateTime($ayv[1]['to_date']);$deadline = new DateTime($_POST['deadline']);$validation_result[] = array('deadline',deadline_validator($from_date,$to_date,$deadline));}}else{$validation_result[] = array('deadline',"Should have an associative valid academic year");}}else{$validation_result[] = array('deadline',"Please put a valid deadline");}
 if(isset($_POST['academic_year_id'])){$old['academic_year_id'] = $_POST['academic_year_id'];$validation_result[] = array('academic_year_id',academic_year_for_level_validator($_POST['academic_year_id'],$mysqli)[0]);}else{$validation_result[] = array('academic_year_id',"Please put a valid academic year");}
 
+if(isset($_GET['id'])) {
+    if (isset($_POST['type']) && isset($_POST['academic_year_id'])) {
+        $old['type'] = $_POST['type'];
+        $validation_result[] = array('type', academic_level_type_validator($_POST['academic_year_id'],$_POST['type'],$_GET['id'], $mysqli));
+    } else {
+        $validation_result[] = array('type', "Please put a valid academic year or select a type[academic year is required to define type]");
+    }
+
+}else
+    {
+        if (isset($_POST['type']) && isset($_POST['academic_year_id'])) {
+            $old['type'] = $_POST['type'];
+            $validation_result[] = array('type', academic_level_type_validator($_POST['academic_year_id'],$_POST['type'],0, $mysqli));
+        } else {
+            $validation_result[] = array('type', "Please put a valid academic year or select a type[academic year is required to define type]");
+        }
+
+    }
+
+
 
 
 
@@ -94,14 +114,15 @@ if($error_counter == 0)
         $title = $_POST['title'];
         $description = $_POST['description'];
         $deadline = $_POST['deadline'];
+        $type = $_POST['type'];
         $academic_year_id = $_POST['academic_year_id'];
         $date_of_create= $mysqli->escape_string( date("Y-m-d H:i:s"));
         $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
 
         //insert query
         $sql = "INSERT INTO level  (title, description, deadline, academic_year_id, date_of_create,"
-            ." date_of_update) "
-            . "VALUES ('$title','$description','$deadline',$academic_year_id,'$date_of_create','$date_of_update')";
+            ." date_of_update,type) "
+            . "VALUES ('$title','$description','$deadline',$academic_year_id,'$date_of_create','$date_of_update','$type')";
 
 
         if($mysqli->query($sql))
@@ -120,6 +141,7 @@ if($error_counter == 0)
         $title = $_POST['title'];
         $description = $_POST['description'];
         $deadline = $_POST['deadline'];
+        $type = $_POST['type'];
         $academic_year_id = $_POST['academic_year_id'];
         $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
         $id = $_GET['id'];
@@ -130,7 +152,7 @@ if($error_counter == 0)
 
         if($level_result->num_rows !=0)
         {
-            $sql = "UPDATE level  SET title='$title', description='$description', deadline='$deadline', academic_year_id='$academic_year_id', date_of_update='$date_of_update'"
+            $sql = "UPDATE level  SET title='$title', description='$description', deadline='$deadline', academic_year_id='$academic_year_id', date_of_update='$date_of_update',type='$type'"
                 ."  WHERE id='$id'";
 
             if($mysqli->query($sql))
@@ -208,6 +230,12 @@ if($error_counter == 0)
 
 
 
+        }else
+        {
+            $_SESSION['message'] = "No valid submission";
+            header("location:error.php");
+
+            //should set error in here
         }
 
 

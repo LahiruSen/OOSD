@@ -9,6 +9,13 @@ if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
 }
+elseif($_SESSION['active'] != 1)
+{
+    $_SESSION['message'] = "We have sent you a verification email to your email account. Please click verification link to verify your account!!!";
+    header("location: error.php");
+
+}
+
 else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -22,6 +29,8 @@ else {
         header("location: home_student.php");
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -45,66 +54,87 @@ else {
         <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
     </div>
 
-<?php } else { if($two_step ==1) {
-$current_employee_type_result = $current_user_info_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
-if($current_employee_type_result->num_rows !=0)
+<?php } else { if($two_step ==1)
 {
-    $current_employee_type_data = $current_employee_type_result->fetch_assoc();
-    $current_employee_type_result->free();
-    $type_of_employment = $current_employee_type_data['title'];
-}
 
-$all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
 
-if($all_accedemic_years_result->num_rows !=0) {
-    $all_accedemic_years_data = array();
 
-    while ($row = $all_accedemic_years_result->fetch_assoc())
+
+if ($_SERVER['REQUEST_METHOD'] == 'GET')
+{
+
+   if (isset($_GET['employee_type_id']))
     {
-        $all_accedemic_years_data[] = $row;
-    }
 
-    $all_accedemic_years_result->free();
+        if((is_int($_GET['employee_type_id']) || ctype_digit($_GET['employee_type_id'])) && (int)$_GET['employee_type_id'] > 0)
+        {
+            $employee_type_id = $_GET['employee_type_id'];
+
+            $employee_type = $mysqli->query("select title from employee_types where id='$employee_type_id'");
+
+            if($employee_type->num_rows !=0)
+            {
+
+                $employee_type_title = $employee_type->fetch_assoc();
+
+                $employee_type_title = $employee_type_title['title'];
+            }else
+                {
+                    $_SESSION['message'] = "Employee type id is not a valid id!";
+                    header("location:error.php");
+
+                }
+
+            $all_employee_data_result =  $mysqli->query("select * from employee_data where employee_type_id='$employee_type_id'") or die($mysqli->error());
+
+            if($all_employee_data_result->num_rows !=0)
+            {
+
+                $all_employee_data= array();
+
+                while($row = $all_employee_data_result->fetch_assoc())
+                {
+                    $all_employee_data[] = $row;
+
+                }
+                $all_employee_data_result->free();
 
 
+            }else
+            {
+
+                $_SESSION['message'] = "No employee are associated with the academic year";
+                header("location:error.php");
+
+            }
 
 
-    $registration_info = array();
-
-    foreach ($all_accedemic_years_data as $ays)
-    {
-        $id = $ays['id'];
-
-        $title = $ays['title'];
-
-        $sql = "select * from student_data where registered_ayear_id='$id'";
-
-        $registrations = $mysqli->query($sql);
-
-        $number_of_application =$registrations->num_rows;
+        }else
+        {
+            $_SESSION['message'] = "Employee type id should be an integer";
+            header("location:error.php");
 
 
-        $registration_info[]= array($id,$title,$number_of_application);
+        }
 
 
-    }
+    }else
+        {
+            $_SESSION['message'] = "No valid parameters";
+            header("location:error.php");
 
+        }
 
 
 }else
     {
 
-        $_SESSION['message'] = "There are no academic years available";
+        $_SESSION['message'] = "Invalid request!";
         header("location:error.php");
     }
 
-
-
-//THE RULE WILL CHANGE IN HERE DUE TO RULES
-
-if($type_of_employment == 'Administrator'){
-?>
-
+    if($type_of_employment == 'Administrator'){
+    ?>
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
@@ -125,8 +155,7 @@ if($type_of_employment == 'Administrator'){
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Academic Years List <i class="fa fa-graduation-cap"></i> </h2>
-
+            <h2 style="font-size:50px" class="text-dark mb-2">Employee Registrations <i class="fa fa-graduation-cap"></i> </h2>
         </div>
 
     </header>
@@ -137,46 +166,58 @@ if($type_of_employment == 'Administrator'){
 
 
             <div class="row text-center">
-                <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an academic year</h3>
+                        <div class="col-lg-12  col-xl-12">
+                            <?php if(isset($all_employee_data)){?>
+                                <h3 class="text-center text-uppercase text-secondary mb-0">All Employee List</h3>
+                                <h5 class="text-center text-uppercase text-primary mb-0"><?=$employee_type_title?></h5>
 
-                    <hr class="star-dark mb-5">
-                    <div class="container">
-                        <div class="text-left ">
-                            <table class="table table-striped text-center">
-                                <thead>
-                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Number of registrations</th>
-                                    <th class="text-center">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                <hr class="star-dark mb-5">
+                                <div class="container">
+                                    <div class="text-left ">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                                <th>ID</th>
+                                                <th>Full Name</th>
+                                                <th>NIC</th>
+                                                <th>Information status</th>
+                                                <th>Employee ID </th>
+                                                <th>Approved</th>
+                                                <th class="text-center">Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
 
-                                <?php foreach ($registration_info as $sd){ ?>
+                                            <?php foreach ($all_employee_data as $sd){ ?>
 
-                                        <tr>
-                                            <td><?= $sd[0] ?></td>
-                                            <td><?= $sd[1] ?></td>
-                                            <td><?= $sd[2] ?></td>
-                                              <td class="text-center">
-                                                <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="student_registrations.php?academic_year_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
-                                                 </div>
-                                            </td>
+                                                    <tr>
+                                                        <td><?= $sd['id'] ?></td>
+                                                        <td><?= $sd['full_name'] ?></td>
+                                                        <td><?= $sd['nic'] ?></td>
+                                                        <td><?php if($sd['is_locked'] == 1){echo("Locked");}else{echo("Not locked");} ?></td>
+                                                        <td><?= $sd['employee_id'] ?></td>
+                                                        <td><?php if($sd['is_approved'] == 1){echo("Approved");}else{echo("Pending");} ?></td>
+                                                        <td>
+                                                            <div class="btn-group" role="group" >
+                                                                <a href="employee_registration_view.php?id=<?= $sd['id'];?>&et_id=<?=$employee_type_id?>"><button class="btn btn-info m-1" type="submit">View</button></a>
+                                                            </div>
+                                                        </td>
 
-                                        </tr>
+                                                    </tr>
 
-                                <?php } ?>
+                                            <?php } ?>
 
 
-                                </tbody>
-                            </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            <?php } ?>
+
+
                         </div>
-                    </div>
 
-                  </div>
             </div>
 
         </div>
@@ -242,15 +283,14 @@ if($type_of_employment == 'Administrator'){
         </a>
     </div>
 
-
     <!-- Model -->
-    <div class="modal fade" id="academic_year_view">
+    <div class="modal fade" id="academic_level_view">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
 
                 <!-- Modal Header -->
                 <div id="modal_head_div" class="modal-header">
-                    <h4 id="ay_title" class="modal-title"></h4>
+                    <h4 id="al_title" class="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -258,19 +298,19 @@ if($type_of_employment == 'Administrator'){
                 <div class="modal-body">
                     <div class="m-2">
                         <div class="row ">
-                            <label class="text-dark" for="ay_description">Description</label>
+                            <label class="text-dark" for="al_description">Description</label>
                         </div>
                         <div class="row">
-                            <p id="ay_description"></p>
+                            <p id="al_description"></p>
                         </div>
 
                     </div>
                     <div class="m-2">
                         <div class="row">
-                            <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
+                                <label class="text-dark" for="al_registration_deadline">Registration deadline</label>
                         </div>
                         <div class="row">
-                            <p style="font-size: 20px" id="ay_registration_deadline"></p>
+                                <p style="font-size: 20px" id="al_registration_deadline"></p>
                         </div>
                     </div>
                 </div>
@@ -279,10 +319,10 @@ if($type_of_employment == 'Administrator'){
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-lg-4">
-                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
+                            <a href="" id="al_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
                         </div>
                         <div class="col-lg-4">
-                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
                         <div class="col-lg-4 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -295,30 +335,29 @@ if($type_of_employment == 'Administrator'){
         </div>
     </div>
 
-
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
 <?php } else
-{
-    if ($_SESSION['types'] == 1) {
+    {
+        if ($_SESSION['types'] == 1) {
 
-        header('location: home_employee.php');
-    } else {
-        header('location: home_student.php');
+            header('location: home_employee.php');
+        } else {
+            header('location: home_student.php');
+        }
     }
-}
 
 } else
-{
+    {
 
-    if ($_SESSION['types'] == 1) {
+        if ($_SESSION['types'] == 1) {
 
-        header('location: home_employee.php');
-    } else {
-        header('location: home_student.php');
+            header('location: home_employee.php');
+        } else {
+            header('location: home_student.php');
+        }
+
     }
-
-}
 }
 ?>
 
@@ -341,7 +380,10 @@ if($type_of_employment == 'Administrator'){
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+
 <!--custom-->
+
 
 
 

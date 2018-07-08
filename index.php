@@ -1,7 +1,7 @@
 <?php
 /* Main page with two forms: sign up and log in */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 ?>
 <!DOCTYPE html>
 <html>

@@ -290,7 +290,7 @@ function academic_year_for_level_validator($academic_year_id,$mysqli)
     {
         if($academic_year_id != 0) {
             $ay_id = $academic_year_id;
-            $ay = $mysqli->query("select * from academic_year where id = '$ay_id' and status <> -1");
+            $ay = $mysqli->query("select * from academic_year where id = '$ay_id'");
 
             if ($ay->num_rows != 0) {
                 $ay_data = $ay->fetch_assoc();
@@ -313,13 +313,88 @@ function academic_year_for_level_validator($academic_year_id,$mysqli)
             }
         }else
             {
-                return ['Please select one',[]];
+                return ['Please select one academic year',[]];
 
             }
     }
     else
     {
         return ["Not a valid academic year",[]];
+
+    }
+
+}
+
+
+function academic_level_type_validator($academic_year_id,$type,$id,$mysqli)
+{
+    if(isset($academic_year_id) )
+    {
+        if($academic_year_id != 0) {
+            $ay_id = $academic_year_id;
+            $ay = $mysqli->query("select * from academic_year where id = '$ay_id'");
+
+            if ($ay->num_rows != 0) {
+                $ay_data = $ay->fetch_assoc();
+
+                if (!isset($ay_data)) {
+
+
+                    return "Something went wrong while fetching academic year";
+                }else
+                {
+
+                    if($id == 0)
+                    {
+                        $level_result = $mysqli->query("select id from level where academic_year_id='$academic_year_id' and type='$type'");
+
+                        if($level_result->num_rows == 0)
+                        {
+
+                            return "Y";
+
+                        }else
+                            {
+                                return "Level ".$type." is already created for this academic year";
+
+                            }
+
+
+                    }else
+                        {
+                            $level_result = $mysqli->query("select id from level where academic_year_id='$academic_year_id' and type='$type' and id <> '$id'");
+
+                            if($level_result->num_rows == 0)
+                            {
+
+                                return "Y";
+
+                            }else
+                            {
+                                return "Level ".$type." is already created for this academic year";
+
+                            }
+
+
+
+                        }
+
+
+                }
+
+            } else {
+
+                return "This academic year ID is not belongs to valid academic year";
+            }
+        }else
+        {
+            return "Please select an academic year";
+
+        }
+    }
+    else
+    {
+        return "Academic year is needed!";
 
     }
 

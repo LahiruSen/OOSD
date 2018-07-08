@@ -1,6 +1,6 @@
 <?php
 /* Log out process, unsets and destroys session variables */
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 session_unset();
 session_destroy(); 
 ?>

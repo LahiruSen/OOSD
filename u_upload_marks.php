@@ -5,7 +5,7 @@
  * Date: 4/1/2018
  * Time: 4:50 PM
  */
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
 //$full_name=$_SESSION['name'];

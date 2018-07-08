@@ -2,13 +2,20 @@
 <?php
 /* Displays user information and some useful messages */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
 }
+elseif($_SESSION['active'] != 1)
+{
+    $_SESSION['message'] = "We have sent you a verification email to your email account. Please click verification link to verify your account!!!";
+    header("location: error.php");
+
+}
+
 else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -56,9 +63,9 @@ else {
     }
 
     $all_accedemic_levels_result  =  $mysqli->query("select * from level") or die($mysqli->error());
-    $all_accedemic_years_result  =  $mysqli->query("select * from academic_year where status <> -1 ") or die($mysqli->error());
+    $all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
 
-    if($all_accedemic_levels_result->num_rows !=0 && $all_accedemic_years_result->num_rows !=0) {
+    if( $all_accedemic_years_result->num_rows !=0) {
         $all_accedemic_levels_data = array();
         $all_accedemic_years_data = array();
 
@@ -71,6 +78,8 @@ else {
         {
             $all_accedemic_years_data[] = $row2;
         }
+
+
 
 
         $all_accedemic_levels_result->free();
@@ -244,6 +253,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                         <?php } ?>
 
                                                     </select>
+
+                                                    <?php if(isset($error_array) && array_key_exists('academic_year_id',$error_array))  {?>
+                                                        <div class="row">
+                                                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                                <small id="passwordHelp" class="text-danger">
+                                                                    <?= $error_array['academic_year_id'] ?>
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
 
@@ -277,6 +296,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                         <option value="1" <?php if(isset($old)){if ($old['type'] == 1) {echo "selected";}}else{if(isset($selected)) {if ($selected['type'] == 1) {echo "selected";}}} ?> >Level 1</option>
                                                         <option value="2" <?php if(isset($old)){if ($old['type'] == 2) {echo "selected";}}else{if(isset($selected)) {if ($selected['type'] == 2) {echo "selected";}}} ?> >Level 2</option>
                                                     </select>
+
+                                                    <?php if(isset($error_array) && array_key_exists('type',$error_array))  {?>
+                                                        <div class="row">
+                                                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                                <small id="passwordHelp" class="text-danger">
+                                                                    <?= $error_array['type'] ?>
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -312,36 +341,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
                                     <?php }?>
-                                    <?php if(isset($all_accedemic_levels_data)) { ?>
+                                    <?php if(isset($all_accedemic_levels_data)) {
+                                        if (count($all_accedemic_levels_data) > 0) { ?>
 
-                                        <button id="academic_level_togal" type="button" class="btn btn-primary w-100">
-                                            Academic levels
-                                        </button>
-
-
-                                        <div  class="container w-100 text-center">
-                                            <ul id="academic_level_div" class="list-group  w-100 text-center">
-
-                                            </ul>
-                                        </div>
-
-                                    <?php } else { ?>
+                                            <button id="academic_level_togal" type="button"
+                                                    class="btn btn-primary w-100">
+                                                Academic levels
+                                            </button>
 
 
-                                        <?php if(isset($_GET['id'])){ ?>
+                                            <div class="container w-100 text-center">
+                                                <ul id="academic_level_div" class="list-group  w-100 text-center">
 
-                                            <div class="text-center mt-4 w-100">
-                                                <a href="create_academic_level.php" class="btn btn-xl btn-outline-primary" >Create New</a>
+                                                </ul>
                                             </div>
-                                        <?php }?>
 
-                                        <div class="jumbotron jumbotron-fluid bg-topfive">
-                                            <div class="container">
-                                                <h1>Can't Find Any Academic Levels</h1>
-                                                <p>Please create a new academic level!</p>
+                                        <?php } else { ?>
+
+
+                                            <?php if (isset($_GET['id'])) { ?>
+
+                                                <div class="text-center mt-4 w-100">
+                                                    <a href="create_academic_level.php"
+                                                       class="btn btn-xl btn-outline-primary">Create New</a>
+                                                </div>
+                                            <?php } ?>
+
+                                            <div class="jumbotron jumbotron-fluid bg-topfive">
+                                                <div class="container">
+                                                    <h1>Can't Find Any Academic Levels</h1>
+                                                    <p>Please create a new academic level!</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                   <?php } ?>
+                                        <?php }
+
+                                    }else
+                                        { ?>
+                                            <div class="jumbotron jumbotron-fluid bg-topfive">
+                                                <div class="container">
+                                                    <h1>Can't Find Any Academic Years</h1>
+                                                    <p>Please create a new academic year to create an academic level!</p>
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <?php
+                                        }
+
+
+                                   ?>
                                 </div>
                             </div>
                         </div>
@@ -538,7 +589,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 
     <?php if(isset($old)){ ?>
-        deadline = moment('<?php echo $selected['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
+        deadline = moment('<?php echo $old['deadline'] ?>').format('YYYY-MM-DD HH:mm:ss');
     <?php } ?>
 
     $('#datetimepicker3').attr('disabled',false);

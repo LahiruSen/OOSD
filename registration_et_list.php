@@ -54,30 +54,30 @@ if($current_employee_type_result->num_rows !=0)
     $type_of_employment = $current_employee_type_data['title'];
 }
 
-$all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
+$all_employee_type_result  =  $mysqli->query("select * from employee_types") or die($mysqli->error());
 
-if($all_accedemic_years_result->num_rows !=0) {
-    $all_accedemic_years_data = array();
+if($all_employee_type_result->num_rows !=0) {
+    $all_employee_type_data = array();
 
-    while ($row = $all_accedemic_years_result->fetch_assoc())
+    while ($row = $all_employee_type_result->fetch_assoc())
     {
-        $all_accedemic_years_data[] = $row;
+        $all_employee_type_data[] = $row;
     }
 
-    $all_accedemic_years_result->free();
+    $all_employee_type_result->free();
 
 
 
 
     $registration_info = array();
 
-    foreach ($all_accedemic_years_data as $ays)
+    foreach ($all_employee_type_data as $ays)
     {
         $id = $ays['id'];
 
         $title = $ays['title'];
 
-        $sql = "select * from student_data where registered_ayear_id='$id'";
+        $sql = "select * from employee_data where employee_type_id='$id'";
 
         $registrations = $mysqli->query($sql);
 
@@ -125,7 +125,7 @@ if($type_of_employment == 'Administrator'){
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Academic Years List <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Employee type list <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -138,7 +138,7 @@ if($type_of_employment == 'Administrator'){
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an academic year</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an employee type</h3>
 
                     <hr class="star-dark mb-5">
                     <div class="container">
@@ -162,7 +162,7 @@ if($type_of_employment == 'Administrator'){
                                             <td><?= $sd[2] ?></td>
                                               <td class="text-center">
                                                 <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="student_registrations.php?academic_year_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
+                                                    <a <?php if($sd[2]!=0){ ?>href="employee_registrations.php?employee_type_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
                                                  </div>
                                             </td>
 

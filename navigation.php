@@ -133,7 +133,7 @@
                             <h6 class="dropdown-header">Registration</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="registration_ay_list.php">Student Registration</a>
-                            <a class="dropdown-item" href="#">Employee Registration</a>
+                            <a class="dropdown-item" href="registration_et_list.php">Employee Registration</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Student Registration Setting</a>
 
@@ -148,7 +148,7 @@
                         <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                             <h6 class="dropdown-header">Notification</h6>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Create Notification</a>
+                            <a class="dropdown-item" href="create_notification.php">Create Notification</a>
                             <a class="dropdown-item" href="#">Notification List</a>
                         </div>
                     </div>

@@ -5,9 +5,12 @@
  * Date: 3/30/2018
  * Time: 6:09 AM
  */
-session_start();
 
 require 'db.php';
+
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
+
+
 
 
     if ( $_SESSION['logged_in'] != 1 ) {

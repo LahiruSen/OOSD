@@ -2,7 +2,7 @@
 <?php
 /* Displays user information and some useful messages */
 require 'db.php';
-session_start();
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 // Check if user is logged in using the session variable
 if ( $_SESSION['logged_in'] != 1 ) {
@@ -285,7 +285,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                     </select>
                                                 </div>
                                             </div>
-
+                                            <?php if(isset($error_array) && array_key_exists('status',$error_array))  {?>
+                                                <div class="row">
+                                                    <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                        <small id="passwordHelp" class="text-danger">
+                                                            <?= $error_array['status'] ?>
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            <?php } ?>
 
                                             <?php if(isset($selected)) {?>
                                                 <input type="hidden" name="id" value="<?=$selected['id']?>">
