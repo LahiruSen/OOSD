@@ -33,7 +33,7 @@ if(!count($records)){
 
     ?>
     <div id="table">
-    <table class="table table-striped table-bordered border="5";"  >
+    <table class="table table-striped table-bordered border=5;"  >
         <thead>
         <tr>
             <th>Course ID</th>
@@ -47,7 +47,7 @@ if(!count($records)){
         <tbody>
 
             <?php
-            $option="<select>";
+            $option="<select name='course'>";
             foreach($records as $r){
                 $i++;
                 ?>
@@ -57,22 +57,29 @@ if(!count($records)){
                     <td ><?php echo $r->description;?></td>
                     <td><?php echo $r->credits;?></td>
                     <td><?php echo $r->no_of_working_hours;?></td>
-                    <?php // $option.'<option value="'.$r->course_id.'">'.$r->title.'</option>' ;?>
+                    <?php $option.='<option value="'.$r->course_id.'">'.$r->title.'</option>' ;?>
 
                 </tr>
                 <?php
             }
-            //echo $option.'</select>';
             ?>
+
+
+
 
 
         </tbody>
     </table>
-        <form action="" method="post">
-
-    <input type="submit" value="Submit">
+    </div>
+    <div>
+        <form action="course_registration_check.php" method="post">
+            <?php
+            echo $option.='</select>';
+            ?>
+            <input type="submit" value="Register">
         </form>
     </div>
+
     <?php
 }
 ?>
