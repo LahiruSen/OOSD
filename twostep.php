@@ -204,9 +204,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
             <?php if($two_step != 1){ ?>
 
                 <h4 style="font-size:50px" class="text-dark mb-2"> <?php if(isset($ayear_data)) { echo('You are registering for '.$ayear_data['title']);} ?>. <strong class="text-white"><?= $first_name.' '.$last_name; ?></strong><?php if(isset($student_data)) { if($student_data['is_locked'] != 1){echo (', Please complete your student profile');}}else{echo (', Please complete your student profile');}?></h4>
-                <h5 style="font-size:30px" class="text-white text-uppercase mb-2">Deadline <?=$ayear_data['registration_deadline']?></h5>
+               <?php if(isset($ayear_data)){ ?>
 
+                    <h5 style="font-size:30px" class="text-white text-uppercase mb-2">Deadline <?=$ayear_data['registration_deadline']?></h5>
 
+                <?php } else { ?>
+
+                        <h5 style="font-size:30px" class="text-white text-uppercase mb-2">No academic years detected</h5>
+
+                    <?php } ?>
 
             <?php } else {
                 ?>
