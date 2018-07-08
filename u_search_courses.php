@@ -30,6 +30,6 @@ if($user_type==1){
     $course_query_student=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$student_reg_no'");
 
 }
-$name=$_SESSION['first_name'].' '.$_SESSION['last_name'];
-$_SESSION['name']=$name;
+//$name=$_SESSION['first_name'].' '.$_SESSION['last_name'];
+//$_SESSION['name']=$name;
 ?>

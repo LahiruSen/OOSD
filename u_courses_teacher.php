@@ -21,9 +21,18 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
+    $user_id=$_SESSION['user_id'];
+
+    $employee_query=$mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'");
+    $employee=$employee_query->fetch_assoc();
+    $employee_type_id=$employee['employee_type_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
+    }else{
+        if($employee_type_id==1 || $employee_type_id==3 ||$employee_type_id==4){
+            header("location: home_employee.php");
+        }
     }
 }
 
@@ -95,16 +104,19 @@ else {
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0">My Courses</h2 class="text-center text-uppercase text-secondary mb-0">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12  col-xl-12">
+        <h3 class="text-center text-uppercase text-secondary mb-0">My Courses</h3>
         <hr class="star-dark mb-5">
         <div class="container">
-            <table class="table table-condensed">
+            <div class="text-left ">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                     <th>Course Title</th>
                     <th>Course Id</th>
-                    <th></th>
+                    <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -120,8 +132,10 @@ else {
                     <td class="text-success font-weight-bold"><?php echo $course[1];?></td>
                     <td class="text-success font-weight-bold"><?php echo $course_id;?></td>
                     <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->
-                    <td>
-                        <a class="text-dark" href="u_course_session_setup.php?course_id=<?php echo $course_id;?>&course_title=<?php echo $course[1];?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Course"></a>
+                    <td class="text-center">
+                        <div class="btn-group" role="group" >
+                        <a class="btn btn-info" href="u_course_session_setup.php?course_id=<?php echo $course_id;?>&course_title=<?php echo $course[1];?>"> View Course</a>
+                        </div>
                     </td>
                     </tr>
                     <?php
@@ -132,7 +146,9 @@ else {
 
                 </tbody>
             </table>
+            </div>
         </div>
+            </div></div>
     </div>
 </section>
 

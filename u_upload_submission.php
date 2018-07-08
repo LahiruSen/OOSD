@@ -24,8 +24,10 @@ $string = "$location.$name";
 $lastDot = strrpos($string, ".");
 $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $lastDot);
 
-$mysqli->query("INSERT INTO assignment_submissions(assignment_id, student_id, pdf_link) VALUES ('$assignment_id','$reg_no','$string')");
+$today = date("Y-m-d H:i:s");
 
-header("Location:assignment_details_student.php");
+$mysqli->query("INSERT INTO assignment_submissions(assignment_id, student_id, pdf_link,date_of_create, date_of_update) VALUES ('$assignment_id','$reg_no','$string','$today','$today')");
+
+header("Location:u_assignment_details_student.php");
 
 ?>

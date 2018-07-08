@@ -52,10 +52,12 @@ if ($_SESSION['logged_in'] != 1) {
 
 
             } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
-                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0");
-            } elseif (strcasecmp($employee_title, "Administrator") == 0) {
-                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0");
-            } else {
+                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0 AND approved_by_principal=1");
+            }
+            elseif (strcasecmp($employee_title, "Administrator") == 0) {
+                $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0 AND approved_by_hr=1 ");
+            }
+            else {
                 $_SESSION['message'] = "You have no administrative priviledges";
                 header("location:error.php");
                 die();
@@ -125,7 +127,6 @@ if ($_SESSION['logged_in'] != 1) {
 
     </header>
 
-
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
         <div class="container ">
@@ -149,7 +150,7 @@ if ($_SESSION['logged_in'] != 1) {
 
                             <?php
 
-                            if ($leave_result->num_rows != 0) {
+                            if ($leave_result->num_rows > 0) {
                                 while ($row = $leave_result->fetch_object()) {
                                     $records[] = $row;
                                 }
@@ -243,26 +244,26 @@ if ($_SESSION['logged_in'] != 1) {
 
     <!--Model-->
 
-<?php if ($_SESSION['two_step'] == 0) {
+<?php if($_SESSION['two_step'] == 0) {
 
 
-$user_result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 
-if ($user_result->num_rows != 0)
+if($user_result->num_rows != 0)
 {
 $user_data = $user_result->fetch_assoc();
 $user_result->free();
 $user_id = $user_data['id'];
-$employee_result = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
 
 
-if ($employee_result->num_rows != 0)
+if($employee_result->num_rows != 0)
 {
 $employee_data = $employee_result->fetch_assoc();
 
 $employee_result->free();
 
-if ($employee_data['is_locked'] != 1)
+if($employee_data['is_locked'] != 1)
 {
 ?>
 
@@ -278,8 +279,7 @@ if ($employee_data['is_locked'] != 1)
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP
-                    resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -293,7 +293,8 @@ if ($employee_data['is_locked'] != 1)
 
     <?php
 }
-else {
+else
+{
     ?>
 
     <div class="modal fade" id="completeProfile">
@@ -302,15 +303,13 @@ else {
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title text-warning">Activation is pending <i
-                                class="fa fa-exclamation-triangle"></i></h4>
+                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP
-                    resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -326,7 +325,8 @@ else {
 }
 
 }
-else {
+else
+{
 
     ?>
 
@@ -342,8 +342,7 @@ else {
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP
-                    resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -361,13 +360,15 @@ else {
 
 }
 
-else {
+else
+{
 
     $_SESSION['message'] = "You are not a valid user";
     header("location:error.php");
 }
 
 } ?>
+
 
 
     <!-- Footer -->
@@ -450,9 +451,10 @@ else {
 <script src="js/freelancer.js"></script>
 
 
-<?php if ($_SESSION['two_step'] == 0) { ?>
-    <script>
-        $(document).ready(function () {
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <script >
+        $( document ).ready(function() {
             $('#completeProfile').modal('show');
         });
 

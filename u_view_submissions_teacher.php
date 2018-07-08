@@ -20,13 +20,22 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
+    $user_id=$_SESSION['user_id'];
+
+    $employee_query=$mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'");
+    $employee=$employee_query->fetch_assoc();
+    $employee_type_id=$employee['employee_type_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
+    }else{
+        if($employee_type_id==1 || $employee_type_id==3 ||$employee_type_id==4){
+            header("location: home_employee.php");
+        }
     }
 }
 
-$name=$_SESSION['name'];
+//$name=$_SESSION['name'];
 $assignment_id=$_SESSION['assignment_id'];
 $assignment_title=$_SESSION['assignment_title'];
 
@@ -52,7 +61,7 @@ $deadline=$assignment['date_of_deadline'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 

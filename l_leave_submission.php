@@ -32,7 +32,7 @@ if ($_SESSION['logged_in'] != 1) {
             $datetime1 = new DateTime($start_date);
             $datetime2 = new DateTime($end_date);
 
-            $number_of_dates = $datetime2->diff($datetime1)->d;
+            $number_of_dates = 1+$datetime2->diff($datetime1)->d;
 
 
             $email = $_SESSION['email'];

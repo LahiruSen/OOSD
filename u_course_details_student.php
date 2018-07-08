@@ -28,12 +28,23 @@ $course_title=$_SESSION['course_title'];
 
 $course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
 $course=$course_query->fetch_assoc();
-$field=$course['field'];
+//$field=$course['field'];
+$no_of_hours=$course['no_of_working_hours'];
 $credit=$course['credits'];
 $description=$course['description'];
 $level_id=$course['level_id'];
+$teacher_id=$course['assigned_teacher_id'];
 
-$name=$_SESSION['name'];
+$teacher_user_query=$mysqli->query("SELECT * FROM employee_data where id='$teacher_id'");
+$teacher_user=$teacher_user_query->fetch_assoc();
+$teacher_user_id=$teacher_user['user_id'];
+$user_query=$mysqli->query("SELECT * FROM users where id='$teacher_user_id'");
+$teacher_user=$user_query->fetch_assoc();
+$first_name=$teacher_user['first_name'];
+$last_name=$teacher_user['last_name'];
+
+
+//$name=$_SESSION['name'];
 
 ?>
 
@@ -46,7 +57,7 @@ $name=$_SESSION['name'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name?></title>
+    <title>My Home : <?= $first_name.' '.$last_name?></title>
     <?php include 'css/css.html'; ?>
     <link rel="stylesheet" href="sidebar.css">
 </head>
@@ -97,25 +108,44 @@ $name=$_SESSION['name'];
         <hr class="star-dark mb-5">
         <div class="row">
             <div class="col-md-6">
-                <p>Course Id : <?php echo $course_id?></p>
-                <p>Field : <?php echo $field?></p>
-                <p>Description : <?php echo $description?></p>
-                <p>Credits : <?php echo $credit?></p>
+                <div class="jumbotron jumbotron-fluid bg-topfive">
+                <div class="container">
+                    <h1>Course Info</h1>
+                    <div class="card" style="width:100%">
+                        <div class="container text-center w-100">
+                            <i style="font-size: 100px" class="fa fa-graduation-cap"></i>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">Course Id</h6>
+                <p class="card-text"><?php echo $course_id?></p>
+                            <h6 class="card-title">Description</h6>
+                <p class="card-text"> <?php echo $description?></p>
+                            <h6 class="card-title">Credits</h6>
+                <p class="card-text"><?php echo $credit?></p>
+                            <h6 class="card-title">No of Houres per week</h6>
+                <p class="card-text"><?php echo $no_of_hours?></p>
+                            <h6 class="card-title">Teacher in Charge</h6>
+                <p class="card-text"><?php echo $first_name.' '.$last_name?></p>
+                        </div>
+                    </div>
+                </div>
+                </div>
             </div>
             <div class="col-md-6">
+
                 <div class="container">
-                    <button type="button" style="width: 80%;" class="btn btn-success" >Schedule</a></button>
+                    <button type="button" style="width: 80%;" class="btn bg-topfive text-light" >Schedule</a></button>
                 </div>
 
                 <div class="container">
-                    <br><a href="u_view_assignments_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Assignments</button></a>
+                    <br><a href="u_view_assignments_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignments</button></a>
                 </div>
                 <div class="container">
-                    <br><a href="u_view_assignments_marks_student.php"> <button class="btn btn-success" style="width: 80%" type="button">Grades</button></a>
+                    <br><a href="u_view_assignments_marks_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Grades</button></a>
                 </div>
 
 
-            </div>
+                </div>
 
         </div>
     </div>
