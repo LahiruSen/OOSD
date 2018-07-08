@@ -20,9 +20,18 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
+    $user_id=$_SESSION['user_id'];
+
+    $employee_query=$mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'");
+    $employee=$employee_query->fetch_assoc();
+    $employee_type_id=$employee['employee_type_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
+    }else{
+        if($employee_type_id==1 || $employee_type_id==3 ||$employee_type_id==4){
+            header("location: home_employee.php");
+        }
     }
 }
 
@@ -87,7 +96,7 @@ $deadline=$assignment['date_of_deadline'];
 
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
         <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
@@ -98,16 +107,29 @@ $deadline=$assignment['date_of_deadline'];
 
 
 <section class="" id="portfolio">
-    <div class="container  ">
+    <div class="container">
         <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $assignment_title?></h2>
         <hr class="star-dark mb-5">
-
-        <div class="text-center text-secondary mb-0">
-            <li class="badge"><?php echo $assignment['description'];?></li><br>
+        <div class="col-md">
+        <div class="jumbotron jumbotron-fluid bg-topfive">
+        <div class="container text-center">
+            <div class="card" style="width:100%">
+                <div class="card-body">
+                    <h6 class="card-title">Description</h6>
+            <p class="card-text text-center"><?php echo $assignment['description'];?></p>
+                    <h6 class="card-title">Attachment</h6>
             <a href="<?php echo $assignment['attachment_link'];?>" target="_blank"> <li class="badge badge-pill badge-primary "><?php echo $assignment['attachment_link'];?></li></a>
+                    <h6 class="card-title">Deadline</h6>
+            <p class="card-text text-center"><?php echo $assignment['date_of_deadline'];?></p>
+                    <h6 class="card-title">Date of Update</h6>
+            <p class="card-text text-center"><?php echo $assignment['date_of_update'];?></p>
+                    <h6 class="card-title">Date of Create</h6>
+            <p class="card-text text-center"><?php echo $assignment['date_of_create'];?></p>
+                </div>
+            </div>
         </div>
-        <br>
 
+        </div></div>
         <?php
 
         $today = date("Y-m-d H:i:s");
@@ -117,11 +139,13 @@ $deadline=$assignment['date_of_deadline'];
         if($today<=$deadline){
             if($no_of_submissions==0){
                 ?>
+                <div class="row">
+                <div class="col-md">
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
                     <button type="button" style="width: 50%;" class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow2">UPDATE ASSIGNMENT</button>
                     <div class="modal fade" id="popUpWindow2">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h3 class="modal-title">Update Assignment</h3>
@@ -154,21 +178,21 @@ $deadline=$assignment['date_of_deadline'];
                             </div>
                         </div>
                     </div>
-                </div><br>
-
+                </div></div><br>
+                <div class="col">
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
                     <button type="button" style="width: 50%;" class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow">DELETE ASSIGNMENT</button>
                     <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">ARE YOU SURE?</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
 
-                                    <p><?php echo $assignment_id?></p>
+                                    <p>You are going to delete this assignment permanantly</p>
                                     <!--                                    <a href="--><?php //echo $previous_submission['pdf_link'];?><!--" target="_blank"><li class="badge badge-success">--><?php //echo $previous_submission['pdf_link']?><!--</li></a><br>-->
 
                                 </div>
@@ -179,6 +203,8 @@ $deadline=$assignment['date_of_deadline'];
                             </div>
                         </div>
                     </div>
+                </div>
+                </div>
                 </div>
 
                 <!--                <div class="container">-->
@@ -295,8 +321,10 @@ $deadline=$assignment['date_of_deadline'];
 
         if($no_of_submissions==0){
             ?>
-            <div class="text-center text-uppercase text-danger mb-0">
-                <li class="badge">No Submission</li>
+            <div class="col-md">
+            <div class="text-center mb-0">
+                <label class="btn bg-danger text-light">No Submissions</label>
+            </div>
             </div>
         <?php }else{
         //$previous_submission=$submission_query->fetch_assoc();

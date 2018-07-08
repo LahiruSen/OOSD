@@ -28,13 +28,22 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
+    $user_id=$_SESSION['user_id'];
+
+    $employee_query=$mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'");
+    $employee=$employee_query->fetch_assoc();
+    $employee_type_id=$employee['employee_type_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
+    }else{
+        if($employee_type_id==1 || $employee_type_id==3 ||$employee_type_id==4){
+            header("location: home_employee.php");
+        }
     }
 }
 
-$name=$_SESSION['name'];
+//$name=$_SESSION['name'];
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
 
@@ -45,7 +54,7 @@ $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$
 
 //$_SESSION['course_id']=$course_id;
 //$_SESSION['course_title']=$course_title;
-$_SESSION['error']=false;
+//$_SESSION['error']=false;
 
 ?>
 
@@ -58,7 +67,7 @@ $_SESSION['error']=false;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
@@ -106,12 +115,12 @@ $_SESSION['error']=false;
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="">
+    <div class="container">
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
         <div class="row">
             <div class="col-md-6" align="center">
-                <h3 align="center">OVERDUE</h3>
+                <h3 align="center" class="bg-topfive text-light">OVERDUE</h3>
                 <?php
 
                 while ($asignment = mysqli_fetch_array($assignment_query, MYSQLI_NUM)) {
@@ -120,23 +129,24 @@ $_SESSION['error']=false;
                     if ($deadline < $today) {
 
                         ?>
-                        <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
-
-
-                            <label class="btn btn-danger btn-lg-0" style=""><?php echo $asignment[5];?></label>
-
-                            <a class="text-dark" href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
-                            <br>
-                            <br>
+                <div class="row">
+                        <div class="col-lg-4 " align="center">
+                            <label class="btn text-dark btn-block">Assignment id:<?php echo $asignment[0]; ?></label>
                         </div>
+                    <div class="col-lg-4 " align="center">
+                        <label class="btn btn-danger btn-block" ><?php echo $asignment[5];?></label>
+                    </div>
+                    <div class="col-lg-4 " align="center">
+                        <a href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-block" type="submit" value="View Assignment"></a>
+                    </div>
+                </div>
 
                         <?php
                     }
                 }?>
             </div>
             <div class="col-md-6" align="center">
-                <h3 align="center">ONGOING</h3>
+                <h3 align="center" class="bg-topfive text-light">ONGOING</h3>
                 <?php
                 while ($asignment = mysqli_fetch_array($assignment_query_2, MYSQLI_NUM)) {
                     $deadline = $asignment[7];
@@ -145,16 +155,19 @@ $_SESSION['error']=false;
                     if ($deadline >= $today) {
 
                         ?>
-                        <div class="col-lg-6 " align="center">
-                            <li class="badge"><label class="btn btn-light btn-lg-0">Assignment id:<?php echo $asignment[0]; ?></label></li>
-
-
-                            <label class="btn btn-success btn-lg-0" style=""><?php echo $asignment[5];?></label>
-
-                            <a class="text-dark" href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
-                            <br>
-                            <br>
+                <div class="row">
+                    <div class="col-lg-4 " align="center">
+                       <label class="btn text-dark btn-block">Assignment id:<?php echo $asignment[0]; ?></label>
+                    </div>
+                        <div class="col-lg-4 " align="center">
+                            <label class="btn btn-success btn-block"><?php echo $asignment[5];?></label>
                         </div>
+
+
+                    <div class="col-lg-4 " align="center">
+                            <a href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-block" type="submit" value="View Assignment"></a>
+                        </div>
+                </div>
                         <!--                        <div>-->
                         <!--                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=--><?php //echo $asignment[0]?><!--&assignment_title=--><?php //echo $asignment[5]?><!--"> <input class="btn btn-dark btn-lg-0" type="submit" value="Update Assignment"></a>-->
                         <!--                        </div>-->

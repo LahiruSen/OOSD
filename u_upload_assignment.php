@@ -26,8 +26,9 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
 
 //$_GET["course_id"]=$course_id;
 //$_GET["course_title"]=$course_title;
+$today = date("Y-m-d H:i:s");
 
-$mysqli->query("INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline) VALUES ('$course_id','$description','$string','$title','$deadline')");
+$mysqli->query("INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')");
 //$full_name=$_SESSION['name'];
 
 header("Location:u_course_details_teacher.php");

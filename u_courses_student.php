@@ -37,8 +37,8 @@ else {
 //$reg_no=$student['registration_number'];
 //$_SESSION['reg_no']=$reg_no;
 //
-$first_name = $_SESSION['first_name'];
-$last_name = $_SESSION['last_name'];
+//$first_name = $_SESSION['first_name'];
+//$last_name = $_SESSION['last_name'];
 //
 //$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
 //$no_of_courses=$courrse_query->num_rows;
@@ -99,16 +99,19 @@ $last_name = $_SESSION['last_name'];
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0">My Courses</h2 class="text-center text-uppercase text-secondary mb-0">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12  col-xl-12">
+        <h3 class="text-center text-uppercase text-secondary mb-0">My Courses</h3>
         <hr class="star-dark mb-5">
         <div class="container">
-            <table class="table table-condensed">
+            <div class="text-left ">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                     <th>Course Title</th>
                     <th>Course Id</th>
-                    <th></th>
+                    <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -124,8 +127,10 @@ $last_name = $_SESSION['last_name'];
                     <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
                     <td class="text-success font-weight-bold"><?php echo $my_course['course_id'];?></td>
                     <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->
-                    <td>
-                        <a class="text-dark" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Course"></a>
+                    <td class="text-center">
+                        <div class="btn-group" role="group" >
+                        <a class="btn btn-info" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> View Course</a>
+                        </div>
                     </td>
                     </tr>
                     <?php
@@ -135,8 +140,8 @@ $last_name = $_SESSION['last_name'];
 
 
                 </tbody>
-            </table>
-        </div>
+            </table></div>
+        </div></div></div>
     </div>
 </section>
 

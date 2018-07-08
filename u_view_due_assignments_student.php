@@ -92,18 +92,21 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="">
-        <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-12  col-xl-12">
+        <h3 class="text-center text-uppercase text-secondary mb-0">Assignments</h3>
         <hr class="star-dark mb-5">
         <div class="container">
-            <table class="table table-condensed">
+            <div class="text-left ">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                     <th>Assignment Title</th>
                     <th>Course</th>
                     <th>Deadline</th>
                     <th>Submission Status</th>
-                    <th></th>
+                    <th class="text-center">Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -148,8 +151,10 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
                                         ?>
 
                                     </td> <?php } ?>
-                                <td>
-                                    <a class="text-dark" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-lg-0" type="submit" value="View Assignment"></a>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group" >
+                                    <a class="btn btn-info" href="u_assignment_session_setup.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>">View Assignment</a>
+                                    </div>
                                 </td>
                             </tr>
                             <?php
@@ -158,8 +163,9 @@ $course_query=$mysqli->query("SELECT * FROM course_registration WHERE registrati
                 }
                 ?>
                 </tbody>
-            </table>
+            </table></div>
         </div>
+            </div></div>
     </div>
 </section>
 

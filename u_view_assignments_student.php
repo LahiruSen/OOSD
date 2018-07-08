@@ -30,7 +30,7 @@ else {
 }
 
 $course_id=$_SESSION['course_id'];
-$name=$_SESSION['name'];
+//$name=$_SESSION['name'];
 
 $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id' ORDER BY date_of_deadline DESC");
 
@@ -44,7 +44,7 @@ $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$co
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $name ?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
