@@ -492,7 +492,7 @@
                 <div  class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                     <h6 class="dropdown-header">Courses</h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Enroll Course</a>
+                    <a class="dropdown-item" href="A_register_for_courses_final.php">Enroll Course</a>
                     <a class="dropdown-item" href="u_courses_student.php">Course List</a>
                 </div>
             </div>
