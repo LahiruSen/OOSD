@@ -168,6 +168,8 @@
                             <a class="dropdown-item" href="A_create_courses.php">Add Courses</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_define_scholarship_form.php">Add Scholarship</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="l_view_submitted_scholarships.php">Scholarship Submissions</a>
 
                         </div>
                     </div>

@@ -1,12 +1,15 @@
 <?php
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
-if (session_status() == PHP_SESSION_NONE) {    session_start();}
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check if user is logged in using the session variable
 if ($_SESSION['logged_in'] != 1) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
+    die();
 } else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -18,6 +21,7 @@ if ($_SESSION['logged_in'] != 1) {
 
     if ($types == 2) {
         header("location: home_student.php");
+        die();
     }
 
 
@@ -53,16 +57,54 @@ if ($_SESSION['logged_in'] != 1) {
 
             } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
                 $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0 AND approved_by_principal=1");
-            }
-            elseif (strcasecmp($employee_title, "Administrator") == 0) {
+            } elseif (strcasecmp($employee_title, "Administrator") == 0) {
                 $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0 AND approved_by_hr=1 ");
-            }
-            else {
+            } else {
                 $_SESSION['message'] = "You have no administrative priviledges";
                 header("location:error.php");
                 die();
             }
 
+
+            if ($leave_result->num_rows > 0) {
+                while ($row = $leave_result->fetch_object()) {
+                    $records[] = $row;
+                }
+
+
+                $leave_result->free();
+
+
+            } else { ?>
+
+
+                <div class="modal fade" id="popUpWindow2">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">No Requests</h3>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+
+                                <p>No Requests are pending for approval.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="text-light btn-block btn btn-primary"
+                                   href="home_employee.php">
+                                    <button class="btn btn-primary btn-block">Home</button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+                <?
+
+            }
 
         }
 
@@ -82,20 +124,23 @@ if ($_SESSION['logged_in'] != 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name ?></title>
+    <title>My Home : <?= $first_name . ' ' . $last_name ?></title>
     <?php include 'css/css.html'; ?>
 </head>
 
 <body id="page-top">
 
 
-<?php if(!$active) { ?>
+<?php if (!$active) { ?>
 
     <div class="form text-center">
 
         <h4 class="alert-heading">Please verify your account!</h4>
-        <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
-        <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+        <p>We have sent you a verification email to your email account. Please click verification link to verify your
+            account!!!</p>
+        <a href="logout.php">
+            <button class="btn btn-group btn-lg">Logout</button>
+        </a>
 
     </div>
 
@@ -106,12 +151,14 @@ if ($_SESSION['logged_in'] != 1) {
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
-            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+                    type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fa fa-bars"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <?php require 'navigation.php';?>
+                <?php require 'navigation.php'; ?>
             </div>
         </div>
     </nav>
@@ -147,29 +194,6 @@ if ($_SESSION['logged_in'] != 1) {
                         <table class="table-active">
                             <tbody>
 
-
-                            <?php
-
-                            if ($leave_result->num_rows > 0) {
-                                while ($row = $leave_result->fetch_object()) {
-                                    $records[] = $row;
-                                }
-
-
-                                $leave_result->free();
-
-
-                            } else { ?>
-
-                                <div class="container ">
-                                    <h1>No Requests are pending for approval.</h1>
-
-                                </div>
-
-
-                                <?php
-                                die();
-                            } ?>
                             <tr>
                                 <th>Employee ID</th>
                                 <th>Reason</th>
@@ -181,6 +205,8 @@ if ($_SESSION['logged_in'] != 1) {
                                 <th>Reject</th>
                                 <th>Delete</th>
                             </tr>
+
+
                             <?php
                             foreach ($records as $r) { ?>
 
@@ -244,26 +270,26 @@ if ($_SESSION['logged_in'] != 1) {
 
     <!--Model-->
 
-<?php if($_SESSION['two_step'] == 0) {
+<?php if ($_SESSION['two_step'] == 0) {
 
 
-$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+$user_result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 
-if($user_result->num_rows != 0)
+if ($user_result->num_rows != 0)
 {
 $user_data = $user_result->fetch_assoc();
 $user_result->free();
 $user_id = $user_data['id'];
-$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+$employee_result = $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
 
 
-if($employee_result->num_rows != 0)
+if ($employee_result->num_rows != 0)
 {
 $employee_data = $employee_result->fetch_assoc();
 
 $employee_result->free();
 
-if($employee_data['is_locked'] != 1)
+if ($employee_data['is_locked'] != 1)
 {
 ?>
 
@@ -279,7 +305,8 @@ if($employee_data['is_locked'] != 1)
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -293,8 +320,7 @@ if($employee_data['is_locked'] != 1)
 
     <?php
 }
-else
-{
+else {
     ?>
 
     <div class="modal fade" id="completeProfile">
@@ -303,13 +329,15 @@ else
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
+                    <h4 class="modal-title text-warning">Activation is pending <i
+                                class="fa fa-exclamation-triangle"></i></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -325,8 +353,7 @@ else
 }
 
 }
-else
-{
+else {
 
     ?>
 
@@ -342,7 +369,8 @@ else
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                    Our system administrator should verify your profile information before giving access to EMPLUP
+                    resources.
                 </div>
 
                 <!-- Modal footer -->
@@ -360,15 +388,15 @@ else
 
 }
 
-else
-{
+else {
 
     $_SESSION['message'] = "You are not a valid user";
     header("location:error.php");
+    die();
 }
 
-} ?>
 
+} ?>
 
 
     <!-- Footer -->
@@ -451,10 +479,9 @@ else
 <script src="js/freelancer.js"></script>
 
 
-
-<?php if($_SESSION['two_step'] == 0) { ?>
-    <script >
-        $( document ).ready(function() {
+<?php if ($_SESSION['two_step'] == 0) { ?>
+    <script>
+        $(document).ready(function () {
             $('#completeProfile').modal('show');
         });
 
@@ -464,5 +491,3 @@ else
 
 </body>
 </html>
-
-
