@@ -57,8 +57,7 @@ else {
                         } else {
                             $title1 = test_input($_POST["title"]);
                             if (!preg_match("/^[a-zA-Z0-9 ]*$/", $title1)) {
-                                var_dump($title1);
-                                die();
+
                                 $titleErr = "Title only can contain letters and numbers";
                             }
 
