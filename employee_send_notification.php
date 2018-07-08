@@ -62,28 +62,28 @@ else {
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
-    if (isset($_POST['academic_year_id']) && isset($_POST['title'])&& isset($_POST['description']))
+    if (isset($_POST['employee_data_id']) && isset($_POST['title'])&& isset($_POST['description']))
     {
 
-        if((is_int($_POST['academic_year_id']) || ctype_digit($_POST['academic_year_id'])) && (int)$_POST['academic_year_id'] > 0)
+        if((is_int($_POST['employee_data_id']) || ctype_digit($_POST['employee_data_id'])) && (int)$_POST['employee_data_id'] > 0)
         {
-            $academic_year_id = $_POST['academic_year_id'];
+            $employee_data_id = $_POST['employee_data_id'];
             $title = $_POST['title'];
             $description = $_POST['description'];
 
 
-            $student_result_to_send = $mysqli->query("select * from student_data where registered_ayear_id='$academic_year_id'");
+            $employee_result_to_send = $mysqli->query("select * from employee_data where employee_type_id='$employee_data_id'");
 
-            if($student_result_to_send->num_rows !=0)
+            if($employee_result_to_send->num_rows !=0)
             {
 
 
 
-                $student_data_to_send = array();
+                $employee_data_to_send = array();
 
-                while($row = $student_result_to_send->fetch_assoc())
+                while($row = $employee_result_to_send->fetch_assoc())
                 {
-                    $student_data_to_send[] = $row;
+                    $employee_data_to_send[] = $row;
                 }
 
 
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             }else
             {
-                $_SESSION['message'] = "There is no students which are registered with the academic year";
+                $_SESSION['message'] = "There is no employee which are related with the employee type";
                 header("location:error.php");
 
             }
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         }else
         {
-            $_SESSION['message'] = "Academic year id should be an integer";
+            $_SESSION['message'] = "Employee type id should be an integer";
             header("location:error.php");
 
 
@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Create New</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">Select Employee</h3>
                     <hr class="star-dark mb-5">
                     <div id="two_step_submission_form" class="two_step_form"  >
                         <div class="container">
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <div class="row m-2">
                                         <div class=" form-group col-lg-12 col-md-12">
                                             <label class="text-dark" for="title">Title</label>
-                                            <input  class="text-dark" value="<?= $title ?>" readonly >
+                                            <input id="title" name="title" class="text-dark" value="<?= $title ?>" readonly >
 
                                         </div>
                                     </div>
@@ -191,19 +191,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                         <div class="form-group col-lg-12 col-md-12">
 
                                             <div class="m-2">
-                                                <h4 class="text-dark">Students</h4>
+                                                <h4 class="text-dark">Employee</h4>
                                             </div>
 
                                             <div class="row m-2">
                                                 <div class="col-lg-10 col-xl-10">
                                                     <div class="input-group date">
-                                                        <label class="text-dark" for="student_id">Select students</label>
-                                                        <select class="student_multi_search" id="student_id" name="student_id[]" multiple="multiple">
+                                                        <label class="text-dark" for="employee_id">Select students</label>
+                                                        <select class="student_multi_search" id="employee_id" name="employee_id[]" multiple="multiple">
 
-                                                            <?php for ( $i=0;$i<count($student_data_to_send);$i++ ) {  ?>
+                                                            <?php for ( $i=0;$i<count($employee_data_to_send);$i++ ) {  ?>
 
-                                                                <option  value="<?php echo($student_data_to_send[$i]['user_id']) ?>"><?php if($student_data_to_send[$i]['registration_number'] == null){$regno ="no registration";}else{$regno=$student_data_to_send[$i]['registration_number'];}  echo($regno.'-'.$student_data_to_send[$i]['full_name']) ?> </option>
+                                                                <?php if($employee_data_to_send[$i]['user_id'] != $_SESSION['user_id']){ ?>
 
+                                                                <option  value="<?php echo($employee_data_to_send[$i]['user_id']) ?>"><?php if($employee_data_to_send[$i]['employee_id'] == null){$regno ="no registration";}else{$regno=$employee_data_to_send[$i]['employee_id'];}  echo($regno.'-'.$employee_data_to_send[$i]['full_name']) ?> </option>
+
+                                                                    <?php } ?>
                                                             <?php } ?>
 
                                                         </select>
@@ -217,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                             </div>
                                             <div class="row">
                                                 <div class="text-center mt-4 w-100">
-                                                    <button name="student" type="submit" class="btn btn-lg btn-primary" formaction="student_submit_notification.php" >Send</button>
+                                                    <button name="student" type="submit" class="btn btn-lg btn-primary" formaction="employee_submit_notification.php" >Send</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,16 +405,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <script type="text/javascript">
 
     $(document).ready(function() {
-        $('#student_id').select2();
+        $('#employee_id').select2();
     });
 
     $("#checkbox").click(function(){
         if($("#checkbox").is(':checked') ){
-            $("#student_id > option").prop("selected","selected");// Select All Options
-            $("#student_id").trigger("change");// Trigger change to select 2
+            $("#employee_id > option").prop("selected","selected");// Select All Options
+            $("#employee_id").trigger("change");// Trigger change to select 2
         }else{
-            $("#student_id > option").removeAttr("selected");
-            $("#student_id").trigger("change");// Trigger change to select 2
+            $("#employee_id > option").removeAttr("selected");
+            $("#employee_id").trigger("change");// Trigger change to select 2
         }
     });
 

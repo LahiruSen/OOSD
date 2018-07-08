@@ -44,6 +44,13 @@ if(isset($_SESSION['email']))
            header("location:error.php");
        }
 
+       if($_SESSION['two_step'] == 0)
+       {
+           $_SESSION['message'] = "You are not completed 2nd step of registration";
+           header("location:error.php");
+
+       }
+
 
 
    }else

@@ -9,13 +9,6 @@ if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
 }
-elseif($_SESSION['active'] != 1)
-{
-    $_SESSION['message'] = "We have sent you a verification email to your email account. Please click verification link to verify your account!!!";
-    header("location: error.php");
-
-}
-
 else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -24,8 +17,7 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
-
-
+    $userId = $_SESSION['user_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
@@ -54,74 +46,38 @@ else {
         <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
     </div>
 
-<?php } else { if($two_step ==1)
-{
+<?php } else { if($two_step ==1) {
+
+
+        $notification_result = $mysqli->query("SELECT notifications.*,users.email FROM notifications,users WHERE notifications,sender_id='$userId' and users.id =notifications.target_user_ids   ORDER BY notifications.date_of_create DESC");
 
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-
-    if (isset($_POST['academic_year_id']) && isset($_POST['title'])&& isset($_POST['description']))
-    {
-
-        if((is_int($_POST['academic_year_id']) || ctype_digit($_POST['academic_year_id'])) && (int)$_POST['academic_year_id'] > 0)
+        if($notification_result->num_rows >0)
         {
-            $academic_year_id = $_POST['academic_year_id'];
-            $title = $_POST['title'];
-            $description = $_POST['description'];
+            $notifications = array();
+
+            while ($row = $notification_result->fetch_assoc())
+            {
+                $notifications[] = $row;
+            }
 
 
-            $student_result_to_send = $mysqli->query("select * from student_data where registered_ayear_id='$academic_year_id'");
+            var_dump($notifications);
+            die();
 
-            if($student_result_to_send->num_rows !=0)
+
+        }else
             {
 
 
-
-                $student_data_to_send = array();
-
-                while($row = $student_result_to_send->fetch_assoc())
-                {
-                    $student_data_to_send[] = $row;
-                }
-
-
-
-
-
-            }else
-            {
-                $_SESSION['message'] = "There is no students which are registered with the academic year";
+                $_SESSION['message'] = "Notification list is empty!";
                 header("location:error.php");
-
             }
 
 
 
-        }else
-        {
-            $_SESSION['message'] = "Academic year id should be an integer";
-            header("location:error.php");
-
-
-        }
-
-
-    }else
-    {
-        $_SESSION['message'] = "No valid parameters";
-        header("location:error.php");
-
-    }
-
-
-}else
-{
-
-    $_SESSION['message'] = "Invalid request!";
-    header("location:error.php");
-}
+//THE RULE WILL CHANGE IN HERE DUE TO RULES
 
 
 ?>
@@ -146,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Send Notification <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Employee type list <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -159,79 +115,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select Student(s)</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an employee type</h3>
+
                     <hr class="star-dark mb-5">
-                    <div id="two_step_submission_form" class="two_step_form"  >
-                        <div class="container">
-                            <form method="post" action="">
-                                <div class="text-left ">
-                                    <div id="form_section_header" class="bg-topfive">
-                                        <h2 class="text-white"> Notification Details</h2>
-                                    </div>
-                                    <div class="row m-2">
-                                        <div class=" form-group col-lg-12 col-md-12">
-                                            <label class="text-dark" for="title">Title</label>
-                                            <input id="title" name="title" class="text-dark" value="<?= $title ?>" readonly >
+                    <div class="container">
+                        <div class="text-left ">
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Number of registrations</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                                        </div>
-                                    </div>
-                                    <div class="row m-2">
-                                        <div class=" form-group col-lg-12 col-md-12">
-                                            <label class="text-dark" for="description">Description</label>
-                                            <textarea rows="10" class="textarea_expand text-dark"  readonly type="text" id="description" name="description" required  ><?= $description ?></textarea>
+                                <?php foreach ($registration_info as $sd){ ?>
 
-                                        </div>
-                                    </div>
-                                    <div id="form_section_header" class="bg-topfive">
-                                        <h2 class="text-white">Receivers</h2>
-                                    </div>
+                                        <tr>
+                                            <td><?= $sd[0] ?></td>
+                                            <td><?= $sd[1] ?></td>
+                                            <td><?= $sd[2] ?></td>
+                                              <td class="text-center">
+                                                <div class="btn-group" role="group" >
+                                                    <a <?php if($sd[2]!=0){ ?>href="employee_registrations.php?employee_type_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
+                                                 </div>
+                                            </td>
 
-                                    <div class="row m-2">
+                                        </tr>
 
-                                        <div class="form-group col-lg-12 col-md-12">
-
-                                            <div class="m-2">
-                                                <h4 class="text-dark">Students</h4>
-                                            </div>
-
-                                            <div class="row m-2">
-                                                <div class="col-lg-10 col-xl-10">
-                                                    <div class="input-group date">
-                                                        <label class="text-dark" for="student_id">Select students</label>
-                                                        <select class="student_multi_search" id="student_id" name="student_id[]" multiple="multiple">
-
-                                                            <?php for ( $i=0;$i<count($student_data_to_send);$i++ ) {  ?>
-
-                                                                <option  value="<?php echo($student_data_to_send[$i]['user_id']) ?>"><?php if($student_data_to_send[$i]['registration_number'] == null){$regno ="no registration";}else{$regno=$student_data_to_send[$i]['registration_number'];}  echo($regno.'-'.$student_data_to_send[$i]['full_name']) ?> </option>
-
-                                                            <?php } ?>
-
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2 col-xl-2" style="width: 100%">
-                                                    <label class="text-dark" for="checkbox" ><strong>Select all</strong></label>
-                                                    <input type="checkbox" id="checkbox" style="width: 60px;height: 60px;">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="text-center mt-4 w-100">
-                                                    <button name="student" type="submit" class="btn btn-lg btn-primary" formaction="student_submit_notification.php" >Send</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <?php } ?>
 
 
-
-                                    </div>
-
-                                </div>
-                            </form>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
 
+                  </div>
             </div>
 
         </div>
@@ -297,14 +219,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         </a>
     </div>
 
+
     <!-- Model -->
-    <div class="modal fade" id="academic_level_view">
+    <div class="modal fade" id="academic_year_view">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
 
                 <!-- Modal Header -->
                 <div id="modal_head_div" class="modal-header">
-                    <h4 id="al_title" class="modal-title"></h4>
+                    <h4 id="ay_title" class="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -312,28 +235,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 <div class="modal-body">
                     <div class="m-2">
                         <div class="row ">
-                            <label class="text-dark" for="al_description">Description</label>
+                            <label class="text-dark" for="ay_description">Description</label>
                         </div>
                         <div class="row">
-                            <p id="al_description"></p>
+                            <p id="ay_description"></p>
                         </div>
 
                     </div>
                     <div class="m-2">
                         <div class="row">
-                            <label class="text-dark" for="al_registration_deadline">Registration deadline</label>
+                            <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
                         </div>
                         <div class="row">
-                            <p style="font-size: 20px" id="al_registration_deadline"></p>
-                        </div>
-                    </div>
-
-                    <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="al_registration_level_type">Academic Level</label>
-                        </div>
-                        <div class="row">
-                            <p style="font-size: 30px" id="al_registration_level_type"></p>
+                            <p style="font-size: 20px" id="ay_registration_deadline"></p>
                         </div>
                     </div>
                 </div>
@@ -342,10 +256,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                 <div class="modal-footer">
                     <div class="row">
                         <div class="col-lg-4">
-                            <a href="" id="al_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
+                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
                         </div>
                         <div class="col-lg-4">
-                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
+                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
                         <div class="col-lg-4 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -358,9 +272,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         </div>
     </div>
 
+
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-    <?php
+<?php
 
 } else
 {
@@ -394,30 +309,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
-<script src="js/select2.min.js"></script>
-
-
 
 <!--custom-->
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        $('#student_id').select2();
-    });
-
-    $("#checkbox").click(function(){
-        if($("#checkbox").is(':checked') ){
-            $("#student_id > option").prop("selected","selected");// Select All Options
-            $("#student_id").trigger("change");// Trigger change to select 2
-        }else{
-            $("#student_id > option").removeAttr("selected");
-            $("#student_id").trigger("change");// Trigger change to select 2
-        }
-    });
-
-
-
-</script>
 
 
 
