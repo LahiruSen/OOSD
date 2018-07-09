@@ -43,6 +43,12 @@ if(isset($_SESSION['email']))
            $_SESSION['message'] = "This is invalid submission";
            header("location:error.php");
        }
+       if($_SESSION['two_step'] == 0)
+       {
+           $_SESSION['message'] = "You are not completed 2nd step of registration";
+           header("location:error.php");
+
+       }
 
 
 

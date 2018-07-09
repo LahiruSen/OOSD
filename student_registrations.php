@@ -181,9 +181,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                 <hr class="star-dark mb-5">
                                 <div class="container">
                                     <div class="text-left ">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                        <table class="table table-striped table-bordered">
+                                            <thead class="thead_my">
+                                            <tr class="text-white" >
                                                 <th>ID</th>
                                                 <th>Full Name</th>
                                                 <th>NIC</th>
@@ -206,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                         <td><?php if($sd['is_approved'] == 1){echo("Approved");}else{echo("Pending");} ?></td>
                                                         <td>
                                                             <div class="btn-group" role="group" >
-                                                                <a href="student_registration_view.php?id=<?= $sd['id'];?>&ay_id=<?=$student_ayid?>"><button class="btn btn-info m-1" type="submit">View</button></a>
+                                                                <a href="student_registration_view.php?id=<?= $sd['id'];?>&ay_id=<?=$student_ayid?>"><button class="btn btn-outline-primary m-1 " type="submit">View</button></a>
                                                             </div>
                                                         </td>
 
