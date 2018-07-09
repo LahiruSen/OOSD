@@ -17,6 +17,7 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
+    $userId = $_SESSION['user_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
@@ -46,63 +47,39 @@ else {
     </div>
 
 <?php } else { if($two_step ==1) {
-$current_employee_type_result = $current_user_info_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
-if($current_employee_type_result->num_rows !=0)
-{
-    $current_employee_type_data = $current_employee_type_result->fetch_assoc();
-    $current_employee_type_result->free();
-    $type_of_employment = $current_employee_type_data['title'];
-}
 
-$all_employee_type_result  =  $mysqli->query("select * from employee_types") or die($mysqli->error());
 
-if($all_employee_type_result->num_rows !=0) {
-    $all_employee_type_data = array();
 
-    while ($row = $all_employee_type_result->fetch_assoc())
-    {
-        $all_employee_type_data[] = $row;
-    }
+        $notification_result = $mysqli->query("SELECT notifications.* FROM notifications WHERE notifications.target_user_ids='$userId' and notifications.delete_receiver='0' ORDER BY notifications.date_of_create DESC");
 
-    $all_employee_type_result->free();
+
+
+        if($notification_result->num_rows >0)
+        {
+            $notifications = array();
+
+            while ($row = $notification_result->fetch_assoc())
+            {
+                $notifications[] = $row;
+            }
 
 
 
 
-    $registration_info = array();
 
-    foreach ($all_employee_type_data as $ays)
-    {
-        $id = $ays['id'];
-
-        $title = $ays['title'];
-
-        $sql = "select * from employee_data where employee_type_id='$id'";
-
-        $registrations = $mysqli->query($sql);
-
-        $number_of_application =$registrations->num_rows;
+        }else
+            {
 
 
-        $registration_info[]= array($id,$title,$number_of_application);
-
-
-    }
-
-
-
-}else
-    {
-
-        $_SESSION['message'] = "There are no academic years available";
-        header("location:error.php");
-    }
+                $_SESSION['message'] = "Notification list is empty!";
+                header("location:error.php");
+            }
 
 
 
 //THE RULE WILL CHANGE IN HERE DUE TO RULES
 
-if($type_of_employment == 'Administrator'){
+
 ?>
 
 
@@ -125,7 +102,7 @@ if($type_of_employment == 'Administrator'){
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Employee type list <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Notifications <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -138,31 +115,31 @@ if($type_of_employment == 'Administrator'){
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an employee type</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">My Notification List(Inbox)</h3>
 
                     <hr class="star-dark mb-5">
                     <div class="container">
                         <div class="text-left ">
-                            <table class="table table-striped text-center table-bordered ">
+                            <table class="table table-striped text-center table-bordered">
                                 <thead class="thead_my">
-                                <tr class="text-white " >
+                                <tr class="text-white ">
                                     <th>ID</th>
                                     <th>Title</th>
-                                    <th>Number of registrations</th>
+                                    <th>Status</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                <?php foreach ($registration_info as $sd){ ?>
+                                <?php foreach ($notifications as $sd){ ?>
 
                                         <tr>
-                                            <td><?= $sd[0] ?></td>
-                                            <td><?= $sd[1] ?></td>
-                                            <td><?= $sd[2] ?></td>
+                                            <td><?= $sd['id'] ?></td>
+                                            <td><?= $sd['title'] ?></td>
+                                            <td id="seen_id_<?= $sd['id'] ?>"><?php if($sd['is_seen']==0){ echo("Unseen");}else{echo("Seen");} ?></td>
                                               <td class="text-center">
                                                 <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="employee_registrations.php?employee_type_id=<?= $sd[0] ?>" <?php }?> class="btn btn-outline-primary"  >View</a>
+                                                    <a  data-id="<?= $sd['id'] ?>" data-title="<?= $sd['title'] ?>"  data-description="<?= $sd['description'] ?>" class=" show_msg al_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">View</a>
                                                  </div>
                                             </td>
 
@@ -244,13 +221,13 @@ if($type_of_employment == 'Administrator'){
 
 
     <!-- Model -->
-    <div class="modal fade" id="academic_year_view">
+    <div class="modal fade" id="academic_level_view">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
 
                 <!-- Modal Header -->
                 <div id="modal_head_div" class="modal-header">
-                    <h4 id="ay_title" class="modal-title"></h4>
+                    <h4 id="al_title" class="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -258,35 +235,28 @@ if($type_of_employment == 'Administrator'){
                 <div class="modal-body">
                     <div class="m-2">
                         <div class="row ">
-                            <label class="text-dark" for="ay_description">Description</label>
+                            <label class="text-dark" for="al_description">Description</label>
                         </div>
                         <div class="row">
-                            <p id="ay_description"></p>
+                            <p id="al_description"></p>
                         </div>
 
                     </div>
-                    <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
-                        </div>
-                        <div class="row">
-                            <p style="font-size: 20px" id="ay_registration_deadline"></p>
-                        </div>
-                    </div>
+
+
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
+                    <div class="row ">
+
+                        <div class="col-lg-6">
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
-                        <div class="col-lg-4">
-                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
-                        </div>
-                        <div class="col-lg-4 ">
+                        <div class="col-lg-6 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
+
                     </div>
 
                 </div>
@@ -298,15 +268,7 @@ if($type_of_employment == 'Administrator'){
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-<?php } else
-{
-    if ($_SESSION['types'] == 1) {
-
-        header('location: home_employee.php');
-    } else {
-        header('location: home_student.php');
-    }
-}
+<?php
 
 } else
 {
@@ -340,12 +302,90 @@ if($type_of_employment == 'Administrator'){
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
+<script type="text/javascript">
 
+
+    $(document.body).on('click', '.al_view' ,function()
+    {
+
+        id = $(this).data('id');
+        title = $(this).data('title');
+        description = $(this).data('description');
+
+
+        $('#academic_level_view #al_title').text(title);
+        $('#academic_level_view #al_description').text(description);
+
+
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
+
+
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='notification_delete.php?id='+id;
+        });
+
+        $('#academic_level_view').modal('show');
+
+
+    });
+
+
+
+
+
+    $(document).ready(function() {
+
+
+
+        $('.show_msg').on('click',function () {
+
+            var id = $(this).data('id');
+
+            setSeen(id)
+
+        });
+
+
+
+    });
+
+    function setSeen(seen_id) {
+
+        $.ajax({
+            type: 'post',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {msg_id: seen_id},
+            success: function (data) {
+
+        
+                if(data != '0'){
+
+
+                    $('#seen_id_'+data).html('Seen');
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+                alert('Exception:', exception);
+            }
+        });
+
+    }
+
+
+
+
+</script>
 <!--custom-->
 
 
 
 </body>
 </html>
+
+
 
 

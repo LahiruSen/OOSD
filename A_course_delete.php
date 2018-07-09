@@ -8,7 +8,7 @@
 
 
 require 'db.php';
-if (session_status() == PHP_SESSION_NONE) {    session_start();}
+
 
 // CHECK THERE IS A LOGNG[SESSION VARIABLE WERE ONLY CREATED DURING LOGIN] &&&& CHECK USER TYPE = ADMINISTRATOR
 if(isset($_SESSION['email']))

@@ -119,10 +119,15 @@ if(!count($records)){
 
     </tbody>
 </table>
-<?php }?>
+<?php }
+
+var_dump($records);
+
+die();
 
 
-<?php
+
+
 if(!count($records)){
     echo "No records";
 }else{
@@ -160,14 +165,15 @@ if(!count($records)){
                 ?>
             <form action="enroll_mark_submit.php" method="post">
                 <tr>
-                    <td><?php echo escape($r->registration_number); ?></td>
+                <td><?php echo escape($r->registration_number); ?></td>
                    <?php $sql="SELECT marks,status,attendance FROM course_mark where course_registration_id='{$r->id}'";
-                    echo $sql.'<br>';
-                    if($results=$mysqli->query($sql)) {
-                        if ($results->num_rows) {
-                            $row2 = $results->fetch_object();
 
-                    ?>
+                   var_dump($sql);
+                   die();
+
+                    if($results=$mysqli->query($sql)) {
+                        if ($results->num_rows ) { $row2 = $results->fetch_object(); ?>
+
                             <td><input class="text-dark bg-white" type="text" name="mark" value=<?php echo escape($row2->marks); ?>></td>
                             <td><input type="text" class="text-dark bg-white" name="attendance"  value=<?php  echo escape($row2->attendance); ?>></td>
                             <td><input type="text" class="text-dark bg-white" name="attendance"  value=<?php echo escape($row2->attendance); ?>></td>

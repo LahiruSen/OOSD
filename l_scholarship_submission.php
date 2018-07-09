@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     if ($_POST["list"]=='0') {
-        $listErr = "Please select the schplarship";
+        $listErr = "Please select the scholarship";
     } else {
         $scholarship = test_input($_POST["list"]);
 
@@ -72,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         if (!preg_match("/^[a-zA-Z0-9 ]*$/", $registration_number1)) {
             $regErr = "Registration number only can contain letters and numbers";
         }
+
 
     }
 
@@ -110,6 +111,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 die();
             }
             else{
+
                 $target_dir = "scholarship_application_uploads/";
                 $target_file = $target_dir . basename($_FILES["scholarship_application"]["name"]);
                 $uploadOk = 1;
@@ -148,7 +150,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
                 // Check if file already exists
-                if (file_exists($target_file)) {
+
+                if($registration_number!=$registration_number1){
+                    $_SESSION['message'] = "Wrong Index Number. Please Check again.";
+                    header("location: error.php");
+                    die();
+                }
+
+
+                elseif (file_exists($target_file)) {
                     $_SESSION['message'] = "The file already exists!";
                     $uploadOk = 0;
                     header("location: error.php");

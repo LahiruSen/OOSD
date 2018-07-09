@@ -9,13 +9,6 @@ if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
 }
-elseif($_SESSION['active'] != 1)
-{
-    $_SESSION['message'] = "We have sent you a verification email to your email account. Please click verification link to verify your account!!!";
-    header("location: error.php");
-
-}
-
 else {
     // Makes it easier to read
     $first_name = $_SESSION['first_name'];
@@ -24,8 +17,7 @@ else {
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
     $two_step = $_SESSION['two_step'];
-
-
+    $userId = $_SESSION['user_id'];
 
     if ($types == 2) {
         header("location: home_student.php");
@@ -54,74 +46,37 @@ else {
         <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
     </div>
 
-<?php } else { if($two_step ==1)
-{
+<?php } else { if($two_step ==1) {
+
+
+        $notification_result = $mysqli->query("SELECT notifications.*,users.email FROM notifications,users WHERE notifications.sender_id='$userId' and notifications.delete_sender='0' and users.id =notifications.target_user_ids   ORDER BY notifications.date_of_create DESC");
 
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-
-    if (isset($_POST['employee_data_id']) && isset($_POST['title'])&& isset($_POST['description']))
-    {
-
-        if((is_int($_POST['employee_data_id']) || ctype_digit($_POST['employee_data_id'])) && (int)$_POST['employee_data_id'] > 0)
+        if($notification_result->num_rows >0)
         {
-            $employee_data_id = $_POST['employee_data_id'];
-            $title = $_POST['title'];
-            $description = $_POST['description'];
+            $notifications = array();
 
-
-            $employee_result_to_send = $mysqli->query("select * from employee_data where employee_type_id='$employee_data_id'");
-
-            if($employee_result_to_send->num_rows !=0)
+            while ($row = $notification_result->fetch_assoc())
             {
-
-
-
-                $employee_data_to_send = array();
-
-                while($row = $employee_result_to_send->fetch_assoc())
-                {
-                    $employee_data_to_send[] = $row;
-                }
-
-
-
-
-
-            }else
-            {
-                $_SESSION['message'] = "There is no employee which are related with the employee type";
-                header("location:error.php");
-
+                $notifications[] = $row;
             }
 
 
 
+
+
         }else
-        {
-            $_SESSION['message'] = "Employee type id should be an integer";
-            header("location:error.php");
+            {
 
 
-        }
+                $_SESSION['message'] = "Notification list is empty!";
+                header("location:error.php");
+            }
 
 
-    }else
-    {
-        $_SESSION['message'] = "No valid parameters";
-        header("location:error.php");
 
-    }
-
-
-}else
-{
-
-    $_SESSION['message'] = "Invalid request!";
-    header("location:error.php");
-}
+//THE RULE WILL CHANGE IN HERE DUE TO RULES
 
 
 ?>
@@ -146,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Send Notification <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Notifications <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -159,82 +114,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select Employee</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">My Notification List(Outbox)</h3>
+
                     <hr class="star-dark mb-5">
-                    <div id="two_step_submission_form" class="two_step_form"  >
-                        <div class="container">
-                            <form method="post" action="">
-                                <div class="text-left ">
-                                    <div id="form_section_header" class="bg-topfive">
-                                        <h2 class="text-white"> Notification Details</h2>
-                                    </div>
-                                    <div class="row m-2">
-                                        <div class=" form-group col-lg-12 col-md-12">
-                                            <label class="text-dark" for="title">Title</label>
-                                            <input id="title" name="title" class="text-dark" value="<?= $title ?>" readonly >
+                    <div class="container">
+                        <div class="text-left ">
+                            <table class="table table-striped text-center table-bordered">
+                                <thead class="thead_my">
+                                <tr class="text-white ">
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Receiver Email</th>
+                                    <th>User Seen Status</th>
+                                    <th>Type</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                                        </div>
-                                    </div>
-                                    <div class="row m-2">
-                                        <div class=" form-group col-lg-12 col-md-12">
-                                            <label class="text-dark" for="description">Description</label>
-                                            <textarea rows="10" class="textarea_expand text-dark"  readonly type="text" id="description" name="description" required  ><?= $description ?></textarea>
+                                <?php foreach ($notifications as $sd){ ?>
 
-                                        </div>
-                                    </div>
-                                    <div id="form_section_header" class="bg-topfive">
-                                        <h2 class="text-white">Receivers</h2>
-                                    </div>
+                                        <tr>
+                                            <td><?= $sd['id'] ?></td>
+                                            <td><?= $sd['title'] ?></td>
+                                            <td><?= $sd['email'] ?></td>
+                                            <td><?php if($sd['is_seen']==0){ echo("Unseen");}else{echo("Seen");} ?></td>
+                                            <td><?php if($sd['types']==1){ echo("Employee");}else{echo("Student");} ?></td>
+                                              <td class="text-center">
+                                                <div class="btn-group" role="group" >
+                                                    <a data-id="<?= $sd['id'] ?>" data-title="<?= $sd['title'] ?>" data-email="<?= $sd['email'] ?>" data-description="<?= $sd['description'] ?>" class=" al_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">View</a>
+                                                 </div>
+                                            </td>
 
-                                    <div class="row m-2">
+                                        </tr>
 
-                                        <div class="form-group col-lg-12 col-md-12">
-
-                                            <div class="m-2">
-                                                <h4 class="text-dark">Employee</h4>
-                                            </div>
-
-                                            <div class="row m-2">
-                                                <div class="col-lg-10 col-xl-10">
-                                                    <div class="input-group date">
-                                                        <label class="text-dark" for="employee_id">Select students</label>
-                                                        <select class="student_multi_search" id="employee_id" name="employee_id[]" multiple="multiple">
-
-                                                            <?php for ( $i=0;$i<count($employee_data_to_send);$i++ ) {  ?>
-
-                                                                <?php if($employee_data_to_send[$i]['user_id'] != $_SESSION['user_id']){ ?>
-
-                                                                <option  value="<?php echo($employee_data_to_send[$i]['user_id']) ?>"><?php if($employee_data_to_send[$i]['employee_id'] == null){$regno ="no registration";}else{$regno=$employee_data_to_send[$i]['employee_id'];}  echo($regno.'-'.$employee_data_to_send[$i]['full_name']) ?> </option>
-
-                                                                    <?php } ?>
-                                                            <?php } ?>
-
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2 col-xl-2" style="width: 100%">
-                                                    <label class="text-dark" for="checkbox" ><strong>Select all</strong></label>
-                                                    <input type="checkbox" id="checkbox" style="width: 60px;height: 60px;">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="text-center mt-4 w-100">
-                                                    <button name="student" type="submit" class="btn btn-lg btn-primary" formaction="employee_submit_notification.php" >Send</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <?php } ?>
 
 
-
-                                    </div>
-
-                                </div>
-                            </form>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div>
 
+                  </div>
             </div>
 
         </div>
@@ -300,6 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         </a>
     </div>
 
+
     <!-- Model -->
     <div class="modal fade" id="academic_level_view">
         <div class="modal-dialog modal-dialog-centered">
@@ -322,37 +245,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         </div>
 
                     </div>
-                    <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="al_registration_deadline">Registration deadline</label>
-                        </div>
-                        <div class="row">
-                            <p style="font-size: 20px" id="al_registration_deadline"></p>
-                        </div>
-                    </div>
 
                     <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="al_registration_level_type">Academic Level</label>
+                        <div class="row ">
+                            <label class="text-dark" for="al_description">Receiver Email</label>
                         </div>
                         <div class="row">
-                            <p style="font-size: 30px" id="al_registration_level_type"></p>
+                            <h5 id="al_email"></h5>
                         </div>
+
                     </div>
+
+
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a href="" id="al_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
-                        </div>
-                        <div class="col-lg-4">
+                    <div class="row ">
+
+                        <div class="col-lg-6">
                             <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
-                        <div class="col-lg-4 ">
+                        <div class="col-lg-6 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
+
                     </div>
 
                 </div>
@@ -361,9 +278,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         </div>
     </div>
 
+
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-    <?php
+<?php
 
 } else
 {
@@ -397,34 +315,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
-<script src="js/select2.min.js"></script>
+<script type="text/javascript">
 
+
+    $(document.body).on('click', '.al_view' ,function()
+    {
+
+        id = $(this).data('id');
+        title = $(this).data('title');
+        description = $(this).data('description');
+        email = $(this).data('email');
+
+
+
+
+
+        $('#academic_level_view #al_title').text(title);
+        $('#academic_level_view #al_description').text(description);
+        $('#academic_level_view #al_email').text(email);
+
+
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
+
+
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='notification_delete.php?id='+id;
+        });
+
+        $('#academic_level_view').modal('show');
+
+
+    });
+
+</script>
 
 
 <!--custom-->
-<script type="text/javascript">
-
-    $(document).ready(function() {
-        $('#employee_id').select2();
-    });
-
-    $("#checkbox").click(function(){
-        if($("#checkbox").is(':checked') ){
-            $("#employee_id > option").prop("selected","selected");// Select All Options
-            $("#employee_id").trigger("change");// Trigger change to select 2
-        }else{
-            $("#employee_id > option").removeAttr("selected");
-            $("#employee_id").trigger("change");// Trigger change to select 2
-        }
-    });
-
-
-
-</script>
 
 
 
 </body>
 </html>
+
+
 
 
