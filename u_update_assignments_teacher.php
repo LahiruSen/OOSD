@@ -52,13 +52,13 @@ $sql="UPDATE assignments SET title='$title',description='$description',attachmen
 if ( $mysqli->query($sql) ) {
 
     $_SESSION['message']="Your Assignment is updated successfully";
-    header("location: success.php");
+    header("location: u_success.php");
     die();
 
 }
 else{
     $_SESSION['message']="Sorry. Your Assignment could not be updated. Please, Try again";
-    header("location: error.php");
+    header("location: u_error.php");
     die();
 }
 //header("location: u_up_del_assignments_teacher.php");

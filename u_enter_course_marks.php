@@ -202,6 +202,8 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
                                    </div>
                                    <div class="modal-body" >
                                        <form id="mark-form" role="form" action="u_upload_course_marks.php" method="POST" enctype="multipart/form-data">
+                                           <h6 class="card-title">Registration_No</h6>
+                                           <p><?php echo $reg_no?></p>
                                            <div class="form-group">
                                                <input id="mark-model-input" type="number" min="0" max="100" class="form-control" placeholder="Marks" name="marks" required>
                                            </div>

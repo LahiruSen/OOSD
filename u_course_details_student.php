@@ -25,6 +25,7 @@ else {
 
 $course_id=$_SESSION['course_id'];
 $course_title=$_SESSION['course_title'];
+$course_registration_id=$_SESSION['course_registration_id'];
 
 $course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
 $course=$course_query->fetch_assoc();
@@ -139,14 +140,47 @@ $last_name_teacher=$teacher_user['last_name'];
             <div class="col-md-6">
 
                 <div class="container">
-                    <button type="button" style="width: 80%;" class="btn bg-topfive text-light" >Schedule</a></button>
-                </div>
-
-                <div class="container">
                     <br><a href="u_view_assignments_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignments</button></a>
                 </div>
                 <div class="container">
                     <br><a href="u_view_assignments_marks_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignment Marks</button></a>
+                </div>
+
+                <div class="container">
+                    <br><button type="button" style="width: 80%;" class="btn bg-topfive text-light" data-toggle="modal" data-target="#popUpWindow">View Course Marks</button>
+
+                    <div class="modal fade" id="popUpWindow">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-topfive">
+                                    <h3 class="modal-title">COURSE MARK</h3>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body" >
+                                    <?php
+                                       $course_reg=$mysqli->query("SELECT * FROM course_mark where course_registration_id='$course_registration_id'");
+                                       $no_of_rows=$course_reg->num_rows;
+                                       if($no_of_rows==1){
+                                           $marks_query=$course_reg->fetch_assoc();
+                                           $mark=$marks_query['marks'];?>
+
+                                           <h6 class="card-title">Your Marks:</h6>
+                                           <p class="card-text"><?php echo $mark?></p>
+                                           <?php
+
+                                       }else{?>
+                                           <p class="card-text text-center">Marks are not available yet</p>
+
+                                           <?php
+                                       }
+                                    ?>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
 

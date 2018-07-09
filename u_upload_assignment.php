@@ -26,20 +26,33 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
 
 $today = date("Y-m-d H:i:s");
 
-$sql="INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')";
+if(preg_match("/^[a-zA-Z0-9]*$/", $title)){
 
-if ( $mysqli->query($sql) ) {
+    $sql="INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')";
 
-    $_SESSION['message']="Your Assignment is uploaded successfully";
-    header("location: success.php");
-    die();
+    if ( $mysqli->query($sql) ) {
 
-}
-else{
-    $_SESSION['message']="Sorry. Your Assignment could not be uploaded. Please, Try again";
+        $_SESSION['message']="Your Assignment is uploaded successfully";
+        header("location: success.php");
+        die();
+
+    }
+    else{
+        $_SESSION['message']="Sorry. Your Assignment could not be uploaded. Please, Try again";
+        header("location: error.php");
+        die();
+    }
+
+
+}else{
+
+    $_SESSION['message']="Uploading is unsuccessful. Title is inappropiate";
     header("location: error.php");
     die();
+
 }
+
+
 //header("Location:u_course_details_teacher.php");
 
 ?>

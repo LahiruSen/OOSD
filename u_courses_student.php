@@ -110,6 +110,7 @@ else {
                 <?php require "u_search_courses.php";
                 while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
                     $course_id=$course[5];
+                    $course_registration_id=$course[0];
                     $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
                     $my_course=$result5->fetch_assoc();//course2
 
@@ -125,7 +126,7 @@ else {
 
                     <td class="text-center">
                         <div class="btn-group" role="group" >
-                        <a class="btn btn-info" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> View Course</a>
+                        <a class="btn btn-info" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>&course_registration_id=<?php echo $course_registration_id?>"> View Course</a>
                         </div>
                     </td>
                     </tr>
