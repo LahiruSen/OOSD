@@ -72,7 +72,7 @@ elseif($_SESSION['active'] != 1)
 
 <?php } else { if($two_step == 1){
 
-$current_employee_type_result = $current_user_info_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
+$user_id = $_SESSION['user_id']; $current_employee_type_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where employee_data.user_id = '$user_id' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
 if($current_employee_type_result->num_rows !=0)
 {
     $current_employee_type_data = $current_employee_type_result->fetch_assoc();
