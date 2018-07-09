@@ -34,6 +34,20 @@ if ($_SESSION['logged_in'] != 1) {
 
             $number_of_dates = 1+$datetime2->diff($datetime1)->d;
 
+            if (!preg_match("/^[a-zA-Z ]*$/", $reason)) {
+                $_SESSION['message'] = "Reason can only contain letters";
+                header("location: error.php");
+                die();
+            }
+
+            if (!preg_match("/^[a-zA-Z0-9 ]*$/", $description)) {
+                $_SESSION['message'] = "Description can only contain letters and numbers";
+                header("location: error.php");
+                die();
+            }
+
+
+
 
             $email = $_SESSION['email'];
             $result = $mysqli->query("SELECT id FROM users WHERE email='$email'");
@@ -171,13 +185,13 @@ if ($_SESSION['logged_in'] != 1) {
         <div class="field-wrap">
 
             <label>
-                Reason for Leave<span class="req">*</span>
+                Reason for Leave<span class="req"  >*</span>
             </label>
-            <input type="text" name="reason" required>
+            <input type="text" name="reason"  required>
             <label>
                 Description<span class="req">*</span>
             </label>
-            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50" required></textarea>
+            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50" pattern="[A-Za-z]" required></textarea>
             <label>
                 Start Date<span class="req">*</span>
             </label>
