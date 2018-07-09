@@ -296,6 +296,19 @@ background-color: white;
 
 }
 
+
+#login_back
+{
+
+  background: -webkit-gradient(linear,  left top, right top, color-stop(0%, #0f2c86), color-stop(100%, #ffffff)); /* Chrome, Safari4+ */
+  background: -webkit-linear-gradient(bottom,#0f2c86  0%, #ffffff 100%); /* Chrome10+, Safari5.1+ */
+  background: -moz-linear-gradient(bottom,#0f2c86  0%,#ffffff 100%);    /* FF3.6+ */
+  background: linear-gradient(to top, #0f2c86  0%,#ffffff 100%);      /* W3C */
+
+
+}
+
+
 #two_step_submission_form input[type=checkbox]
 {
 

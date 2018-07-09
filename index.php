@@ -44,6 +44,7 @@ if(isset($_SESSION['logged_in'])) {
 }
 ?>
 <body>
+
 <div class="form">
 
     <ul class="tab-group">
@@ -146,7 +147,12 @@ if(isset($_SESSION['logged_in'])) {
 
     </div><!-- tab-content -->
 
-</div> <!-- /form -->
+
+
+</div>
+
+
+<!-- /form -->
 <script src='js/jquery.min.js'></script>
 
 <script src="js/index.js"></script>
