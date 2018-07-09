@@ -16,5 +16,5 @@ $_SESSION['assignment_title']=$_GET['assignment_title'];
 //header("Location:u_view_submissions_teacher.php");
 //}else if($user_type==2){
 header("Location:u_assignment_details_teacher.php");
-
+die();
 //}

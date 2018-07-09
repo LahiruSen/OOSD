@@ -48,7 +48,8 @@ if ($_SESSION['logged_in'] != 1) {
                 $user = $result->fetch_assoc(); // $user becomes array with user data
 
                 $user_id = $user['id'];
-                $result_new = $mysqli->query("SELECT employee_id FROM employee_data WHERE user_id='$user_id' ");
+                $result_new = $mysqli->query("SELECT employee_id,	employee_type_id FROM employee_data WHERE user_id='$user_id' ");
+
 
                 if ($result_new->num_rows == 0) {
                     $_SESSION['message'] = "This employ detail doesn't exist in the system.";
@@ -57,10 +58,35 @@ if ($_SESSION['logged_in'] != 1) {
                 } else {
                     $employee = $result_new->fetch_assoc(); // employ become arry with employ data
                     $employee_id = $employee['employee_id'];
+                    $employee_type_id = $employee['employee_type_id'];
+                    //teacher
 
-                    $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
-                        . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update')";
+                    if(	$employee_type_id==2) {
 
+                        $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update) "
+                            . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update')";
+                    }
+                   // principal
+                    elseif($employee_type_id==3){
+                        $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update,approved_by_principal) "
+                            . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update',1)";
+
+                //HR
+                    }
+                    elseif($employee_type_id==4){
+                        $sql = "INSERT INTO leave_submission (employ_id, reason_for_leave, description, number_of_dates, start_date, end_date, date_of_create,date_of_update,approved_by_principal,	approved_by_hr) "
+                            . "VALUES ('$employee_id','$reason','$description','$number_of_dates', '$start_date', '$end_date','$date_of_create','$date_of_update',1,1)";
+
+
+
+                    }
+
+                    else{
+                        $_SESSION['message'] = "You're not able to upload leave applications";
+                        header("location: error.php");
+                        die();
+
+                    }
 
                     if ($mysqli->query($sql)) {
 
@@ -155,11 +181,11 @@ if ($_SESSION['logged_in'] != 1) {
             <label>
                 Start Date<span class="req">*</span>
             </label>
-            <input  required type="date" name="start_date" max='2018-12-31' min= <?php echo date('Y-m-d'); ?> >
+            <input  id="start_date" required type="date" name="start_date" max="2018-12-31" min="<?php echo date('Y-m-d'); ?>" >
             <label>
                 End Date<span class="req">*</span>
             </label>
-            <input required type="date" name="end_date" max='2018-12-31' min=  <?php echo date('Y-m-d'); ?>/>
+            <input id="end_date" required type="date" name="end_date" max="2018-12-31" >
         </div>
         <button class="button button-block"/>
         Apply </button>
@@ -400,6 +426,16 @@ else
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+
+<script type="text/javascript">
+
+   $("#start_date").on("change", function() {
+        var v= $(this).val();
+        $('#end_date').attr('min',v);
+    });
+
+
+</script>
 
 
 <?php if($_SESSION['two_step'] == 0) { ?>

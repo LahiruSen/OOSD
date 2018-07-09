@@ -11,14 +11,14 @@ if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
 $name=$_FILES['file']['name'];
 $tmp_name=$_FILES['file']['tmp_name'];
-$assignment_id=$_GET["assignment_id"];
+$assignment_id=$_POST["assignment_id"];
 
 $location='submission_files/';
 move_uploaded_file($tmp_name,$location.$name);
 $reg_no=$_SESSION['reg_no'];
 //$first_name = $_SESSION['first_name'];
 //$last_name = $_SESSION['last_name'];
-$assignment_title = $_GET['assignment_title'];
+$assignment_title = $_POST['assignment_title'];
 
 $string = "$location.$name";
 $lastDot = strrpos($string, ".");

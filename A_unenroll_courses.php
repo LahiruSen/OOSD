@@ -1,6 +1,8 @@
 <?php
+
+
 if (session_status() == PHP_SESSION_NONE) {    session_start();}
-require 'u_connection.php';
+require "u_connection.php";
 
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
@@ -23,52 +25,34 @@ else {
 
 }
 
-$course_id=$_SESSION['course_id'];
-$course_title=$_SESSION['course_title'];
-$course_registration_id=$_SESSION['course_registration_id'];
-
-$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$course_query->fetch_assoc();
-//$field=$course['field'];
-$no_of_hours=$course['no_of_working_hours'];
-$credit=$course['credits'];
-$description=$course['description'];
-
-$level_id=$course['level_id'];
-$level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
-$level=$level_query->fetch_assoc();
-$level_title=$level['title'];
-
-$teacher_id=$course['assigned_teacher_id'];
-
-$teacher_user_query=$mysqli->query("SELECT * FROM employee_data where id='$teacher_id'");
-$teacher_user=$teacher_user_query->fetch_assoc();
-$teacher_user_id=$teacher_user['user_id'];
-$user_query=$mysqli->query("SELECT * FROM users where id='$teacher_user_id'");
-$teacher_user=$user_query->fetch_assoc();
-$first_name_teacher=$teacher_user['first_name'];
-$last_name_teacher=$teacher_user['last_name'];
-
-
-//$name=$_SESSION['name'];
-
+//$user_id=$_SESSION['user_id'];
+//$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
+//$student=$student_query->fetch_assoc();
+//
+//$reg_no=$student['registration_number'];
+//$_SESSION['reg_no']=$reg_no;
+//
+//$first_name = $_SESSION['first_name'];
+//$last_name = $_SESSION['last_name'];
+//
+//$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
+//$no_of_courses=$courrse_query->num_rows;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
-    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
+
 
 <?php if(!$active) { ?>
 
@@ -82,7 +66,8 @@ $last_name_teacher=$teacher_user['last_name'];
 
 <?php } else { ?>
 
-<!-- Navigation -->
+
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
@@ -96,121 +81,94 @@ $last_name_teacher=$teacher_user['last_name'];
         </div>
     </nav>
 
-<!-- Header -->
-<header class="masthead bg-primary text-white text-center ">
+    <!-- Header -->
+    <header class="masthead bg-primary text-white text-center ">
 
-    <div>
-        <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
-    </div>
+        <div>
+            <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
+            <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+            <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        </div>
 
-</header>
+    </header>
 
-<!-- Dashboard Section -->
-<section class="" id="portfolio">
-    <div class="container ">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_id.'-'.$course_title?></h2>
-        <hr class="star-dark mb-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="jumbotron jumbotron-fluid bg-topfive">
-                <div class="container">
-                    <h1>Course Info</h1>
-                    <div class="card" style="width:100%">
-                        <div class="container text-center w-100">
-                            <i style="font-size: 100px" class="fa fa-graduation-cap"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Level</h6>
-                <p class="card-text"><?php echo $level_title?></p>
-                            <h6 class="card-title">Description</h6>
-                <p class="card-text"> <?php echo $description?></p>
-                            <h6 class="card-title">Credits</h6>
-                <p class="card-text"><?php echo $credit?></p>
-                            <h6 class="card-title">No of Houres per week</h6>
-                <p class="card-text"><?php echo $no_of_hours?></p>
-                            <h6 class="card-title">Teacher in Charge</h6>
-                <p class="card-text"><?php echo $first_name_teacher.' '.$last_name_teacher?></p>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div class="col-md-6">
+    <!-- Dashboard Section -->
+    <section class="" id="portfolio">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-lg-12  col-xl-12">
+                    <h3 class="text-center text-uppercase text-secondary mb-0">My recently enrolled courses</h3>
+                    <hr class="star-dark mb-5">
+                    <div class="container">
+                        <div class="text-left ">
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                    <th>Level</th>
+                                    <th>Course Title</th>
+                                    <th>Course Id</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
-                <div class="container">
-                    <br><a href="u_view_assignments_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignments</button></a>
-                </div>
-                <div class="container">
-                    <br><a href="u_view_assignments_marks_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignment Marks</button></a>
-                </div>
 
-                <div class="container">
-                    <br><button type="button" style="width: 80%;" class="btn bg-topfive text-light" data-toggle="modal" data-target="#popUpWindow">View Course Marks</button>
 
-                    <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header bg-topfive">
-                                    <h3 class="modal-title">COURSE MARK</h3>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body" >
-                                    <?php
-                                       $course_reg=$mysqli->query("SELECT * FROM course_mark where course_registration_id='$course_registration_id'");
-                                       $no_of_rows=$course_reg->num_rows;
-                                       if($no_of_rows==1){
-                                           $marks_query=$course_reg->fetch_assoc();
-                                           $mark=$marks_query['marks'];?>
+                                <?php require "u_search_courses.php";
+                                while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
+                                    $course_id=$course[5];
+                                    $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
+                                    $my_course=$result5->fetch_assoc();//course2
 
-                                           <h6 class="card-title">Your Marks:</h6>
-                                           <p class="card-text"><?php echo $mark?></p>
-                                           <?php
+                                    $level_id=$my_course['level_id'];
+                                    $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
+                                    $level=$level_query->fetch_assoc();
 
-                                       }else{?>
-                                           <p class="card-text text-center">Marks are not available yet</p>
-
-                                           <?php
-                                       }
                                     ?>
+                                    <tr>
+                                        <td class="text-success font-weight-bold"><?php echo $level['title'];?></td>
+                                        <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
+                                        <td class="text-success font-weight-bold"><?php echo $my_course['course_id'];?></td>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group" >
+                                                <a class="btn btn-info" href="A_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> Unenroll</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+
+                                ?>
 
 
+                                </tbody>
+                            </table></div>
+                    </div></div></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
+            <hr class="star-light mb-5">
+            <div class="row">
+                <div class="col-lg-4 ml-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
                 </div>
-
-
+                <div class="col-lg-4 mr-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
                 </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- About Section -->
-<section class="bg-primary text-white mb-0" id="about">
-    <div class="container">
-        <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
-        <hr class="star-light mb-5">
-        <div class="row">
-            <div class="col-lg-4 ml-auto">
-                <p class="lead">Basic introduction about the web site goes here! {description left]</p>
             </div>
-            <div class="col-lg-4 mr-auto">
-                <p class="lead">Basic introduction about the web site goes here! {description right</p>
+            <div class="text-center mt-4">
+                <a class="btn btn-xl btn-outline-light" href="#">
+                    <i class="fa fa-info mr-2"></i>
+                    Read More
+                </a>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <a class="btn btn-xl btn-outline-light" href="#">
-                <i class="fa fa-info mr-2"></i>
-                Read More
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
 
 <?php if($_SESSION['two_step'] == 0) { ?>
     <div class="modal fade" id="completeProfile">
@@ -238,8 +196,6 @@ $last_name_teacher=$teacher_user['last_name'];
     </div>
 
 <?php } ?>
-
-<!--Model-->
     <!-- Footer -->
     <footer class="footer text-center">
         <div class="container">
@@ -302,6 +258,7 @@ $last_name_teacher=$teacher_user['last_name'];
 
 <?php } ?>
 
+
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
@@ -330,3 +287,4 @@ $last_name_teacher=$teacher_user['last_name'];
 </body>
 
 </html>
+

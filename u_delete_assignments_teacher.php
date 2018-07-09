@@ -15,13 +15,13 @@ $sql="DELETE FROM assignments WHERE id='$assignment_id'";
 if ( $mysqli->query($sql) ) {
 
     $_SESSION['message']="Your Assignment is deleted successfully";
-    header("location: success.php");
+    header("location: u_success.php");
     die();
 
 }
 else{
     $_SESSION['message']="Sorry. Your Assignment could not be deleted. Please, Try again";
-    header("location: error.php");
+    header("location: u_error.php");
     die();
 }
 

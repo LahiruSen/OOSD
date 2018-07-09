@@ -114,10 +114,10 @@ else {
     <form action="l_scholarship_submission.php" method="post" enctype="multipart/form-data">
         <div class="field-wrap">
             First Name              :<br>
-            <input type="text" name="first_name" required>
+            <input type="text" name="first_name" pattern="[A-Za-z]" required>
             <br>
             Registration Number     :<br>
-            <input type="text" name = "registration_number" required>
+            <input type="number" name = "registration_number" maxlength=10 required>
             Select the scholarship   :<br>
 
             <select name="list" required>

@@ -29,3 +29,4 @@ if($temp==1){
 
 
 header("Location:u_enter_course_marks.php");
+die();

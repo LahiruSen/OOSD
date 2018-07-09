@@ -157,7 +157,7 @@ list($hour,$min,$dsec)=explode(':',$time);
                                                 <textarea type="text" class="form-control" placeholder="Description" name="description" required></textarea>
                                             </div>
                                             <div class="form-group">
-                                                <input type="file" class="form-control" placeholder="Attachment" name="file" required>
+                                                <input type="file" class="form-control" placeholder="Attachment" name="file">
                                             </div>
                                             <div class="form-group">
                                                 <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>

@@ -138,13 +138,15 @@ $deadline=$assignment['date_of_deadline'];
                                 </div>
                                 <div class="modal-body" >
 <!--                                    <p>--><?php //echo $assignment_id?><!--</p>-->
-                                    <form role="form" action="u_upload_submission.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>" method="POST" enctype="multipart/form-data">
+                                    <form role="form" action="u_upload_submission.php?" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <input type="file" class="form-control" placeholder="Title" name="file" required>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-primary btn-block">Submit</button>
                                         </div>
+                                        <input type="hidden" name="assignment_id" value="<?php echo $assignment_id?>">
+                                        <input type="hidden" name="assignment_title" value="<?php echo $assignment_title?>">
                                     </form>
 
 
