@@ -333,7 +333,7 @@ else {
 
 
         $('#academic_level_view #al_delete_btn').click(function(){
-            window.location.href='A_enroll_unenroll.php?course='+course+'?regno='+regno;
+            window.location.href='A_enroll_unenroll.php?course='+course+'&regno='+regno;
         });
 
         $('#academic_level_view').modal('show');

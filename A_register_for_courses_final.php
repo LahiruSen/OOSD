@@ -57,9 +57,6 @@ if($current_employee_type_result->num_rows !=0)
     $current_employee_type_data = $current_employee_type_result->fetch_assoc();
     $current_employee_type_result->free();
     $type_of_employment = $current_employee_type_data['title'];
-}else{
-    $_SESSION['message'] = "Err1 There are no courses available";
-    header("location:error.php");
 }
 
 
