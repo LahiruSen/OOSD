@@ -493,7 +493,8 @@
                     <h6 class="dropdown-header">Courses</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="A_register_for_courses_final.php">Enroll Course</a>
-                    <a class="dropdown-item" href="u_courses_student.php">Course List</a>
+                    <a class="dropdown-item" href="u_courses_student.php">Registerd courses</a>
+                    <a class="dropdown-item" href="A_unenroll_courses.php">Unenroll courses</a>
                 </div>
             </div>
         </li>
