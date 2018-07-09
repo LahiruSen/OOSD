@@ -9,82 +9,83 @@ if (session_status() == PHP_SESSION_NONE) {
 if ($_SESSION['logged_in'] != 1) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
-    die();}
+    die();
+}
 
-    // Makes it easier to read
-    $first_name = $_SESSION['first_name'];
-    $last_name = $_SESSION['last_name'];
-    $email = $_SESSION['email'];
-    $active = $_SESSION['active'];
-    $types = $_SESSION['types'];
-    $two_step = $_SESSION['two_step'];
-    $user_id = $_SESSION['user_id'];
-
-
-    $employee_id_result = $mysqli->query("SELECT * FROM employee_data WHERE 	user_id='$user_id'");
+// Makes it easier to read
+$first_name = $_SESSION['first_name'];
+$last_name = $_SESSION['last_name'];
+$email = $_SESSION['email'];
+$active = $_SESSION['active'];
+$types = $_SESSION['types'];
+$two_step = $_SESSION['two_step'];
+$user_id = $_SESSION['user_id'];
 
 
-    if ($employee_id_result->num_rows > 0) {
-        $employee_id_array = $employee_id_result->fetch_assoc();
-        $employee_id = $employee_id_array['employee_id'];
-        $employee_type_id = $employee_id_array['employee_type_id'];
+$employee_id_result = $mysqli->query("SELECT * FROM employee_data WHERE 	user_id='$user_id'");
 
 
-        $leave_submissions = $mysqli->query("SELECT * FROM leave_submission WHERE 	employ_id='$employee_id' ");
-        $records = array();
+if ($employee_id_result->num_rows > 0) {
+    $employee_id_array = $employee_id_result->fetch_assoc();
+    $employee_id = $employee_id_array['employee_id'];
+    $employee_type_id = $employee_id_array['employee_type_id'];
 
 
-        if ($leave_submissions->num_rows > 0) {
-            while ($row = $leave_submissions->fetch_object()) {
-                $records[] = $row;
-            }
-            $leave_submissions->free();
+    $leave_submissions = $mysqli->query("SELECT * FROM leave_submission WHERE 	employ_id='$employee_id' ");
+    $records = array();
 
 
-        } else {
-
-            $ismodel = 0; ?>
-            <div class="modal fade  hidden" id="popUpWindow2">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3 class="modal-title">No Submissions</h3>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-
-                            <p>You haven't submitted any leave applications.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <a class="text-light btn-block btn btn-primary"
-                               href="home_employee.php">
-                                <button class="btn btn-primary btn-block">Home</button>
-                            </a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            </div>
-            <?php
-
-
+    if ($leave_submissions->num_rows > 0) {
+        while ($row = $leave_submissions->fetch_object()) {
+            $records[] = $row;
         }
-        if ($types == 2) {
-            $_SESSION['message'] = "You(Student) don't have access to this page!";
-            header("location: error.php");
-            die();
-
-
-        }
+        $leave_submissions->free();
 
 
     } else {
-        $_SESSION['message'] = "Invalid User !";
+
+        $ismodel = 0; ?>
+        <div class="modal fade  hidden" id="popUpWindow2">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">No Submissions</h3>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>You haven't submitted any leave applications.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="text-light btn-block btn btn-primary"
+                           href="home_employee.php">
+                            <button class="btn btn-primary btn-block">Home</button>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+        <?php
+
+
+    }
+    if ($types == 2) {
+        $_SESSION['message'] = "You(Student) don't have access to this page!";
         header("location: error.php");
         die();
 
+
     }
+
+
+} else {
+    $_SESSION['message'] = "Invalid User !";
+    header("location: error.php");
+    die();
+
+}
 
 
 ?>
@@ -163,12 +164,12 @@ if ($_SESSION['logged_in'] != 1) {
 
                 <?php if ($_SESSION['two_step'] != 0) {
 
-                    if (isset($records)) {
-                        // Teacher
-                        if ($employee_type_id == 2) { ?>
+                if (isset($records)) {
+                    // Teacher
+                    if ($employee_type_id == 2) { ?>
 
 
-                            <div class="container">
+                        <div class="container">
 
 
                             <table id="leave_submissions" class="table table-dark">
@@ -194,92 +195,23 @@ if ($_SESSION['logged_in'] != 1) {
 
 
                                     <tr>
-
-
-                                        <td><?php echo $r->reason_for_leave; ?></td>
-                                        <td><?php echo $r->start_date; ?></td>
-                                        <td><?php echo $r->end_date; ?></td>
-
-                                        <td><?php if ($r->approved_by_principal == 0) {
-                                                echo 'Pending';
-                                            } elseif ($r->approved_by_principal == 1) {
-                                                echo 'Approved';
-                                            } elseif ($r->approved_by_principal == 2) {
-                                                echo 'Rejected';
-                                            } else {
-                                                echo 'Error';
-                                            }
-                                            ?></td>
-                                        <td><?php if ($r->approved_by_hr == 0) {
-                                                echo 'Pending';
-                                            } elseif ($r->approved_by_hr == 1) {
-                                                echo 'Approved';
-                                            } elseif ($r->approved_by_hr == 2) {
-                                                echo 'Rejected';
-                                            } else {
-                                                echo 'Error';
-                                            }
-
-
-                                            ?></td>
-
-                                        <td><?php if ($r->approved_by_admin == 0) {
-                                                echo 'Pending';
-                                            } elseif ($r->approved_by_admin == 1) {
-                                                echo 'Approved';
-                                            } elseif ($r->approved_by_admin == 2) {
-                                                echo 'Rejected';
-                                            } else {
-                                                echo 'Error';
-                                            }
-
-
-                                            ?></td>
-
-                                    </tr>
-                                <?php } ?>
-
-                                </tbody>
-                            </table>
-                        </div>
-
-<!--                        Principal-->
-                    <?php } elseif ($employee_type_id == 3) {
-
-                        ?>
-
-
-                        <div class="container">
-
-
-                                <table id="leave_submissions" class="table table-dark">
-
-
-                                    <tbody>
-
-                                    <tr>
-                                        <th>Reason</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>HR</th>
-                                        <th>Administrator</th>
-                                    </tr>
-
-
-                                    <?php
-
-
-                                    foreach ($records as $r) { ?>
-
-
-                                        <tr>
+                                        <form action="l_delete_submitted_leave.php" method="post">
 
 
                                             <td><?php echo $r->reason_for_leave; ?></td>
                                             <td><?php echo $r->start_date; ?></td>
                                             <td><?php echo $r->end_date; ?></td>
 
-
+                                            <td><?php if ($r->approved_by_principal == 0) {
+                                                    echo 'Pending';
+                                                } elseif ($r->approved_by_principal == 1) {
+                                                    echo 'Approved';
+                                                } elseif ($r->approved_by_principal == 2) {
+                                                    echo 'Rejected';
+                                                } else {
+                                                    echo 'Error';
+                                                }
+                                                ?></td>
                                             <td><?php if ($r->approved_by_hr == 0) {
                                                     echo 'Pending';
                                                 } elseif ($r->approved_by_hr == 1) {
@@ -306,66 +238,164 @@ if ($_SESSION['logged_in'] != 1) {
 
                                                 ?></td>
 
-                                        </tr>
-                                    <?php } ?>
 
-                                    </tbody>
-                                </table>
+                                            <td><input class="btn btn-dark text-light" type="submit" value="delete"
+                                                       name="delete"></td>
+
+
+                                            <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
+                                            <td>
+
+
+                                        </form>
+                                    </tr>
+                                <?php } ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--                        Principal-->
+                    <?php } elseif ($employee_type_id == 3) {
+
+                        ?>
+
+
+                        <div class="container">
+
+
+                            <table id="leave_submissions" class="table table-dark">
+
+
+                                <tbody>
+
+                                <tr>
+                                    <th>Reason</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>HR</th>
+                                    <th>Administrator</th>
+                                </tr>
+
+
+                                <?php
+
+
+                                foreach ($records as $r) { ?>
+
+
+                                    <tr>
+
+                                        <form action="l_delete_submitted_leave.php" method="post">
+                                        <td><?php echo $r->reason_for_leave; ?></td>
+                                        <td><?php echo $r->start_date; ?></td>
+                                        <td><?php echo $r->end_date; ?></td>
+
+
+                                        <td><?php if ($r->approved_by_hr == 0) {
+                                                echo 'Pending';
+                                            } elseif ($r->approved_by_hr == 1) {
+                                                echo 'Approved';
+                                            } elseif ($r->approved_by_hr == 2) {
+                                                echo 'Rejected';
+                                            } else {
+                                                echo 'Error';
+                                            }
+
+
+                                            ?></td>
+
+                                        <td><?php if ($r->approved_by_admin == 0) {
+                                                echo 'Pending';
+                                            } elseif ($r->approved_by_admin == 1) {
+                                                echo 'Approved';
+                                            } elseif ($r->approved_by_admin == 2) {
+                                                echo 'Rejected';
+                                            } else {
+                                                echo 'Error';
+                                            }
+
+
+                                            ?></td>
+
+
+                                            <td><input class="btn btn-dark text-light" type="submit" value="delete"
+                                                       name="delete"></td>
+
+
+                                            <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
+                                            </td>
+
+                                        </form>
+                                    </tr>
+                                <?php } ?>
+
+                                </tbody>
+                            </table>
 
                         </div>
 
 
-<!--                        HR-->
+                        <!--                        HR-->
                     <?php } elseif ($employee_type_id == 4) { ?>
 
 
                         <div class="container">
 
-                                <table id="leave_submissions" class="table table-dark">
+                            <table id="leave_submissions" class="table table-dark">
 
 
-                                    <tbody>
+                                <tbody>
+
+                                <tr>
+                                    <th>Reason</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Administrator</th>
+                                </tr>
+
+
+                                <?php
+
+
+                                foreach ($records as $r) { ?>
+
 
                                     <tr>
-                                        <th>Reason</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Administrator</th>
+
+                                        <form action="l_delete_submitted_leave.php" method="post">
+                                        <td><?php echo $r->reason_for_leave; ?></td>
+                                        <td><?php echo $r->start_date; ?></td>
+                                        <td><?php echo $r->end_date; ?></td>
+
+
+                                        <td><?php if ($r->approved_by_admin == 0) {
+                                                echo 'Pending';
+                                            } elseif ($r->approved_by_admin == 1) {
+                                                echo 'Approved';
+                                            } elseif ($r->approved_by_admin == 2) {
+                                                echo 'Rejected';
+                                            } else {
+                                                echo 'Error';
+                                            }
+
+
+                                            ?></td>
+
+                                            <td><input class="btn btn-dark text-light" type="submit" value="delete"
+                                                       name="delete"></td>
+
+
+                                            <td><input type="hidden" value="<?php echo $r->id; ?>" name="leave_id">
+                                            </td>
+
+
+                                        </form>
                                     </tr>
+                                <?php } ?>
 
-
-                                    <?php
-
-
-                                    foreach ($records as $r) { ?>
-
-
-                                        <tr>
-
-
-                                            <td><?php echo $r->reason_for_leave; ?></td>
-                                            <td><?php echo $r->start_date; ?></td>
-                                            <td><?php echo $r->end_date; ?></td>
-
-
-                                            <td><?php if ($r->approved_by_admin == 0) {
-                                                    echo 'Pending';
-                                                } elseif ($r->approved_by_admin == 1) {
-                                                    echo 'Approved';
-                                                } elseif ($r->approved_by_admin == 2) {
-                                                    echo 'Rejected';
-                                                } else {
-                                                    echo 'Error';
-                                                }
-
-
-                                                ?></td>
-
-                                        </tr>
-                                    <?php } ?>
-
-                                    </tbody>
-                                </table>
+                                </tbody>
+                            </table>
 
                         </div>
 
@@ -376,7 +406,6 @@ if ($_SESSION['logged_in'] != 1) {
                         $_SESSION['message'] = "You are not able to submmit leave application thought this system";
                         header("location:error.php");
                         die();
-
 
 
                     } ?>
@@ -601,7 +630,8 @@ else {
     </div>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-<?php }} ?>
+<?php }
+} ?>
 
 
 <!-- Bootstrap core JavaScript -->
