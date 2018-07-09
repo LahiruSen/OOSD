@@ -211,6 +211,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
@@ -267,6 +268,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
@@ -316,6 +318,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
@@ -493,7 +496,8 @@
                     <h6 class="dropdown-header">Courses</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="A_register_for_courses_final.php">Enroll Course</a>
-                    <a class="dropdown-item" href="u_courses_student.php">Course List</a>
+                    <a class="dropdown-item" href="u_courses_student.php">Registerd courses</a>
+                    <a class="dropdown-item" href="A_unenroll_courses.php">Unenroll courses</a>
                 </div>
             </div>
         </li>

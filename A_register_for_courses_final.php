@@ -19,8 +19,11 @@ else {
     $two_step = $_SESSION['two_step'];
     $id=$_SESSION['user_id'];
 
+
     if ($types == 1) {
+
         header("location: home_employee.php");
+        die();
     }
 }
 ?>
@@ -321,12 +324,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                         }
                         $results->free();
                     }else{
-                        $_SESSION['message'] = "1:12 There are no courses available";
+                        $_SESSION['message'] = "Err12:1 There are no courses available";
                         header("location:error.php");
                     }
 
                 }else{
-                    $_SESSION['message'] = "12 There are no courses available";
+                    $_SESSION['message'] = "Err12 There are no courses available";
                     header("location:error.php");
                 }
 
@@ -338,12 +341,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                         }
                         $results->free();
                     }else{
-                        $_SESSION['message'] = "13 There are no courses available";
+                        $_SESSION['message'] = "Err13:1 There are no courses available";
                         header("location:error.php");
                     }
 
                 }else{
-                    $_SESSION['message'] = "13 There are no courses available";
+                    $_SESSION['message'] = "Err13 There are no courses available";
                     header("location:error.php");
                 }
             }
@@ -353,7 +356,7 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
 
 }else
     {
-        $_SESSION['message'] = "14 There are no courses available";
+        $_SESSION['message'] = "Err14 There are no courses available";
         header("location:error.php");
     }
 
