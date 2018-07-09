@@ -237,7 +237,7 @@
                             <h6 class="dropdown-header">Courses</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="u_courses_teacher.php">Courses list</a>
-                            <a class="dropdown-item" href="">Enter Marks</a>
+<!--                            <a class="dropdown-item" href="">Enter Marks</a>-->
                             <a class="dropdown-item" href="create_academic_level.php">Attendance</a>
 
                         </div>
