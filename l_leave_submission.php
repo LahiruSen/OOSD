@@ -147,19 +147,19 @@ if ($_SESSION['logged_in'] != 1) {
             <label>
                 Reason for Leave<span class="req">*</span>
             </label>
-            <input type="text" name="reason"/>
+            <input type="text" name="reason" required>
             <label>
                 Description<span class="req">*</span>
             </label>
-            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50"></textarea>
+            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50" required></textarea>
             <label>
                 Start Date<span class="req">*</span>
             </label>
-            <input type="date" name="start_date" max='2018-12-31' min= <?php echo date('Y-m-d'); ?>/>
+            <input  required type="date" name="start_date" max='2018-12-31' min= <?php echo date('Y-m-d'); ?> >
             <label>
                 End Date<span class="req">*</span>
             </label>
-            <input type="date" name="end_date" max='2018-12-31' min=  <?php echo date('Y-m-d'); ?>/>
+            <input required type="date" name="end_date" max='2018-12-31' min=  <?php echo date('Y-m-d'); ?>/>
         </div>
         <button class="button button-block"/>
         Apply </button>
