@@ -135,11 +135,11 @@ else {
                         <label class="text-dark" size="10">
                             Title<span class="req">*</span>
                         </label>
-                        <input type="text" class="text-dark border-dark"   name="title"/>
+                        <input type="text" class="text-dark border-dark"   name="title" required/>
                         <label class="text-dark">
                             Description<span class="req">*</span>
                         </label>
-                        <textarea class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
+                        <textarea required class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
                         </div>
                         <button class="btn btn-dark btn-block " />Submit </button>
                     </form>

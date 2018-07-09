@@ -56,9 +56,9 @@ else {
                             $titleErr = "Please select enter a title for the scholarship";
                         } else {
                             $title1 = test_input($_POST["title"]);
-                            if (!preg_match("/^[a-zA-Z0-9 ]*$/", $title1)) {
+                            if (!preg_match("/^[a-zA-Z ]*$/", $title1)) {
 
-                                $titleErr = "Title only can contain letters and numbers";
+                                $titleErr = "Title only can contain letters";
                             }
 
                         }
