@@ -123,13 +123,13 @@ $deadline=$assignment['date_of_deadline'];
         }else{
         ?>
         <div class="container">
-            <table class="table table-condensed">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px"">
                     <th>Registration id</th>
                     <th>Submission File</th>
                     <th>Marks</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -138,21 +138,40 @@ $deadline=$assignment['date_of_deadline'];
                 while ($submission = mysqli_fetch_array($submission_query, MYSQLI_NUM)) {
                     ?>
                     <tr>
+
                         <td><?php echo $submission[2];?></td>
                         <td> <a href="<?php echo $submission[4];?>" target="_blank"><li class="badge badge-pill badge-light"><?php echo $submission[4];?></li></a></td>
 
                         <?php if($today>$deadline){?>
+                            <?php $marked=false?>
                             <td><?php $mark=$submission[3];
                             if($mark>=0){
                                 echo $mark;
+                                $marked=true;
                             }else{
                                 echo "Not Graded";
+                                $marked=false;
                             }?></td><?php
                             ?>
+
                             <div class="container">
-                                <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow<?php echo $submission[0]?>">Edit Marks</button></td>
+                                <td>
+                                    <div class="row">
+                                    <div class="col-md">
+                                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow<?php echo $submission[0]?>">Edit Marks</button>
+
+                                    </div>
+                                    <?php if($marked){?>
+                                    <div class="col-md">
+                                        <form role="form" action="u_clear_assignment_marks.php" method="POST" enctype="multipart/form-data">
+                                            <input type="hidden" name="submission_id" value="<?php echo $submission[0]?>">
+                                            <button type="submit" class="btn btn-success btn-block">Clear Marks</button>
+                                        </form>
+
+                                    </div><?php }?></div>
+                                </td>
                                 <div class="modal fade" id="popUpWindow<?php echo $submission[0]?>">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h3 class="modal-title">Grading</h3>
@@ -168,26 +187,6 @@ $deadline=$assignment['date_of_deadline'];
                                                         <button class="btn btn-primary btn-block">Submit</button>
                                                     </div>
                                                 </form>
-                                            </div>
-
-                                            <!--                                            <div class="modal-footer" id="mark-model-btn">-->
-                                            <!--                                                <button class="btn btn-primary btn-block">Submit</button>-->
-                                            <!--                                            </div>-->
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h3 class="modal-title">Error</h3>
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            <div class="modal-body" >
-
-
                                             </div>
 
                                         </div>

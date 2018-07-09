@@ -19,8 +19,11 @@ else {
     $two_step = $_SESSION['two_step'];
     $id=$_SESSION['user_id'];
 
+
     if ($types == 1) {
+
         header("location: home_employee.php");
+        die();
     }
 }
 ?>
@@ -54,49 +57,306 @@ if($current_employee_type_result->num_rows !=0)
     $current_employee_type_data = $current_employee_type_result->fetch_assoc();
     $current_employee_type_result->free();
     $type_of_employment = $current_employee_type_data['title'];
+}else{
+    $_SESSION['message'] = "Err1 There are no courses available";
+    header("location:error.php");
 }
 
 
+$records=array();
 
 if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FROM student_data WHERE user_id='{$id}'")){
-    $output=$result1->fetch_object();
-    $reg_num=$output->registration_number;
-    $ay_id=$output->registered_ayear_id;
-
-}
-$result1->free();
-
-$records2=array();
-
-if($result2 = $mysqli->query("SELECT id FROM level WHERE academic_year_id='{$ay_id}'")){
-    if($result2->num_rows){
-        while($row=$result2->fetch_object()){
-            $records2[]=$row;
-        }
-        $result2->free();
+    if($result1->num_rows){
+        $output=$result1->fetch_object();
+        $reg_num=$output->registration_number;
+        $ay_id=$output->registered_ayear_id;
+       //  var_dump($reg_num);
+       //  var_dump($ay_id);
+       // die();
+        $result1->free();
+    }else{
+        $_SESSION['message'] = "Err2:1 There are no courses available";
+        header("location:error.php");
     }
+
+
+}else{
+    $_SESSION['message'] = "Err2 There are no courses available";
+    header("location:error.php");
 }
 
 
-//print_r($records2);
-//die();
-//$level_id_1=
 
-    $records=array();
-    $level_id=0;
-    if($results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id}'")){
-        if($results->num_rows){
-            while($row=$results->fetch_object()){
-                $records[]=$row;
+
+//If there is a record in student_final_grade
+
+    if($results3=$mysqli->query("select level_id,status from student_final_grade where registration_number='{$reg_num}' ")){
+        if($results3->num_rows){
+            $output2=$results3->fetch_object();
+            $level_id=$output2->level_id;
+            $status=$output2->status;
+          //  var_dump($level_id);
+          //  var_dump($status);
+
+            //If the student passed his level
+//$level_id+=1
+
+
+            if($status==1){
+
+                $level_id+=1;
+
+
+
+
+                //if the level_id is in between the deadline
+
+                $current_date = date('Y-m-d H:i:s');
+                if($results4=$mysqli->query("select from_date from academic_year where id='{$level_id}'")){
+                    if($results4->num_rows){
+                        $ay_start=$results4->fetch_object()->from_date;
+                    }
+                else{
+                        $_SESSION['message'] = "Err3:1 There are no courses available";
+                        header("location:error.php");
+                    }
+                }else{
+                    $_SESSION['message'] = "Err3 There are no courses available";
+                    header("location:error.php");
+                }
+
+
+                if($results5=$mysqli->query("select deadline from level where id='{$level_id}'")){
+                    if($results5->num_rows){
+                        $deadline=$results5->fetch_object()->deadline;
+                    }else{
+                        $_SESSION['message'] = "Err4:1 There are no courses available";
+                        header("location:error.php");
+                    }
+
+                }else{
+                    $_SESSION['message'] = "Err4 There are no courses available";
+                    header("location:error.php");
+                }
+
+                $interval_b = strtotime($deadline)-strtotime($current_date);
+                $interval_a = strtotime($current_date)-strtotime($ay_start);
+
+                //     echo "deadline ";
+                //     var_dump($deadline);
+                //     echo '<br>'."current date ";
+                //     var_dump($current_date);
+                //     echo '<br>'."start date ";
+                //   var_dump($ay_start);
+                //    var_dump($interval_a);
+                //    var_dump($interval_b);
+                //die();
+
+                if($interval_b>=0 && $interval_a>=0){
+                    //  echo '<script type="text/javascript">alert("hi");</script>';
+                    if($results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id}'")){
+                        if($results->num_rows){
+                            while($row=$results->fetch_object()){
+                                $records[]=$row;
+                            }
+                            $results->free();
+                        }else{
+                            $_SESSION['message'] = "Err5:1 There are no courses available";
+                            header("location:error.php");
+                        }
+
+                    }
+                }else{
+                    $_SESSION['message'] = "Err5 There are no courses available";
+                    header("location:error.php");
+                }
+
             }
-            $results->free();
+            //If the status is zero
+            else{
+                $level_id+=2;
+
+
+                //if the level_id is in between the deadline
+
+                $current_date = date('Y-m-d H:i:s');
+                if($results4=$mysqli->query("select from_date from academic_year where id='{$level_id}'")){
+                   if($results4->num_rows){
+                       $ay_start=$results4->fetch_object()->from_date;
+                   }
+
+                else{
+                        $_SESSION['message'] = "Err6:1 There are no courses available";
+                        header("location:error.php");
+                    }
+                }else{
+                    $_SESSION['message'] = "Err6 There are no courses available";
+                    header("location:error.php");
+                }
+
+                if($results5=$mysqli->query("select deadline from level where id='{$level_id}'")){
+                    if($results5->num_rows) {
+                        $deadline = $results5->fetch_object()->deadline;
+                    } else{
+                        $_SESSION['message'] = "Err7:1 There are no courses available";
+                        header("location:error.php");
+                    }
+                }else{
+                    $_SESSION['message'] = "Err7 There are no courses available";
+                    header("location:error.php");
+                }
+
+
+
+                $interval_b = strtotime($deadline)-strtotime($current_date);
+                $interval_a = strtotime($current_date)-strtotime($ay_start);
+
+                /* var_dump($level_id);
+                 echo "deadline ";
+                 var_dump($deadline);
+                 echo '<br>'."current date ";
+                 var_dump($current_date);
+                 echo '<br>'."start date ";
+                 var_dump($ay_start);
+                 var_dump($interval_a);
+                 var_dump($interval_b);
+                 die();
+
+                 */
+                if($interval_b>=0 && $interval_a>=0){
+                    if($results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id}'")){
+                        if($results->num_rows){
+                            while($row=$results->fetch_object()){
+                                $records[]=$row;
+                            }
+                            $results->free();
+                        }
+
+                    }
+                }else{
+                    $_SESSION['message'] = "Err8 There are no courses available";
+                    header("location:error.php");
+                }
+            }
+
+
+        }else{
+
+
+//If the record is not found in student_final_grade
+
+
+            $records2=array();
+            var_dump($ay_id);
+
+
+            if($result2 = $mysqli->query("SELECT id FROM level WHERE academic_year_id='{$ay_id}'")){
+                if($result2->num_rows){
+                    while($row=$result2->fetch_object()){
+                        $records2[]=$row;
+                    }
+                    $result2->free();
+                }
+            }else{
+                $_SESSION['message'] = "Err9 There are no courses available";
+                header("location:error.php");
+            }
+            $level_id_1 = $records2[0]->id;
+            $level_id_2 = $records2[1]->id;
+
+            var_dump($level_id_1);
+            var_dump($level_id_2);
+            echo '<br>';
+            echo '<br>';
+           // die();
+
+            $current_date = date('Y-m-d H:i:s');
+
+            if($results4=$mysqli->query("select from_date from academic_year where id='{$level_id_1}'")){
+                if($results4->num_rows){
+                    $ay_start=$results4->fetch_object()->from_date;
+                }else{
+                    $_SESSION['message'] = "Err10:1 There are no courses available";
+                    header("location:error.php");
+                }
+
+            }else{
+                $_SESSION['message'] = "Err10 There are no courses available";
+                header("location:error.php");
+            }
+
+
+            if($results5=$mysqli->query("select deadline from level where id='{$level_id_1}'")){
+                if($results5->num_rows){
+                    $deadline=$results5->fetch_object()->deadline;
+                }else{
+                    $_SESSION['message'] = "Err11 There are no courses available";
+                    header("location:error.php");
+                }
+
+            }else{
+                $_SESSION['message'] = "Err11 There are no courses available";
+                header("location:error.php");
+            }
+
+            $interval_b = strtotime($deadline)-strtotime($current_date);
+            $interval_a = strtotime($current_date)-strtotime($ay_start);
+
+               /* echo "level_id ";
+                var_dump($level_id_1);
+                echo '<br>'."deadline ";
+                var_dump($deadline);
+                echo '<br>'."current date ";
+                var_dump($current_date);
+                echo '<br>'."start date ";
+                var_dump($ay_start);
+                var_dump($interval_a);
+                var_dump($interval_b);
+                die();
+
+            */
+
+            if($interval_b>=0 && $interval_a>=0){
+                if($results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id_1}'")){
+                    if($results->num_rows){
+                        while($row=$results->fetch_object()){
+                            $records[]=$row;
+                        }
+                        $results->free();
+                    }else{
+                        $_SESSION['message'] = "Err12:1 There are no courses available";
+                        header("location:error.php");
+                    }
+
+                }else{
+                    $_SESSION['message'] = "Err12 There are no courses available";
+                    header("location:error.php");
+                }
+
+            }else{
+                if($results=$mysqli->query("SELECT course_id,title,description,credits,no_of_working_hours FROM courses where level_id='{$level_id_2}'")){
+                    if($results->num_rows){
+                        while($row=$results->fetch_object()){
+                            $records[]=$row;
+                        }
+                        $results->free();
+                    }else{
+                        $_SESSION['message'] = "Err13:1 There are no courses available";
+                        header("location:error.php");
+                    }
+
+                }else{
+                    $_SESSION['message'] = "Err13 There are no courses available";
+                    header("location:error.php");
+                }
+            }
         }
+
 
 
 }else
     {
-
-        $_SESSION['message'] = "There are no courses available";
+        $_SESSION['message'] = "Err14 There are no courses available";
         header("location:error.php");
     }
 

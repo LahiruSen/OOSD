@@ -24,13 +24,22 @@ $string = "$location.$name";
 $lastDot = strrpos($string, ".");
 $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $lastDot);
 
-//$_GET["course_id"]=$course_id;
-//$_GET["course_title"]=$course_title;
 $today = date("Y-m-d H:i:s");
 
-$mysqli->query("INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')");
-//$full_name=$_SESSION['name'];
+$sql="INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')";
 
-header("Location:u_course_details_teacher.php");
+if ( $mysqli->query($sql) ) {
+
+    $_SESSION['message']="Your Assignment is uploaded successfully";
+    header("location: success.php");
+    die();
+
+}
+else{
+    $_SESSION['message']="Sorry. Your Assignment could not be uploaded. Please, Try again";
+    header("location: error.php");
+    die();
+}
+//header("Location:u_course_details_teacher.php");
 
 ?>

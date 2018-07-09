@@ -56,6 +56,9 @@ $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$
 //$_SESSION['course_title']=$course_title;
 //$_SESSION['error']=false;
 
+//define('MyConst',true);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -137,7 +140,9 @@ $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$
                         <label class="btn btn-danger btn-block" ><?php echo $asignment[5];?></label>
                     </div>
                     <div class="col-lg-4 " align="center">
+
                         <a href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-block" type="submit" value="View Assignment"></a>
+
                     </div>
                 </div>
 
@@ -165,12 +170,10 @@ $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$
 
 
                     <div class="col-lg-4 " align="center">
+
                             <a href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-block" type="submit" value="View Assignment"></a>
                         </div>
-                </div>
-                        <!--                        <div>-->
-                        <!--                            <a class="text-dark" href="assignment_session_setup.php?assignment_id=--><?php //echo $asignment[0]?><!--&assignment_title=--><?php //echo $asignment[5]?><!--"> <input class="btn btn-dark btn-lg-0" type="submit" value="Update Assignment"></a>-->
-                        <!--                        </div>-->
+                </div><br>
 
                         <?php
                     }

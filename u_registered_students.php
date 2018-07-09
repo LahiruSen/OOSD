@@ -1,4 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/8/2018
+ * Time: 5:36 PM
+ */
+
 if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
@@ -13,43 +20,38 @@ else {
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
-    $two_step= $_SESSION['two_step'];
+    $two_step = $_SESSION['two_step'];
+    $user_id=$_SESSION['user_id'];
 
+    $employee_query=$mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'");
+    $employee=$employee_query->fetch_assoc();
+    $employee_type_id=$employee['employee_type_id'];
 
-    if($types == 1)
-    {
-        header("location: home_employee.php");
+    if ($types == 2) {
+        header("location: home_student.php");
+    }else{
+        if($employee_type_id==1 || $employee_type_id==3 ||$employee_type_id==4){
+            header("location: home_employee.php");
+        }
     }
-
 }
 
-$course_id=$_SESSION['course_id'];
-$course_title=$_SESSION['course_title'];
-
-$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$course_query->fetch_assoc();
-//$field=$course['field'];
-$no_of_hours=$course['no_of_working_hours'];
-$credit=$course['credits'];
-$description=$course['description'];
-
-$level_id=$course['level_id'];
-$level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
-$level=$level_query->fetch_assoc();
-$level_title=$level['title'];
-
-$teacher_id=$course['assigned_teacher_id'];
-
-$teacher_user_query=$mysqli->query("SELECT * FROM employee_data where id='$teacher_id'");
-$teacher_user=$teacher_user_query->fetch_assoc();
-$teacher_user_id=$teacher_user['user_id'];
-$user_query=$mysqli->query("SELECT * FROM users where id='$teacher_user_id'");
-$teacher_user=$user_query->fetch_assoc();
-$first_name_teacher=$teacher_user['first_name'];
-$last_name_teacher=$teacher_user['last_name'];
-
-
 //$name=$_SESSION['name'];
+$course_id=$_SESSION['course_id'];
+//$course_title=$_SESSION['course_title'];
+$student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id='$course_id'");
+
+//$assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+//$assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+//$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
+
+
+//$_SESSION['course_id']=$course_id;
+//$_SESSION['course_title']=$course_title;
+//$_SESSION['error']=false;
+
+//define('MyConst',true);
+
 
 ?>
 
@@ -62,12 +64,12 @@ $last_name_teacher=$teacher_user['last_name'];
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
-    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
+
 
 <?php if(!$active) { ?>
 
@@ -80,6 +82,8 @@ $last_name_teacher=$teacher_user['last_name'];
     </div>
 
 <?php } else { ?>
+
+
 
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
@@ -101,58 +105,51 @@ $last_name_teacher=$teacher_user['last_name'];
     <div>
         <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
         <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-        <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
     </div>
 
 </header>
 
 <!-- Dashboard Section -->
 <section class="" id="portfolio">
-    <div class="container ">
-        <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_id.'-'.$course_title?></h2>
+    <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Registered Students</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="jumbotron jumbotron-fluid bg-topfive">
-                <div class="container">
-                    <h1>Course Info</h1>
-                    <div class="card" style="width:100%">
-                        <div class="container text-center w-100">
-                            <i style="font-size: 100px" class="fa fa-graduation-cap"></i>
-                        </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Level</h6>
-                <p class="card-text"><?php echo $level_title?></p>
-                            <h6 class="card-title">Description</h6>
-                <p class="card-text"> <?php echo $description?></p>
-                            <h6 class="card-title">Credits</h6>
-                <p class="card-text"><?php echo $credit?></p>
-                            <h6 class="card-title">No of Houres per week</h6>
-                <p class="card-text"><?php echo $no_of_hours?></p>
-                            <h6 class="card-title">Teacher in Charge</h6>
-                <p class="card-text"><?php echo $first_name_teacher.' '.$last_name_teacher?></p>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div class="col-md-6">
+        <div class="container">
+            <div class="text-left ">
 
-                <div class="container">
-                    <button type="button" style="width: 80%;" class="btn bg-topfive text-light" >Schedule</a></button>
-                </div>
-
-                <div class="container">
-                    <br><a href="u_view_assignments_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignments</button></a>
-                </div>
-                <div class="container">
-                    <br><a href="u_view_assignments_marks_student.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">Assignment Marks</button></a>
-                </div>
+        <table class="table table-striped text-center">
+            <thead>
+            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                <th>Registration Number/th>
+                <th>Full Name</th>
+            </tr>
+            </thead>
+            <tbody>
 
 
-                </div>
 
-        </div>
+            <?php //require "u_search_courses.php";
+            while ($student = mysqli_fetch_array($student_query, MYSQLI_NUM)) {
+                $reg_no=$student[1];
+                $student_query_2=$mysqli->query("SELECT * FROM student_data WHERE registration_number='$reg_no'");
+                $student_2=$student_query_2->fetch_assoc();
+                $full_name=$student_2['full_name'];
+                ?>
+               <tr>
+                <td class="text-success font-weight-bold"><?php echo $reg_no?></td>
+                <td class="text-success font-weight-bold"><?php echo $full_name?></td>
+               </tr>
+                <?php
+
+                }?>
+
+
+
+            </tbody>
+        </table></div></div>
+
+
     </div>
 </section>
 
@@ -178,7 +175,31 @@ $last_name_teacher=$teacher_user['last_name'];
     </div>
 </section>
 
-<?php if($_SESSION['two_step'] == 0) { ?>
+<!--Model-->
+
+<?php if($_SESSION['two_step'] == 0) {
+
+
+$user_result =  $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
+
+if($user_result->num_rows != 0)
+{
+$user_data = $user_result->fetch_assoc();
+$user_result->free();
+$user_id = $user_data['id'];
+$employee_result =  $mysqli->query("SELECT * FROM employee_data WHERE user_id='$user_id'") or die($mysqli->error());
+
+
+if($employee_result->num_rows != 0)
+{
+$employee_data = $employee_result->fetch_assoc();
+
+$employee_result->free();
+
+if($employee_data['is_locked'] != 1)
+{
+?>
+
     <div class="modal fade" id="completeProfile">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
@@ -203,9 +224,86 @@ $last_name_teacher=$teacher_user['last_name'];
         </div>
     </div>
 
-<?php } ?>
+    <?php
+}
+else
+{
+    ?>
 
-<!--Model-->
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title text-warning">Activation is pending <i class="fa fa-exclamation-triangle"></i></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <?php
+}
+
+}
+else
+{
+
+    ?>
+
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Add Profile information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<?php
+
+}
+
+}
+
+else
+{
+
+    $_SESSION['message'] = "You are not a valid user";
+    header("location:error.php");
+}
+
+} ?>
+
+
+
     <!-- Footer -->
     <footer class="footer text-center">
         <div class="container">
@@ -282,7 +380,6 @@ $last_name_teacher=$teacher_user['last_name'];
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
-
 <?php if($_SESSION['two_step'] == 0) { ?>
     <script >
         $( document ).ready(function() {
@@ -293,6 +390,9 @@ $last_name_teacher=$teacher_user['last_name'];
 
 <?php } ?>
 
+
 </body>
 
 </html>
+
+

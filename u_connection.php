@@ -8,5 +8,5 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$db = 'oosd2';
+$db = 'oosd';
 $mysqli = new mysqli($host,$user,$pass,$db);

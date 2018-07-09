@@ -114,6 +114,7 @@ else {
             <table class="table table-striped text-center">
                 <thead>
                 <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                    <th>Level</th>
                     <th>Course Title</th>
                     <th>Course Id</th>
                     <th class="text-center">Action</th>
@@ -126,9 +127,14 @@ else {
                 <?php require "u_search_courses.php";
                 while ($course = mysqli_fetch_array($course_query_teacher,MYSQLI_NUM)) {
                     $course_id=$course[0];
+                    $level_id=$course[4];
+                    $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
+                    $level=$level_query->fetch_assoc();
+                    $level_title=$level['title'];
                     //    $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
                     //    $my_course=$result5->fetch_assoc();//course2
                     ?>
+                    <td class="text-success font-weight-bold"><?php echo $level_title;?></td>
                     <td class="text-success font-weight-bold"><?php echo $course[1];?></td>
                     <td class="text-success font-weight-bold"><?php echo $course_id;?></td>
                     <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->

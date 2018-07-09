@@ -10,10 +10,20 @@ if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require "u_connection.php";
 //$student_id=$_SESSION['reg_no'];
 $assignment_id=$_GET['assignment_id'];
-$mysqli->query("DELETE FROM assignments WHERE id='$assignment_id'");
-//$first_name = $_SESSION['first_name'];
-//$last_name = $_SESSION['last_name'];
-//$assignment_title=$_GET['assignment_title'];
+$sql="DELETE FROM assignments WHERE id='$assignment_id'";
 
-header("location: u_up_del_assignments_teacher.php");
+if ( $mysqli->query($sql) ) {
+
+    $_SESSION['message']="Your Assignment is deleted successfully";
+    header("location: success.php");
+    die();
+
+}
+else{
+    $_SESSION['message']="Sorry. Your Assignment could not be deleted. Please, Try again";
+    header("location: error.php");
+    die();
+}
+
+//header("location: u_up_del_assignments_teacher.php");
 ?>

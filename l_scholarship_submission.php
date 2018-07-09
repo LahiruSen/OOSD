@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
     if ($_POST["list"]=='0') {
-        $listErr = "Please select the scholarship";
+        $listErr = "Please select the scholarship type";
     } else {
         $scholarship = test_input($_POST["list"]);
 

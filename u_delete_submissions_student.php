@@ -9,11 +9,23 @@ if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require "u_connection.php";
 $student_id=$_SESSION['reg_no'];
 $assignment_id=$_GET['assignment_id'];
-$mysqli->query("DELETE FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$student_id'");
-//$first_name = $_SESSION['first_name'];
-//$last_name = $_SESSION['last_name'];
-//$assignment_title=$_GET['assignment_title'];
 
-header("location: u_assignment_details_student.php");
+$sql="DELETE FROM assignment_submissions WHERE assignment_id='$assignment_id' AND student_id='$student_id'";
+
+if ( $mysqli->query($sql) ) {
+
+    $_SESSION['message']="Your Submission is deleted successfully";
+    header("location: success.php");
+    die();
+
+}
+else{
+    $_SESSION['message']="Sorry. Your Submisssion could not be deleted. Please, Try again";
+    header("location: error.php");
+    die();
+}
+
+
+//header("location: u_assignment_details_student.php");
 ?>
 
