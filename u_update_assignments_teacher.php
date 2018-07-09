@@ -18,6 +18,7 @@ $title=$assignment['title'];
 $description=$assignment['description'];
 $file=$assignment['attachment_link'];
 $deadline=$assignment['date_of_deadline'];
+$string=$file;
 
 if(!empty($_POST['title'])){
     $title=$_POST['title'];
@@ -25,8 +26,8 @@ if(!empty($_POST['title'])){
 if(!empty($_POST['description'])){
     $description=$_POST['description'];
 }
-if(!empty($_FILES['file'])){
-    $name=$_FILES["file"]["name"];
+$name=$_FILES["file"]["name"];
+if($name!=''){
     $tmp_name=$_FILES["file"]["tmp_name"];
     $location='assignment_files/';
     move_uploaded_file($tmp_name,$location.$name);
@@ -46,6 +47,19 @@ if(!empty($_POST['deadline'])){
 }
 $today = date("Y-m-d H:i:s");
 
-$mysqli->query("UPDATE assignments SET title='$title',description='$description',attachment_link='$string',date_of_deadline='$deadline' ,date_of_update='$today' WHERE id=$assignment_id");
-header("location: u_up_del_assignments_teacher.php");
+$sql="UPDATE assignments SET title='$title',description='$description',attachment_link='$string',date_of_deadline='$deadline' ,date_of_update='$today' WHERE id=$assignment_id";
+
+if ( $mysqli->query($sql) ) {
+
+    $_SESSION['message']="Your Assignment is updated successfully";
+    header("location: success.php");
+    die();
+
+}
+else{
+    $_SESSION['message']="Sorry. Your Assignment could not be updated. Please, Try again";
+    header("location: error.php");
+    die();
+}
+//header("location: u_up_del_assignments_teacher.php");
 ?>

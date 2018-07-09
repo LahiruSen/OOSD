@@ -26,8 +26,20 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
 
 $today = date("Y-m-d H:i:s");
 
-$mysqli->query("INSERT INTO assignment_submissions(assignment_id, student_id, pdf_link,date_of_create, date_of_update) VALUES ('$assignment_id','$reg_no','$string','$today','$today')");
+$sql="INSERT INTO assignment_submissions(assignment_id, student_id, pdf_link,date_of_create, date_of_update) VALUES ('$assignment_id','$reg_no','$string','$today','$today')";
 
-header("Location:u_assignment_details_student.php");
+if ( $mysqli->query($sql) ) {
+
+    $_SESSION['message']="Your Submission is uploaded successfully";
+    header("location: success.php");
+    die();
+
+}
+else{
+    $_SESSION['message']="Sorry. Your Submissionl could not be uploaded. Please, Try again";
+    header("location: error.php");
+    die();
+}
+//header("Location:u_assignment_details_student.php");
 
 ?>

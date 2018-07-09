@@ -1,4 +1,12 @@
+
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Udhan
+ * Date: 7/8/2018
+ * Time: 5:36 PM
+ */
+
 if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
@@ -20,8 +28,6 @@ else {
     $employee=$employee_query->fetch_assoc();
     $employee_type_id=$employee['employee_type_id'];
 
-
-
     if ($types == 2) {
         header("location: home_student.php");
     }else{
@@ -32,25 +38,7 @@ else {
 }
 
 $course_id=$_SESSION['course_id'];
-$course_title=$_SESSION['course_title'];
-$course_query=$mysqli->query("SELECT * FROM courses where course_id='$course_id'");
-$course=$course_query->fetch_assoc();
-//$field=$course['field'];
-$credit=$course['credits'];
-$description=$course['description'];
-//$level_id=$course['level_id'];
-$no_of_working_hours=$course['no_of_working_hours'];
-
-$level_id=$course['level_id'];
-$level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
-$level=$level_query->fetch_assoc();
-$level_title=$level['title'];
-
-//$name=$_SESSION['name'];
-$today=date("Y-m-d H:i:s");
-$datetime="$today";
-list($date,$time)=explode(' ',$datetime);
-list($hour,$min,$dsec)=explode(':',$time);
+$student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id='$course_id'");
 
 ?>
 
@@ -63,12 +51,12 @@ list($hour,$min,$dsec)=explode(':',$time);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Vocational training center">
     <meta name="author" content="G27">
-    <title>My Home : <?= $first_name.' '.$last_name?></title>
+    <title>My Home : <?= $first_name.' '.$last_name ?></title>
     <?php include 'css/css.html'; ?>
-    <link rel="stylesheet" href="sidebar.css">
 </head>
 
 <body id="page-top">
+
 
 <?php if(!$active) { ?>
 
@@ -83,7 +71,8 @@ list($hour,$min,$dsec)=explode(':',$time);
 <?php } else { ?>
 
 
-    <!-- Navigation -->
+
+<!-- Navigation -->
     <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
         <div class="container">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">Emplup<i class="fa fa-user"></i></a>
@@ -97,128 +86,171 @@ list($hour,$min,$dsec)=explode(':',$time);
         </div>
     </nav>
 
-    <!-- Header -->
-    <header class="masthead bg-primary text-white text-center ">
+<!-- Header -->
+<header class="masthead bg-primary text-white text-center ">
 
-        <div>
-            <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
-            <h4 class="font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
-        </div>
+    <div>
+        <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
+        <h2 style="font-size:50px" class="text-dark mb-2">Employee</h2>
+        <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
+    </div>
 
-    </header>
+</header>
 
-    <!-- Dashboard Section -->
-    <section class="" id="portfolio">
-        <div class="container ">
-            <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $course_id.' '.$course_title?></h2>
-            <hr class="star-dark mb-5">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="jumbotron jumbotron-fluid bg-topfive">
-                        <div class="container">
-                        <h1>Course Info</h1>
-                        <div class="card" style="width:100%">
-                            <div class="container text-center w-100">
-                                <i style="font-size: 100px" class="fa fa-graduation-cap"></i>
-                            </div>
-                            <div class="card-body">
-                                <h6 class="card-title">Level</h6>
-                    <p class="card-text"><?php echo $level_title?></p>
-                                <h6 class="card-title">Description</h6>
-                    <p class="card-text"><?php echo $description?></p>
-                                <h6 class="card-title">Credits</h6>
-                    <p class="card-text" ><?php echo $credit?></p>
-                                <h6 class="card-title">No of Working Hours per week</h6>
-                    <p class="card-text"><?php echo $no_of_working_hours?> </p>
-                            </div>
-                        </div></div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-
-                    <div class="container">
-
-                        <button type="button" style="width: 80%;" class="btn bg-topfive text-light" data-toggle="modal" data-target="#popUpWindow">Create Assignment</button>
-
-                            <div class="modal fade" id="popUpWindow">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-topfive">
-                                        <h3 class="modal-title">Create Assignment</h3>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body" >
-                                        <form role="form" action="u_upload_assignment.php" method="POST" enctype="multipart/form-data">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" placeholder="Title" name="title" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <textarea type="text" class="form-control" placeholder="Description" name="description" required></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="file" class="form-control" placeholder="Attachment" name="file" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button class="btn bg-topfive btn-block">Submit</button>
-                                            </div>
-
-                                        </form>
-                                    </div>
-
-
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="container">
-                        <br><a href="u_up_del_assignments_teacher.php"> <button class="btn bg-topfive text-light" style="width: 80%" type="button">View Assignments</button></a>
-
-                    </div>
-
-                    <div class="container">
-                        <br><a href="u_registered_students.php"><button type="button" style="width: 80%;" class="btn bg-topfive text-light" >Registered Students</button></a>
-                    </div>
-                    <div class="container">
-                        <br><a href="u_enter_course_marks.php"><button type="button" style="width: 80%;" class="btn bg-topfive text-light" >Add Course Marks</button></a>
-                    </div>
-
-
-
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="bg-primary text-white mb-0" id="about">
+<!-- Dashboard Section -->
+<section class="" id="portfolio">
+    <div class="container">
+        <h2 class="text-center text-uppercase text-secondary mb-0">Course Marks</h2 class="text-center text-uppercase text-secondary mb-0">
+        <hr class="star-dark mb-5">
         <div class="container">
-            <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
-            <hr class="star-light mb-5">
-            <div class="row">
-                <div class="col-lg-4 ml-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
-                </div>
-                <div class="col-lg-4 mr-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
-                </div>
+            <div class="text-left ">
+
+        <table class="table table-striped text-center">
+            <thead>
+            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                <th>Registration Number</th>
+                <th>Full Name</th>
+                <th>Marks</th>
+                <th>Attendance</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+
+
+            <?php //require "u_search_courses.php";
+            while ($student = mysqli_fetch_array($student_query, MYSQLI_NUM)) {
+                $reg_no=$student[1];
+                $course_registration_id=$student[0];
+
+                $student_query_2=$mysqli->query("SELECT * FROM student_data WHERE registration_number='$reg_no'");
+                $student_2=$student_query_2->fetch_assoc();
+                $full_name=$student_2['full_name'];
+
+                $student_query_3=$mysqli->query("SELECT * FROM attendance WHERE course_registration_id='$course_registration_id'");
+                $student_3=$student_query_3->fetch_assoc();
+                $attendance=$student_3['no_of_attendant'];
+                $temp='';
+                ?>
+               <tr>
+                <td class="text-success font-weight-bold"><?php echo $reg_no?></td>
+                <td class="text-success font-weight-bold"><?php echo $full_name?></td>
+                   <td class="text-success font-weight-bold">
+                       <?php
+                          $course_mark_query=$mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
+                          $no_of_rows=$course_mark_query->num_rows;
+                          if($no_of_rows==1){
+                              $course_mark=$course_mark_query->fetch_assoc();
+                              $mark=$course_mark['marks'];
+                              echo $mark;
+                              $temp=1;
+                          }else{
+                              echo 'Not Graded';
+                              $temp=0;
+                          }
+                       ?>
+
+                   </td>
+
+
+                   <div class="container">
+                       <td><button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow2<?php echo $reg_no?>">View</button></td>
+                       <!--                           <a href=""> <input class="btn btn-success btn-block" type="submit" value="Edit Marks"></a>-->
+                       <div class="modal fade" id="popUpWindow2<?php echo $reg_no?>">
+                           <div class="modal-dialog modal-dialog-centered">
+                               <div class="modal-content">
+                                   <div class="modal-header bg-topfive">
+                                       <h3 class="modal-title">Attendance</h3>
+                                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                   </div>
+                                   <div class="modal-body" >
+
+                                       <p><?php echo $attendance?></p>
+
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+<!--                   <td>-->
+                   <div class="container">
+                   <td>
+                       <div class="row">
+                       <div class="col-md">
+                       <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow<?php echo $reg_no?>">Edit Marks</button>
+                       </div>
+                   <div class="col-md">
+
+<!--                       <form id="clear_form" role="form" action="--><?php //clearfunction();?><!--" method="POST" enctype="multipart/form-data">-->
+<!--                           <input type="hidden" name="course_registration_id" value="--><?php //echo $course_registration_id?><!--">-->
+                           <button id='clear_ button' type="submit" class="btn btn-success btn-block">Clear Marks</button>
+<!--                       </form>-->
+                   </div></div></td>
+
+                       <div class="modal fade" id="popUpWindow<?php echo $reg_no?>">
+                           <div class="modal-dialog modal-dialog-centered">
+                               <div class="modal-content">
+                                   <div class="modal-header bg-topfive">
+                                       <h3 class="modal-title">Grading</h3>
+                                       <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                   </div>
+                                   <div class="modal-body" >
+                                       <form id="mark-form" role="form" action="u_upload_course_marks.php" method="POST" enctype="multipart/form-data">
+                                           <div class="form-group">
+                                               <input id="mark-model-input" type="number" min="0" max="100" class="form-control" placeholder="Marks" name="marks" required>
+                                           </div>
+                                           <input type="hidden" name="course_registration_id" value="<?php echo $course_registration_id?>">
+                                           <input type="hidden" name="attendance" value="<?php echo $attendance?>">
+                                           <input type="hidden" name="temp" value="<?php echo $temp?>">
+                                           <div class="modal-footer" id="mark-model-btn">
+                                               <button class="btn btn-primary btn-block">Submit</button>
+                                           </div>
+                                       </form>
+                                   </div>
+
+                               </div>
+                           </div>
+                       </div></div>
+
+<!--                   </td>-->
+               </tr>
+                <?php
+
+                }?>
+
+
+
+            </tbody>
+        </table></div></div>
+
+
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="bg-primary text-white mb-0" id="about">
+    <div class="container">
+        <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
+        <hr class="star-light mb-5">
+        <div class="row">
+            <div class="col-lg-4 ml-auto">
+                <p class="lead">Basic introduction about the web site goes here! {description left]</p>
             </div>
-            <div class="text-center mt-4">
-                <a class="btn btn-xl btn-outline-light" href="#">
-                    <i class="fa fa-info mr-2"></i>
-                    Read More
-                </a>
+            <div class="col-lg-4 mr-auto">
+                <p class="lead">Basic introduction about the web site goes here! {description right</p>
             </div>
         </div>
-    </section>
+        <div class="text-center mt-4">
+            <a class="btn btn-xl btn-outline-light" href="#">
+                <i class="fa fa-info mr-2"></i>
+                Read More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!--Model-->
 
 <?php if($_SESSION['two_step'] == 0) {
 
@@ -409,9 +441,6 @@ else
 
 <?php } ?>
 
-<!--Model-->
-<!-- Footer -->
-
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
@@ -426,6 +455,24 @@ else
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
+<script>
+
+    .onclick(function () {
+    <?php
+      $course_registration_id=$_POST['course_registration_id'];
+       $mysqli->query("DELETE FROM course_mark WHERE course_registration_id='$courae_registration_id'");
+    ?>
+    });
+
+    //clearfunction(){
+    //    <?php
+    //    $course_registration_id=$_POST['course_registration_id'];
+    //    $mysqli->query("DELETE FROM course_mark WHERE course_registration_id='$courae_registration_id'");
+    //    ?>
+    //};
+
+</script>
+
 <?php if($_SESSION['two_step'] == 0) { ?>
     <script >
         $( document ).ready(function() {
@@ -436,6 +483,9 @@ else
 
 <?php } ?>
 
+
 </body>
 
 </html>
+
+

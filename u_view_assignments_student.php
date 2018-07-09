@@ -94,9 +94,10 @@ $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$co
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
         <div class="container">
-            <table class="table table-condensed">
+                <div class="text-left ">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                     <th>Assignment Title</th>
                     <th>Date of Create</th>
                     <th>Deadline</th>
@@ -135,7 +136,7 @@ $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$co
                 </tbody>
             </table>
         </div>
-    </div>
+        </div></div>
 </section>
 
 <!-- About Section -->

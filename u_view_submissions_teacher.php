@@ -123,9 +123,9 @@ $deadline=$assignment['date_of_deadline'];
         }else{
         ?>
         <div class="container">
-            <table class="table table-condensed">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px"">
                     <th>Registration id</th>
                     <th>Submission File</th>
                     <th>Marks</th>
@@ -152,7 +152,7 @@ $deadline=$assignment['date_of_deadline'];
                             <div class="container">
                                 <td><button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow<?php echo $submission[0]?>">Edit Marks</button></td>
                                 <div class="modal fade" id="popUpWindow<?php echo $submission[0]?>">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h3 class="modal-title">Grading</h3>
@@ -178,21 +178,21 @@ $deadline=$assignment['date_of_deadline'];
                                     </div>
                                 </div>
 
-                                <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h3 class="modal-title">Error</h3>
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            </div>
-                                            <div class="modal-body" >
-
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                <div class="modal hide fade" style="background-color: #9fcdff" id="pop-error">-->
+<!--                                    <div class="modal-dialog">-->
+<!--                                        <div class="modal-content">-->
+<!--                                            <div class="modal-header">-->
+<!--                                                <h3 class="modal-title">Error</h3>-->
+<!--                                                <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                                            </div>-->
+<!--                                            <div class="modal-body" >-->
+<!---->
+<!---->
+<!--                                            </div>-->
+<!---->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
 
                             </div>
 

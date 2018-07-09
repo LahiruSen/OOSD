@@ -102,11 +102,18 @@ $deadline=$assignment['date_of_deadline'];
     <div class="container  ">
         <h2 class="text-center text-uppercase text-secondary mb-0"><?php echo $assignment_title?></h2>
         <hr class="star-dark mb-5">
-
-        <div class="text-center text-secondary mb-0">
-            <li class="badge"><?php echo $assignment['description'];?></li><br>
+        <div class="col-md">
+            <div class="jumbotron jumbotron-fluid bg-topfive">
+        <div class="container text-center">
+            <div class="card" style="width:100%">
+                <div class="card-body">
+                    <h6 class="card-title">Description</h6>
+                    <p class="card-text text-center"><?php echo $assignment['description'];?></p>
+                    <h6 class="card-title">Attachment</h6>
             <a href="<?php echo $assignment['attachment_link'];?>" target="_blank"> <li class="badge badge-pill badge-primary "><?php echo $assignment['attachment_link'];?></li></a>
-        </div>
+                    <h6 class="card-title">Deadline</h6>
+                    <p class="card-text text-center"><?php echo $assignment['date_of_deadline'];?></p>
+                </div></div></div></div></div>
         <br>
 
         <?php
@@ -123,14 +130,14 @@ $deadline=$assignment['date_of_deadline'];
 
                     <button type="button" style="width: 50%;" class="btn btn-danger" data-toggle="modal" data-target="#popUpWindow3">SUBMIT</button>
                     <div class="modal fade" id="popUpWindow3">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">NEW SUBMISSION</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-                                    <p><?php echo $assignment_id?></p>
+<!--                                    <p>--><?php //echo $assignment_id?><!--</p>-->
                                     <form role="form" action="u_upload_submission.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <input type="file" class="form-control" placeholder="Title" name="file" required>
@@ -153,19 +160,23 @@ $deadline=$assignment['date_of_deadline'];
                 $previous_submission=$submission_query->fetch_assoc();
                 ?>
 
+        <div class="row">
+            <div class="col-md">
+
+
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
                     <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">VIEW SUBMISSION</button>
                     <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">MY SUBMISSION</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-
-                                    <p><?php echo $assignment_id?></p>
+                                    <h6 class="card-title">Date of Submit</h6>
+                                    <p class="card-text text-center"><?php echo $previous_submission['date_of_update']?></p>
                                     <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
 
 
@@ -175,21 +186,23 @@ $deadline=$assignment['date_of_deadline'];
                             </div>
                         </div>
                     </div>
-                </div>
+                </div></div>
+            <div class="col-md">
 
-                <br><div class="container text-center text-uppercase text-secondary mb-0">
+                <div class="container text-center text-uppercase text-secondary mb-0">
 
                     <button type="button" style="width: 50%;" class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow2">DELETE SUBMISSION</button>
                     <div class="modal fade" id="popUpWindow2">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">ARE YOU SURE?</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-
-                                    <p><?php echo $assignment_id?></p>
+                                    <p class="card-text text-center">You are going to delete this submission permanantly</p>
+                                    <h6 class="card-title">Date of Submit</h6>
+                                    <p class="card-text text-center"><?php echo $previous_submission['date_of_update']?></p>
                                     <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
 
                                 </div>
@@ -200,7 +213,7 @@ $deadline=$assignment['date_of_deadline'];
                             </div>
                         </div>
                     </div>
-                </div>
+                </div></div></div>
 
 
 
@@ -221,15 +234,16 @@ $deadline=$assignment['date_of_deadline'];
 
                     <button type="button" style="width: 50%;" class="btn btn-success" data-toggle="modal" data-target="#popUpWindow">VIEW SUBMISSION</button>
                     <div class="modal fade" id="popUpWindow">
-                        <div class="modal-dialog">
+                        <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">MY SUBMISSION</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
 
-                                    <p><?php echo $assignment_id?></p>
+                                    <h6 class="card-title">Date of Submit</h6>
+                                    <p class="card-text text-center"><?php echo $previous_submission['date_of_update']?></p>
                                     <a href="<?php echo $previous_submission['pdf_link'];?>" target="_blank"><li class="badge badge-success"><?php echo $previous_submission['pdf_link']?></li></a><br>
 
                                 </div>
