@@ -128,7 +128,6 @@ $deadline=$assignment['date_of_deadline'];
                 </div>
             </div>
         </div>
-
         </div></div>
         <?php
 

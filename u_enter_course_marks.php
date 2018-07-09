@@ -132,14 +132,14 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
                 $student_3=$student_query_3->fetch_assoc();
                 $attendance=$student_3['no_of_attendant'];
                 $temp='';
+                $course_mark_query=$mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
+                $no_of_rows=$course_mark_query->num_rows;
                 ?>
                <tr>
                 <td class="text-success font-weight-bold"><?php echo $reg_no?></td>
                 <td class="text-success font-weight-bold"><?php echo $full_name?></td>
                    <td class="text-success font-weight-bold">
                        <?php
-                          $course_mark_query=$mysqli->query("SELECT * FROM course_mark WHERE course_registration_id='$course_registration_id'");
-                          $no_of_rows=$course_mark_query->num_rows;
                           if($no_of_rows==1){
                               $course_mark=$course_mark_query->fetch_assoc();
                               $mark=$course_mark['marks'];
@@ -180,13 +180,18 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
                        <div class="col-md">
                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow<?php echo $reg_no?>">Edit Marks</button>
                        </div>
-                   <div class="col-md">
 
-<!--                       <form id="clear_form" role="form" action="--><?php //clearfunction();?><!--" method="POST" enctype="multipart/form-data">-->
-<!--                           <input type="hidden" name="course_registration_id" value="--><?php //echo $course_registration_id?><!--">-->
-                           <button id='clear_ button' type="submit" class="btn btn-success btn-block">Clear Marks</button>
-<!--                       </form>-->
-                   </div></div></td>
+                    <?php if($no_of_rows==1){?>
+                        <div class="col-md">
+
+                            <form id="clear_form" role="form" action="u_clear_course_marks.php" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="course_registration_id" value="<?php echo $course_registration_id?>">
+                                <button type="submit" class="btn btn-success btn-block">Clear Marks</button>
+                            </form>
+                        </div>
+
+                   <?php }?>
+                   </div></td>
 
                        <div class="modal fade" id="popUpWindow<?php echo $reg_no?>">
                            <div class="modal-dialog modal-dialog-centered">
@@ -454,24 +459,6 @@ else
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
-
-<script>
-
-    .onclick(function () {
-    <?php
-      $course_registration_id=$_POST['course_registration_id'];
-       $mysqli->query("DELETE FROM course_mark WHERE course_registration_id='$courae_registration_id'");
-    ?>
-    });
-
-    //clearfunction(){
-    //    <?php
-    //    $course_registration_id=$_POST['course_registration_id'];
-    //    $mysqli->query("DELETE FROM course_mark WHERE course_registration_id='$courae_registration_id'");
-    //    ?>
-    //};
-
-</script>
 
 <?php if($_SESSION['two_step'] == 0) { ?>
     <script >
