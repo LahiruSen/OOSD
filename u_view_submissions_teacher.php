@@ -178,7 +178,7 @@ $deadline=$assignment['date_of_deadline'];
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             </div>
                                             <div class="modal-body" >
-                                                <form id="mark-form" role="form" action="u_upload_marks.php?submission_id=<?php echo $submission[0]?>" method="POST" enctype="multipart/form-data">
+                                                <form id="mark-form" role="form" action="u_upload_marks.php" method="POST" enctype="multipart/form-data">
                                                     <p><?php echo $submission[2]?></p>
                                                     <div class="form-group">
                                                         <input id="mark-model-input" type="number" min="0" max="100" class="form-control" placeholder="Marks" name="marks" required>
@@ -186,6 +186,7 @@ $deadline=$assignment['date_of_deadline'];
                                                     <div class="modal-footer" id="mark-model-btn">
                                                         <button class="btn btn-primary btn-block">Submit</button>
                                                     </div>
+                                                    <input type="hidden" name="submission_id" value="<?php echo $submission[0]?>">
                                                 </form>
                                             </div>
 

@@ -49,14 +49,6 @@ $course_title=$_SESSION['course_title'];
 
 $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
 $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-//$result2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$course_id'");
-
-
-//$_SESSION['course_id']=$course_id;
-//$_SESSION['course_title']=$course_title;
-//$_SESSION['error']=false;
-
-//define('MyConst',true);
 
 
 ?>

@@ -9,7 +9,7 @@
 if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require "u_connection.php";
 //$student_id=$_SESSION['reg_no'];
-$assignment_id=$_GET['assignment_id'];
+$assignment_id=$_POST['assignment_id'];
 
 $assignment_query=$mysqli->query("SELECT * FROM assignments WHERE id='$assignment_id'");
 $assignment=$assignment_query->fetch_assoc();

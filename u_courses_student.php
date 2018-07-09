@@ -30,18 +30,6 @@ else {
 
 }
 
-//$user_id=$_SESSION['user_id'];
-//$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
-//$student=$student_query->fetch_assoc();
-//
-//$reg_no=$student['registration_number'];
-//$_SESSION['reg_no']=$reg_no;
-//
-//$first_name = $_SESSION['first_name'];
-//$last_name = $_SESSION['last_name'];
-//
-//$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
-//$no_of_courses=$courrse_query->num_rows;
 ?>
 
 <!DOCTYPE html>

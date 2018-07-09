@@ -151,10 +151,10 @@ $deadline=$assignment['date_of_deadline'];
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
-                                    <form role="form" action="u_update_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>" method="POST" enctype="multipart/form-data">
+                                    <form role="form" action="u_update_assignments_teacher.php" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
 <!--                                            <li type="text" class="text-dark align-content-lg-start">Previous Name  --><?php //echo $assignment['title']?><!--</li>-->
-                                            <input type="text" class="form-control" placeholder="New Title" name="title">
+                                            <input type="text" class="form-control" placeholder="New Title" name="title" value="<?php echo $assignment['title']?>">
                                         </div>
                                         <div class="form-group">
 <!--                                            <li type="text" class="text-dark align-content-lg-start">Previous Description --><?php //echo $assignment['description']?><!--</li>-->
@@ -173,6 +173,7 @@ $deadline=$assignment['date_of_deadline'];
                                         <div class="modal-footer">
                                             <button class="btn btn-primary btn-block">Update</button>
                                         </div>
+                                        <input type="hidden" name="assignment_id" value="<?php echo $assignment_id?>">
                                     </form>
                                 </div>
 

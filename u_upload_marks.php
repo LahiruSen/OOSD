@@ -9,7 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {    session_start();}
 require 'u_connection.php';
 
 //$full_name=$_SESSION['name'];
-$submission_id=$_GET['submission_id'];
+$submission_id=$_POST['submission_id'];
 
 $mark=$_POST['marks'];
 
@@ -18,7 +18,7 @@ if($mark>=0 && $mark<=100) {
 }
 
 header("Location:u_view_submissions_teacher.php");
-
+die();
 
 ?>
 
