@@ -1,4 +1,8 @@
+
+
+
 <?php
+
 /* Reset your password form, sends reset.php password link */
 require 'db.php';
 if (session_status() == PHP_SESSION_NONE) {    session_start();}
@@ -95,11 +99,11 @@ if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
             <label>
                 Start Date<span class="req">*</span>
             </label>
-            <input type="date" name="start_date" max='2018-12-31' min= <?php echo date('Y-m-d');  ?> />
+            <input type="date" name="start_date" max="2018-12-31" min= "<?php echo date('Y-m-d');  ?>" >
             <label>
                 End Date<span class="req">*</span>
             </label>
-            <input type="date" name="end_date" max='2018-12-31' min=  <?php echo date('Y-m-d');  ?> />
+            <input type="date" name="end_date" max="2018-12-31" min="<?php echo date('Y-m-d');  ?> ">
         </div>
         <button class="button button-block"/>Apply </button>
     </form>

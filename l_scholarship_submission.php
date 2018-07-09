@@ -187,34 +187,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 else {
 
+                    $result_already_exists = $mysqli->query("SELECT * FROM scholarship_submissions WHERE 	registration_number='$registration_number' AND scholarship_id='$scholarship'" );
 
 
+                    if($result_already_exists->num_rows==0) {
 
-                    if (move_uploaded_file($_FILES["scholarship_application"]["tmp_name"], 'scholarship_application_uploads/'.$newfilename)) {
 
-                        $sql = "INSERT INTO scholarship_submissions (registration_number, pdf_url, scholarship_id, date_of_create,date_of_update) "
-                            . "VALUES ('$registration_number','$pdf_url','$scholarship','$date_of_create','$date_of_update')";
+                        if (move_uploaded_file($_FILES["scholarship_application"]["tmp_name"], 'scholarship_application_uploads/' . $newfilename)) {
 
-                        if ( $mysqli->query($sql) ) {
+                            $sql = "INSERT INTO scholarship_submissions (registration_number, pdf_url, scholarship_id, date_of_create,date_of_update) "
+                                . "VALUES ('$registration_number','$pdf_url','$scholarship','$date_of_create','$date_of_update')";
 
-                            $_SESSION['message']="Your scholarship application is uploaded successfully";
-                            header("location: success.php");
-                            $uploadOk=1;
-                            die();
+                            if ($mysqli->query($sql)) {
 
-                        }
-                        else{
-                            $_SESSION['message']="Sorry. Your scholarship application could not be uploaded";
+                                $_SESSION['message'] = "Your scholarship application is uploaded successfully";
+                                header("location: success.php");
+                                $uploadOk = 1;
+                                die();
+
+                            } else {
+                                $_SESSION['message'] = "Sorry. Your scholarship application could not be uploaded";
+                                header("location: error.php");
+                                die();
+                            }
+
+
+                        } else {
+                            $_SESSION['message'] = "Sorry. Error occoured during upload. (During moving file)";
                             header("location: error.php");
                             die();
                         }
 
-
-                     } else {
-                        $_SESSION['message'] = "Sorry. Error occoured during upload. (During moving file)";
+                    }
+                    else{
+                        $_SESSION['message'] = "You have already uploaded an application for this scholarship.";
                         header("location: error.php");
                         die();
+
                     }
+
                 }
 
 

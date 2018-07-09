@@ -49,8 +49,8 @@ else {
 
 
                             if ( $mysqli->query($sql) ) {
-
-                                header("location: home_employee.php");
+                                $_SESSION['message']="Scholarship submission deleted successfully";
+                                header("location: success.php");
                                 die();
 
                             }
