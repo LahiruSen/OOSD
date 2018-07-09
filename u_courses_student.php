@@ -109,6 +109,7 @@ else {
             <table class="table table-striped text-center">
                 <thead>
                 <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                    <th>Level</th>
                     <th>Course Title</th>
                     <th>Course Id</th>
                     <th class="text-center">Action</th>
@@ -123,10 +124,17 @@ else {
                     $course_id=$course[5];
                     $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
                     $my_course=$result5->fetch_assoc();//course2
+
+                    $level_id=$my_course['level_id'];
+                    $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
+                    $level=$level_query->fetch_assoc();
+                    $level_title=$level['title'];
                     ?>
+                    <tr>
+                    <td class="text-success font-weight-bold"><?php echo $level_title;?></td>
                     <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
                     <td class="text-success font-weight-bold"><?php echo $my_course['course_id'];?></td>
-                    <!--                         <tr><td><a class="text-dark" href=><li class="btn">--><?php //echo $my_course['title'];?><!--</li></a><br></td>-->
+
                     <td class="text-center">
                         <div class="btn-group" role="group" >
                         <a class="btn btn-info" href="u_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> View Course</a>

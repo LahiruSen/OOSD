@@ -104,9 +104,10 @@ $course_title=$_SESSION['course_title'];
         <h2 class="text-center text-uppercase text-secondary mb-0">Assignments</h2 class="text-center text-uppercase text-secondary mb-0">
         <hr class="star-dark mb-5">
         <div class="container">
-            <table class="table table-condensed">
+            <div class="text-left ">
+            <table class="table table-striped text-center">
                 <thead>
-                <tr>
+                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
                     <th>Assignment Title</th>
                     <th>Course</th>
                     <th>Submission Status</th>
@@ -167,7 +168,7 @@ $course_title=$_SESSION['course_title'];
                 ?>
                 </tbody>
             </table>
-        </div>
+        </div></div>
     </div>
 </section>
 

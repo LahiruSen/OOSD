@@ -147,26 +147,28 @@ $deadline=$assignment['date_of_deadline'];
                     <div class="modal fade" id="popUpWindow2">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header bg-topfive">
                                     <h3 class="modal-title">Update Assignment</h3>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body" >
                                     <form role="form" action="u_update_assignments_teacher.php?assignment_id=<?php echo $assignment_id?>" method="POST" enctype="multipart/form-data">
                                         <div class="form-group">
-                                            <li type="text" class="text-dark align-content-lg-start">Previous Name  <?php echo $assignment['title']?></li>
+<!--                                            <li type="text" class="text-dark align-content-lg-start">Previous Name  --><?php //echo $assignment['title']?><!--</li>-->
                                             <input type="text" class="form-control" placeholder="New Title" name="title">
                                         </div>
                                         <div class="form-group">
-                                            <li type="text" class="text-dark align-content-lg-start">Previous Description <?php echo $assignment['description']?></li>
+<!--                                            <li type="text" class="text-dark align-content-lg-start">Previous Description --><?php //echo $assignment['description']?><!--</li>-->
                                             <input type="text" class="form-control" placeholder="New Description" name="description">
                                         </div>
                                         <div class="form-group">
-                                            <li type="text" class="text-dark align-content-lg-start">Previous AttachmentLink <a href="<?php echo $assignment['attachment_link'];?>" target="_blank"> <li class="badge badge-pill badge-primary "><?php echo $assignment['attachment_link'];?></li></a></li>
+<!--                                            <li type="text" class="text-dark align-content-lg-start">Previous AttachmentLink <a href="--><?php //echo $assignment['attachment_link'];?><!--" target="_blank"> <li class="badge badge-pill badge-primary ">--><?php //echo $assignment['attachment_link'];?><!--</li></a></li>-->
+                                            <p>New Attachment Link</p>
                                             <input type="file" class="form-control" placeholder="Attachment" name="file">
                                         </div>
                                         <div class="form-group">
-                                            <li type="text" class="text-dark align-content-lg-start">Previous Deadline <?php echo $assignment['date_of_deadline']?></li>
+<!--                                            <li type="text" class="text-dark align-content-lg-start">Previous Deadline --><?php //echo $assignment['date_of_deadline']?><!--</li>-->
+                                            <p>New Deadline</p>
                                             <input type="datetime-local" class="form-control" placeholder="Deadline" name="deadline">
                                         </div>
                                         <div class="modal-footer">
@@ -179,7 +181,7 @@ $deadline=$assignment['date_of_deadline'];
                         </div>
                     </div>
                 </div></div><br>
-                <div class="col">
+                <div class="col-md">
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
                     <button type="button" style="width: 50%;" class="btn btn-dark" data-toggle="modal" data-target="#popUpWindow">DELETE ASSIGNMENT</button>
@@ -255,7 +257,7 @@ $deadline=$assignment['date_of_deadline'];
 
                 <div class="container text-center text-uppercase text-secondary mb-0">
 
-                    <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
+                    <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submissions</button></a>
 
                 </div>
 
@@ -332,7 +334,7 @@ $deadline=$assignment['date_of_deadline'];
 
         <div class="container text-center text-uppercase text-secondary mb-0">
 
-            <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submission</button></a>
+            <a class="text-light btn-block btn btn-primary" href="u_assignment_session_setup.php?assignment_id=<?php echo $assignment_id?>&assignment_title=<?php echo $assignment_title?>">  <button class="btn btn-primary btn-block">View Submissions</button></a>
 
         </div>
     </div>
