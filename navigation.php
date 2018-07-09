@@ -211,6 +211,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
@@ -267,6 +268,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
@@ -316,6 +318,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="l_check_leave.php">Available leave</a>
                             <a class="dropdown-item" href="l_leave_submission.php">Submit leave</a>
+                            <a class="dropdown-item" href="l_view_submitted_leave.php">Previous Submissions</a>
                         </div>
                     </div>
                 </li>
