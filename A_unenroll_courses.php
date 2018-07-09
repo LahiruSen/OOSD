@@ -125,7 +125,12 @@ else {
                                     $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
                                     $level=$level_query->fetch_assoc();
 
+                                    $current_date = date('Y-m-d H:i:s');
+                                    $deadline=$level['deadline'];
+
+                                    $interval = strtotime($deadline)-strtotime($current_date);
                                     ?>
+                                    <?php if($interval>=0){?>
                                     <tr>
                                         <td class="text-success font-weight-bold"><?php echo $level['title'];?></td>
                                         <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
@@ -137,7 +142,8 @@ else {
                                             </div>
                                         </td>
                                     </tr>
-                                    <?php
+
+                                    <?php }
                                 }
 
                                 ?>

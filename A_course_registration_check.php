@@ -21,7 +21,7 @@ if(!empty($_POST)){
                     //If the course is registered before
 
 
-                    $_SESSION['message'] = "You have already created this course";
+                    $_SESSION['message'] = "You have already registered for this course";
                     header("location: error.php");
                 } else {
 
