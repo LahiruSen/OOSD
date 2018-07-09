@@ -149,7 +149,7 @@
                             <h6 class="dropdown-header">Notification</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="create_notification.php">Create Notification</a>
-                            <a class="dropdown-item" href="#">Notification List</a>
+                            <a class="dropdown-item" href="notification_list.php">Notification List</a>
                         </div>
                     </div>
                 </li>
@@ -354,7 +354,7 @@
 
     <li class="nav-item mx-0 mx-lg-1">
         <div class="dropdown">
-            <button style="width: 100%" class="btn  dropdown-toggle user-dropdown text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button id="user_logo" style="width: 100%" class="btn  dropdown-toggle user-dropdown text-white" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user-circle"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
@@ -362,8 +362,8 @@
                 <div class="dropdown-divider"></div>
                 <?php if($two_step ==1) { ?>
                     <a class="dropdown-item" href="#">Profile( <strong class="text-primary"><?php if(isset($employee_type_data)){echo($employee_type_data['title']);}?></strong> )</a>
-                <?php } ?>
-                <a class="dropdown-item" href="#">Messages</a>
+                <?php }  ?>
+                <a class="dropdown-item" href="notification_list_inbox.php">Messages<strong style="color: orangered" id="unseen_count"></strong></a>
                 <a class="dropdown-item" href="logout.php">Logout</a>
 
 
@@ -543,16 +543,16 @@
 
     <li class="nav-item mx-0 mx-lg-1">
         <div class="dropdown">
-            <button style="width: 100%" class="btn  dropdown-toggle user-dropdown text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button id="user_logo" style="width: 100%" class="btn  dropdown-toggle user-dropdown text-white" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-user-circle"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-right bg-dropdown" aria-labelledby="dropdownMenuButton">
                 <h6 class="dropdown-header b"><?= $first_name.' '.$last_name ?> </h6>
                 <div class="dropdown-divider"></div>
                 <?php if($two_step ==1) { ?>
-                    <a class="dropdown-item" href="#">Profile( <strong class="text-primary"><?php if(isset($student_type_data)){echo($student_type_data['title']);}?></strong> )</a>
+                    <a class="dropdown-item" href="#">Profile( <strong class="text-primary">Student</strong> )</a>
                 <?php } ?>
-                <a class="dropdown-item" href="#">Messages</a>
+                <a class="dropdown-item" href="notification_list_inbox.php">Messages<strong style="color: orangered" id="unseen_count"></strong></a>
                 <a class="dropdown-item" href="logout.php">Logout</a>
 
 

@@ -56,6 +56,13 @@ else {
 
 <?php } else { if($two_step ==1)
 {
+$current_employee_type_result = $current_user_info_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where users.email = '$email' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
+if($current_employee_type_result->num_rows !=0)
+{
+    $current_employee_type_data = $current_employee_type_result->fetch_assoc();
+    $current_employee_type_result->free();
+    $type_of_employment = $current_employee_type_data['title'];
+}
 
 
 
@@ -174,9 +181,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                 <hr class="star-dark mb-5">
                                 <div class="container">
                                     <div class="text-left ">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                        <table class="table table-striped table-bordered">
+                                            <thead class="thead_my">
+                                            <tr class="text-white" >
                                                 <th>ID</th>
                                                 <th>Full Name</th>
                                                 <th>NIC</th>
@@ -199,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                                         <td><?php if($sd['is_approved'] == 1){echo("Approved");}else{echo("Pending");} ?></td>
                                                         <td>
                                                             <div class="btn-group" role="group" >
-                                                                <a href="employee_registration_view.php?id=<?= $sd['id'];?>&et_id=<?=$employee_type_id?>"><button class="btn btn-info m-1" type="submit">View</button></a>
+                                                                <a href="employee_registration_view.php?id=<?= $sd['id'];?>&et_id=<?=$employee_type_id?>"><button class="btn btn-outline-primary m-1 " type="submit">View</button></a>
                                                             </div>
                                                         </td>
 
@@ -339,6 +346,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 <?php } else
     {
+
         if ($_SESSION['types'] == 1) {
 
             header('location: home_employee.php');
@@ -349,6 +357,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 } else
     {
+
+
+
 
         if ($_SESSION['types'] == 1) {
 

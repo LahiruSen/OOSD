@@ -49,7 +49,7 @@ else {
 <?php } else { if($two_step ==1) {
 
 
-        $notification_result = $mysqli->query("SELECT notifications.*,users.email FROM notifications,users WHERE notifications,sender_id='$userId' and users.id =notifications.target_user_ids   ORDER BY notifications.date_of_create DESC");
+        $notification_result = $mysqli->query("SELECT notifications.*,users.email FROM notifications,users WHERE notifications.sender_id='$userId' and notifications.delete_sender='0' and users.id =notifications.target_user_ids   ORDER BY notifications.date_of_create DESC");
 
 
 
@@ -63,8 +63,7 @@ else {
             }
 
 
-            var_dump($notifications);
-            die();
+
 
 
         }else
@@ -102,7 +101,7 @@ else {
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Employee type list <i class="fa fa-graduation-cap"></i> </h2>
+            <h2 style="font-size:50px" class="text-dark mb-2">Notifications <i class="fa fa-graduation-cap"></i> </h2>
 
         </div>
 
@@ -115,31 +114,35 @@ else {
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an employee type</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">My Notification List(Outbox)</h3>
 
                     <hr class="star-dark mb-5">
                     <div class="container">
                         <div class="text-left ">
-                            <table class="table table-striped text-center">
-                                <thead>
-                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                            <table class="table table-striped text-center table-bordered">
+                                <thead class="thead_my">
+                                <tr class="text-white ">
                                     <th>ID</th>
                                     <th>Title</th>
-                                    <th>Number of registrations</th>
+                                    <th>Receiver Email</th>
+                                    <th>User Seen Status</th>
+                                    <th>Type</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                <?php foreach ($registration_info as $sd){ ?>
+                                <?php foreach ($notifications as $sd){ ?>
 
                                         <tr>
-                                            <td><?= $sd[0] ?></td>
-                                            <td><?= $sd[1] ?></td>
-                                            <td><?= $sd[2] ?></td>
+                                            <td><?= $sd['id'] ?></td>
+                                            <td><?= $sd['title'] ?></td>
+                                            <td><?= $sd['email'] ?></td>
+                                            <td><?php if($sd['is_seen']==0){ echo("Unseen");}else{echo("Seen");} ?></td>
+                                            <td><?php if($sd['types']==1){ echo("Employee");}else{echo("Student");} ?></td>
                                               <td class="text-center">
                                                 <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="employee_registrations.php?employee_type_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
+                                                    <a data-id="<?= $sd['id'] ?>" data-title="<?= $sd['title'] ?>" data-email="<?= $sd['email'] ?>" data-description="<?= $sd['description'] ?>" class=" al_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">View</a>
                                                  </div>
                                             </td>
 
@@ -221,13 +224,13 @@ else {
 
 
     <!-- Model -->
-    <div class="modal fade" id="academic_year_view">
+    <div class="modal fade" id="academic_level_view">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
 
                 <!-- Modal Header -->
                 <div id="modal_head_div" class="modal-header">
-                    <h4 id="ay_title" class="modal-title"></h4>
+                    <h4 id="al_title" class="modal-title"></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -235,35 +238,38 @@ else {
                 <div class="modal-body">
                     <div class="m-2">
                         <div class="row ">
-                            <label class="text-dark" for="ay_description">Description</label>
+                            <label class="text-dark" for="al_description">Description</label>
                         </div>
                         <div class="row">
-                            <p id="ay_description"></p>
+                            <p id="al_description"></p>
                         </div>
 
                     </div>
+
                     <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
+                        <div class="row ">
+                            <label class="text-dark" for="al_description">Receiver Email</label>
                         </div>
                         <div class="row">
-                            <p style="font-size: 20px" id="ay_registration_deadline"></p>
+                            <h5 id="al_email"></h5>
                         </div>
+
                     </div>
+
+
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
+                    <div class="row ">
+
+                        <div class="col-lg-6">
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
                         </div>
-                        <div class="col-lg-4">
-                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
-                        </div>
-                        <div class="col-lg-4 ">
+                        <div class="col-lg-6 ">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
+
                     </div>
 
                 </div>
@@ -309,6 +315,40 @@ else {
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
+<script type="text/javascript">
+
+
+    $(document.body).on('click', '.al_view' ,function()
+    {
+
+        id = $(this).data('id');
+        title = $(this).data('title');
+        description = $(this).data('description');
+        email = $(this).data('email');
+
+
+
+
+
+        $('#academic_level_view #al_title').text(title);
+        $('#academic_level_view #al_description').text(description);
+        $('#academic_level_view #al_email').text(email);
+
+
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
+
+
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='notification_delete.php?id='+id;
+        });
+
+        $('#academic_level_view').modal('show');
+
+
+    });
+
+</script>
+
 
 <!--custom-->
 
@@ -316,5 +356,7 @@ else {
 
 </body>
 </html>
+
+
 
 

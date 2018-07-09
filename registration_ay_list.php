@@ -143,9 +143,9 @@ if($type_of_employment == 'Administrator'){
                     <hr class="star-dark mb-5">
                     <div class="container">
                         <div class="text-left ">
-                            <table class="table table-striped text-center">
-                                <thead>
-                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                            <table class="table table-striped text-center table-bordered">
+                                <thead class="thead_my">
+                                <tr class="text-white">
                                     <th>ID</th>
                                     <th>Title</th>
                                     <th>Number of registrations</th>
@@ -162,7 +162,7 @@ if($type_of_employment == 'Administrator'){
                                             <td><?= $sd[2] ?></td>
                                               <td class="text-center">
                                                 <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="student_registrations.php?academic_year_id=<?= $sd[0] ?>" <?php }?> class="btn btn-info"  >View</a>
+                                                    <a <?php if($sd[2]!=0){ ?>href="student_registrations.php?academic_year_id=<?= $sd[0] ?>" <?php }?> class="btn btn-outline-primary"  >View</a>
                                                  </div>
                                             </td>
 
