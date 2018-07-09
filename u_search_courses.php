@@ -27,7 +27,7 @@ if($user_type==1){
     $student=$student_query->fetch_assoc();
 
     $student_reg_no=$student['registration_number'];
-    $course_query_student=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$student_reg_no' ORDER BY id DESC ");
+    $course_query_student=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$student_reg_no' AND is_approved=1 ORDER BY id DESC ");
 
 }
 
