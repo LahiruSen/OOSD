@@ -1,10 +1,9 @@
-
 <?php
-/* Displays user information and some useful messages */
-require 'db.php';
-if (session_status() == PHP_SESSION_NONE) {    session_start();}
 
-// Check if user is logged in using the session variable
+
+if (session_status() == PHP_SESSION_NONE) {    session_start();}
+require "u_connection.php";
+
 if ( $_SESSION['logged_in'] != 1 ) {
     $_SESSION['message'] = "You must log in before viewing your profile page!";
     header("location: error.php");
@@ -16,16 +15,33 @@ else {
     $email = $_SESSION['email'];
     $active = $_SESSION['active'];
     $types = $_SESSION['types'];
-    $two_step = $_SESSION['two_step'];
+    $two_step= $_SESSION['two_step'];
 
-    if ($types == 2) {
-        header("location: home_student.php");
+
+    if($types == 1)
+    {
+        header("location: home_employee.php");
     }
+
 }
+
+//$user_id=$_SESSION['user_id'];
+//$student_query=$mysqli->query("SELECT * FROM student_data WHERE user_id='$user_id' ");
+//$student=$student_query->fetch_assoc();
+//
+//$reg_no=$student['registration_number'];
+//$_SESSION['reg_no']=$reg_no;
+//
+//$first_name = $_SESSION['first_name'];
+//$last_name = $_SESSION['last_name'];
+//
+//$course_query=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$reg_no' AND is_approved=1");
+//$no_of_courses=$courrse_query->num_rows;
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -39,71 +55,16 @@ else {
 
 
 <?php if(!$active) { ?>
+
     <div class="form text-center">
+
         <h4 class="alert-heading">Please verify your account!</h4>
         <p>We have sent you a verification email to your email account. Please click verification link to verify your account!!!</p>
         <a href="logout.php"><button class="btn btn-group btn-lg">Logout</button></a>
+
     </div>
 
-<?php } else { if($two_step ==1) {
-$user_id = $_SESSION['user_id']; $current_employee_type_result = $mysqli->query("select DISTINCT employee_types.title,employee_types.id from employee_types, users, employee_data where employee_data.user_id = '$user_id' and employee_types.id = employee_data.employee_type_id") or die($mysqli->error());
-if($current_employee_type_result->num_rows !=0)
-{
-    $current_employee_type_data = $current_employee_type_result->fetch_assoc();
-    $current_employee_type_result->free();
-    $type_of_employment = $current_employee_type_data['title'];
-}
-
-$all_accedemic_years_result  =  $mysqli->query("select * from academic_year") or die($mysqli->error());
-
-if($all_accedemic_years_result->num_rows !=0) {
-    $all_accedemic_years_data = array();
-
-    while ($row = $all_accedemic_years_result->fetch_assoc())
-    {
-        $all_accedemic_years_data[] = $row;
-    }
-
-    $all_accedemic_years_result->free();
-
-
-
-
-    $registration_info = array();
-
-    foreach ($all_accedemic_years_data as $ays)
-    {
-        $id = $ays['id'];
-
-        $title = $ays['title'];
-
-        $sql = "select * from student_data where registered_ayear_id='$id'";
-
-        $registrations = $mysqli->query($sql);
-
-        $number_of_application =$registrations->num_rows;
-
-
-        $registration_info[]= array($id,$title,$number_of_application);
-
-
-    }
-
-
-
-}else
-    {
-
-        $_SESSION['message'] = "There are no academic years available";
-        header("location:error.php");
-    }
-
-
-
-//THE RULE WILL CHANGE IN HERE DUE TO RULES
-
-if($type_of_employment == 'Administrator'){
-?>
+<?php } else { ?>
 
 
     <!-- Navigation -->
@@ -125,64 +86,116 @@ if($type_of_employment == 'Administrator'){
 
         <div>
             <h1 class="text-uppercase mb-0">Emplup <i class="fa fa-user"></i></h1>
-            <h2 style="font-size:50px" class="text-dark mb-2">Academic Years List <i class="fa fa-graduation-cap"></i> </h2>
-
+            <h2 style="font-size:50px" class="text-dark mb-2">Student</h2>
+            <h4 class=" font-weight-light mb-0">Vocational Trainings - Student Management - Employee Management</h4>
         </div>
 
     </header>
 
     <!-- Dashboard Section -->
     <section class="" id="portfolio">
-        <div class="container ">
-
-
+        <div class="container">
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Select an academic year</h3>
-
+                    <h3 class="text-center text-uppercase text-secondary mb-0">My recently enrolled courses</h3>
                     <hr class="star-dark mb-5">
                     <div class="container">
                         <div class="text-left ">
-                            <table class="table table-striped text-center table-bordered">
-                                <thead class="thead_my">
-                                <tr class="text-white">
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Number of registrations</th>
+                            <table class="table table-striped text-center">
+                                <thead>
+                                <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
+                                    <th>Level</th>
+                                    <th>Course Title</th>
+                                    <th>Course Id</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                <?php foreach ($registration_info as $sd){ ?>
 
-                                        <tr>
-                                            <td><?= $sd[0] ?></td>
-                                            <td><?= $sd[1] ?></td>
-                                            <td><?= $sd[2] ?></td>
-                                              <td class="text-center">
-                                                <div class="btn-group" role="group" >
-                                                    <a <?php if($sd[2]!=0){ ?>href="student_registrations.php?academic_year_id=<?= $sd[0] ?>" <?php }?> class="btn btn-outline-primary"  >View</a>
-                                                 </div>
-                                            </td>
 
-                                        </tr>
+                                <?php require "u_search_courses.php";
+                                while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
+                                    $course_id=$course[5];
+                                    $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
+                                    $my_course=$result5->fetch_assoc();//course2
 
-                                <?php } ?>
+                                    $level_id=$my_course['level_id'];
+                                    $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
+                                    $level=$level_query->fetch_assoc();
+
+                                    ?>
+                                    <tr>
+                                        <td class="text-success font-weight-bold"><?php echo $level['title'];?></td>
+                                        <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
+                                        <td class="text-success font-weight-bold"><?php echo $my_course['course_id'];?></td>
+
+                                        <td class="text-center">
+                                            <div class="btn-group" role="group" >
+                                                <a class="btn btn-info" href="A_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> Unenroll</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+
+                                ?>
 
 
                                 </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                  </div>
-            </div>
-
+                            </table></div>
+                    </div></div></div>
         </div>
-
     </section>
 
+    <!-- About Section -->
+    <section class="bg-primary text-white mb-0" id="about">
+        <div class="container">
+            <h2 class="text-center text-uppercase text-white">About EMPLUP</h2>
+            <hr class="star-light mb-5">
+            <div class="row">
+                <div class="col-lg-4 ml-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
+                </div>
+                <div class="col-lg-4 mr-auto">
+                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a class="btn btn-xl btn-outline-light" href="#">
+                    <i class="fa fa-info mr-2"></i>
+                    Read More
+                </a>
+            </div>
+        </div>
+    </section>
+
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <div class="modal fade" id="completeProfile">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Please Complete Your Profile</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    Our system administrator should verify your profile information before giving access to EMPLUP resources.
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<?php } ?>
     <!-- Footer -->
     <footer class="footer text-center">
         <div class="container">
@@ -241,93 +254,13 @@ if($type_of_employment == 'Administrator'){
             <i class="fa fa-chevron-up"></i>
         </a>
     </div>
-
-
-    <!-- Model -->
-    <div class="modal fade" id="academic_year_view">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content ">
-
-                <!-- Modal Header -->
-                <div id="modal_head_div" class="modal-header">
-                    <h4 id="ay_title" class="modal-title"></h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="m-2">
-                        <div class="row ">
-                            <label class="text-dark" for="ay_description">Description</label>
-                        </div>
-                        <div class="row">
-                            <p id="ay_description"></p>
-                        </div>
-
-                    </div>
-                    <div class="m-2">
-                        <div class="row">
-                            <label class="text-dark" for="ay_registration_deadline">Registration deadline</label>
-                        </div>
-                        <div class="row">
-                            <p style="font-size: 20px" id="ay_registration_deadline"></p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <a href="" id="ay_update_btn"  class="btn btn-success" data-dismiss="modal">Update</a>
-                        </div>
-                        <div class="col-lg-4">
-                            <a href="" id="ay_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
-                        </div>
-                        <div class="col-lg-4 ">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
-<?php } else
-{
-    if ($_SESSION['types'] == 1) {
-
-        header('location: home_employee.php');
-    } else {
-        header('location: home_student.php');
-    }
-}
-
-} else
-{
-
-    if ($_SESSION['types'] == 1) {
-
-        header('location: home_employee.php');
-    } else {
-        header('location: home_student.php');
-    }
-
-}
-}
-?>
+<?php } ?>
 
 
 <!-- Bootstrap core JavaScript -->
 <script src="js/jquery.min.js"></script>
-<script src="js/moment.min.js"></script>
-<script type="text/javascript" src="js/tempusdominus-bootstrap-4.min.js"></script>
-
 <script src="js/bootstrap.bundle.min.js"></script>
 
 <!-- Plugin JavaScript -->
@@ -336,16 +269,22 @@ if($type_of_employment == 'Administrator'){
 
 <!-- Contact Form JavaScript -->
 <script src="js/jqBootstrapValidation.min.js"></script>
-
 <script src="js/contact_me.js"></script>
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
-<!--custom-->
 
+<?php if($_SESSION['two_step'] == 0) { ?>
+    <script >
+        $( document ).ready(function() {
+            $('#completeProfile').modal('show');
+        });
 
+    </script>
+
+<?php } ?>
 
 </body>
-</html>
 
+</html>
 
