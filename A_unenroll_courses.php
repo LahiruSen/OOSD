@@ -114,7 +114,8 @@ else {
 
 
 
-                                <?php require "u_search_courses.php";
+                                <?php require "A_search_courses.php";
+
                                 while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
                                     $course_id=$course[5];
                                     $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
@@ -132,7 +133,7 @@ else {
 
                                         <td class="text-center">
                                             <div class="btn-group" role="group" >
-                                                <a class="btn btn-info" href="A_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> Unenroll</a>
+                                                <a data-regno="<?=$student_reg_no?>" data-course="<?=$course_id?>" class="enroll_view btn btn-info" > Unenroll</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -242,6 +243,37 @@ else {
         </div>
     </footer>
 
+    <div class="modal fade" id="academic_level_view">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div id="modal_head_div" class="modal-header">
+                    <h4 id="al_title" class="modal-title">Are you sure?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
+                        </div>
+                        <div class="col-lg-4 ">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="copyright py-4 text-center text-white">
         <div class="container">
             <small>Copyright &copy; EMPLUP 2018</small>
@@ -283,6 +315,35 @@ else {
     </script>
 
 <?php } ?>
+
+
+<script type="text/javascript">
+
+
+    $(document.body).on('click', '.enroll_view' ,function()
+    {
+
+        regno = $(this).data('regno');
+        course = $(this).data('course');
+
+
+
+
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
+
+
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='A_enroll_unenroll.php?course='+course+'?regno='+regno;
+        });
+
+        $('#academic_level_view').modal('show');
+
+
+    });
+
+
+</script>
+
 
 </body>
 
