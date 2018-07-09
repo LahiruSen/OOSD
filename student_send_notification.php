@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             <div class="row text-center">
                 <div class="col-lg-12  col-xl-12">
-                    <h3 class="text-center text-uppercase text-secondary mb-0">Create New</h3>
+                    <h3 class="text-center text-uppercase text-secondary mb-0">Select Student(s)</h3>
                     <hr class="star-dark mb-5">
                     <div id="two_step_submission_form" class="two_step_form"  >
                         <div class="container">
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                                     <div class="row m-2">
                                         <div class=" form-group col-lg-12 col-md-12">
                                             <label class="text-dark" for="title">Title</label>
-                                            <input  class="text-dark" value="<?= $title ?>" readonly >
+                                            <input id="title" name="title" class="text-dark" value="<?= $title ?>" readonly >
 
                                         </div>
                                     </div>
