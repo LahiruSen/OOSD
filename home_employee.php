@@ -219,12 +219,7 @@ else {
             </div>
         </div>
 
-        <div class="text-center mt-4">
-            <a class="btn btn-xl btn-outline-light" href="#">
-                <i class="fa fa-info mr-2"></i>
-                Read More
-            </a>
-        </div>
+        
     </div>
 </section>
 

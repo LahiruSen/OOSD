@@ -72,13 +72,13 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
        // die();
         $result1->free();
     }else{
-        $_SESSION['message'] = "Err2:1 There are no courses available";
+        $_SESSION['message'] = "There are no courses available";
         header("location:error.php");
     }
 
 
 }else{
-    $_SESSION['message'] = "Err2 There are no courses available";
+    $_SESSION['message'] = "There are no courses available";
     header("location:error.php");
 }
 
@@ -114,11 +114,11 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                         $ay_start=$results4->fetch_object()->from_date;
                     }
                 else{
-                        $_SESSION['message'] = "Err3:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
                 }else{
-                    $_SESSION['message'] = "Err3 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -127,12 +127,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                     if($results5->num_rows){
                         $deadline=$results5->fetch_object()->deadline;
                     }else{
-                        $_SESSION['message'] = "Err4:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
 
                 }else{
-                    $_SESSION['message'] = "Err4 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -158,13 +158,13 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                             }
                             $results->free();
                         }else{
-                            $_SESSION['message'] = "Err5:1 There are no courses available";
+                            $_SESSION['message'] = "There are no courses available";
                             header("location:error.php");
                         }
 
                     }
                 }else{
-                    $_SESSION['message'] = "Err5 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -183,11 +183,11 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                    }
 
                 else{
-                        $_SESSION['message'] = "Err6:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
                 }else{
-                    $_SESSION['message'] = "Err6 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -195,11 +195,11 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                     if($results5->num_rows) {
                         $deadline = $results5->fetch_object()->deadline;
                     } else{
-                        $_SESSION['message'] = "Err7:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
                 }else{
-                    $_SESSION['message'] = "Err7 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -231,7 +231,7 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
 
                     }
                 }else{
-                    $_SESSION['message'] = "Err8 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
             }
@@ -255,7 +255,7 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                     $result2->free();
                 }
             }else{
-                $_SESSION['message'] = "Err9 There are no courses available";
+                $_SESSION['message'] = "There are no courses available";
                 header("location:error.php");
             }
             $level_id_1 = $records2[0]->id;
@@ -273,12 +273,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                 if($results4->num_rows){
                     $ay_start=$results4->fetch_object()->from_date;
                 }else{
-                    $_SESSION['message'] = "Err10:1 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
             }else{
-                $_SESSION['message'] = "Err10 There are no courses available";
+                $_SESSION['message'] = "There are no courses available";
                 header("location:error.php");
             }
 
@@ -287,12 +287,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                 if($results5->num_rows){
                     $deadline=$results5->fetch_object()->deadline;
                 }else{
-                    $_SESSION['message'] = "Err11 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
             }else{
-                $_SESSION['message'] = "Err11 There are no courses available";
+                $_SESSION['message'] = "There are no courses available";
                 header("location:error.php");
             }
 
@@ -321,12 +321,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                         }
                         $results->free();
                     }else{
-                        $_SESSION['message'] = "Err12:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
 
                 }else{
-                    $_SESSION['message'] = "Err12 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
 
@@ -338,12 +338,12 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
                         }
                         $results->free();
                     }else{
-                        $_SESSION['message'] = "Err13:1 There are no courses available";
+                        $_SESSION['message'] = "There are no courses available";
                         header("location:error.php");
                     }
 
                 }else{
-                    $_SESSION['message'] = "Err13 There are no courses available";
+                    $_SESSION['message'] = "There are no courses available";
                     header("location:error.php");
                 }
             }
@@ -353,7 +353,7 @@ if($result1 = $mysqli->query("SELECT registration_number,registered_ayear_id FRO
 
 }else
     {
-        $_SESSION['message'] = "Err14 There are no courses available";
+        $_SESSION['message'] = "There are no courses available";
         header("location:error.php");
     }
 
