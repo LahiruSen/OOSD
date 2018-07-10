@@ -111,7 +111,7 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
                 <th>Registration Number</th>
                 <th>Full Name</th>
                 <th>Marks</th>
-                <th>Attendance</th>
+<!--                <th>Attendance</th>-->
                 <th>Action</th>
             </tr>
             </thead>
@@ -154,25 +154,25 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
                    </td>
 
 
-                   <div class="container">
-                       <td><button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow2<?php echo $reg_no?>">View</button></td>
-                       <!--                           <a href=""> <input class="btn btn-success btn-block" type="submit" value="Edit Marks"></a>-->
-                       <div class="modal fade" id="popUpWindow2<?php echo $reg_no?>">
-                           <div class="modal-dialog modal-dialog-centered">
-                               <div class="modal-content">
-                                   <div class="modal-header bg-topfive">
-                                       <h3 class="modal-title">Attendance</h3>
-                                       <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                   </div>
-                                   <div class="modal-body" >
-
-                                       <p><?php echo $attendance?></p>
-
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
+<!--                   <div class="container">-->
+<!--                       <td><button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#popUpWindow2--><?php //echo $reg_no?><!--">View</button></td>-->
+<!--                       <!--                           <a href=""> <input class="btn btn-success btn-block" type="submit" value="Edit Marks"></a>-->-->
+<!--                       <div class="modal fade" id="popUpWindow2--><?php //echo $reg_no?><!--">-->
+<!--                           <div class="modal-dialog modal-dialog-centered">-->
+<!--                               <div class="modal-content">-->
+<!--                                   <div class="modal-header bg-topfive">-->
+<!--                                       <h3 class="modal-title">Attendance</h3>-->
+<!--                                       <button type="button" class="close" data-dismiss="modal">&times;</button>-->
+<!--                                   </div>-->
+<!--                                   <div class="modal-body" >-->
+<!---->
+<!--                                       <p>--><?php //echo $attendance?><!--</p>-->
+<!---->
+<!--                                   </div>-->
+<!--                               </div>-->
+<!--                           </div>-->
+<!--                       </div>-->
+<!--                   </div>-->
 <!--                   <td>-->
                    <div class="container">
                    <td>

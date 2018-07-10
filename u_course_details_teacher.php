@@ -159,6 +159,7 @@ list($hour,$min,$dsec)=explode(':',$time);
                                             <div class="form-group">
                                                 <input type="file" class="form-control" placeholder="Attachment" name="file">
                                             </div>
+                                            <h6 class="card-title">Deadline</h6>
                                             <div class="form-group">
                                                 <input type="datetime-local" min="<?php echo $date.'T'.$hour.':'.$min ;?>" max="2020-12-31T23:59:59" class="form-control" placeholder="Deadline" name="deadline" required>
                                             </div>
