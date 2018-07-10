@@ -130,16 +130,17 @@ else {
 
 
                 <h1 class="display-4">What do employees get?</h1>
-                <p class="lead">Please some one give brief introduction in here [TASK]</p>
+                <p class="lead"> Online Employee management system is the simpler and faster way to do manage all academic and non-academic works.</p>
                 <hr class="my-4">
-                <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 1 [TASK]</p>
-                <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 2 [TASK]</p>
-                <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 3 [TASK]</p>
-                <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 4 [TASK]</p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i><strong>   Complement Communication</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i><strong>  Leave policy awareness</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i><strong>  Precise and accurate information</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i><strong> Transparency of Leave system</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i><strong>  Manage and keep track of student registration</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i> <strong>  Visibility of employee availability</strong></p>
+                <p class="bg-topfive-text"><i class="fa fa-circle"></i> <strong>  Assures compliance to leave policy</strong></p>
 
-                <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-                </p>
+
 
 
             </div>

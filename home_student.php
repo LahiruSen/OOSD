@@ -127,16 +127,14 @@ if($two_step==1)
 
 
                     <h1 class="display-4">What do Student get?</h1>
-                    <p class="lead">Please some one give brief introduction in here [TASK]</p>
-                    <hr class="my-4">
-                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 1 [TASK]</p>
-                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 2 [TASK]</p>
-                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 3 [TASK]</p>
-                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Point 4 [TASK]</p>
 
-                    <p class="lead">
-                        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-                    </p>
+                    <hr class="my-4">
+                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Online course registrations</p>
+                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Online assignments submissions </p>
+                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Online scholarship submission</p>
+                    <p class="bg-topfive-text"><i class="fa fa-circle"></i>   Online grades viewing</p>
+
+
 
 
                 </div>

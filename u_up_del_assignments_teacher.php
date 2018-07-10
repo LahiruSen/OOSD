@@ -136,7 +136,7 @@ $assignment_query_2=$mysqli->query("SELECT * FROM assignments WHERE course_id='$
                         <a href="u_assignment_session.php?assignment_id=<?php echo $asignment[0]?>&assignment_title=<?php echo $asignment[5]?>"> <input class="btn btn-dark btn-block" type="submit" value="View Assignment"></a>
 
                     </div>
-                </div>
+                </div><br>
 
                         <?php
                     }
