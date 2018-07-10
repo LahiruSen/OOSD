@@ -21,6 +21,15 @@ $hash = $mysqli->escape_string( md5( rand(0,1000) ) );
 $date_of_create= $mysqli->escape_string( date("Y-m-d H:i:s"));
 $date_of_update= $mysqli->escape_string( date("Y-m-d H:i:s"));
 
+
+
+if(strlen($_POST['password']) <8)
+{
+
+    $_SESSION['message'] = 'Password should have at least 8 characters ';
+    header("location: error.php");
+
+}
 // Check if user with that email already exists
 $result = $mysqli->query("SELECT * FROM users WHERE email='$email'") or die($mysqli->error());
 

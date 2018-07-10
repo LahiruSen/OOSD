@@ -97,14 +97,14 @@ if(isset($_SESSION['logged_in'])) {
                         <label>
                             First Name<span class="req">*</span>
                         </label>
-                        <input type="text" required autocomplete="off" name='firstname' />
+                        <input pattern="[A-Za-z]+" title="Can't have numbers and special characters" type="text" required autocomplete="off" name='firstname'  />
                     </div>
 
                     <div class="field-wrap">
                         <label>
                             Last Name<span class="req">*</span>
                         </label>
-                        <input type="text"required autocomplete="off" name='lastname' />
+                        <input pattern="[A-Za-z]+" type="text" required autocomplete="off" name='lastname' title="Can't have numbers and special characters" />
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@ if(isset($_SESSION['logged_in'])) {
                     <label>
                         Email Address<span class="req">*</span>
                     </label>
-                    <input type="email"required autocomplete="off" name='email' />
+                    <input type="email" required autocomplete="off" name='email' />
                 </div>
 
 
@@ -134,7 +134,7 @@ if(isset($_SESSION['logged_in'])) {
                         Set A Password<span class="req">*</span>
                     </label>
 
-                        <input  id="password" type="password" required autocomplete="off" name='password' aria-describedby="btnGroupAddon" />
+                        <input  id="password" type="password" required autocomplete="off" name='password' aria-describedby="btnGroupAddon" pattern=".{8,}" title="Should have atleast 8 charactors" />
                         <span id="passwordicon" class="fa fa-eye " style="color: white; float: right; margin-right: 10px;margin-top: -24px; position: relative;z-index: 2;" ></span>
                 </div>
 

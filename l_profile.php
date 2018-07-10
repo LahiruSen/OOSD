@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                 <div class="form-group col-lg-6 col-md-6">
                                     <label class="text-dark" for="last_name">New password</label>
-                                    <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" required>
+                                    <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" title="Should have atleast 8 charactors" required>
                                     <?php if(isset($error_array) && array_key_exists('new_password',$error_array))  {?>
                                         <div class="row">
                                             <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                 <div class="form-group col-lg-6 col-md-6">
                                     <label class="text-dark" for="email">Confirm Password</label>
-                                    <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" placeholder="min 8 characters"    required>
+                                    <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" title="Should have atleast 8 charactors" placeholder="min 8 characters"    required>
                                     <?php if(isset($error_array) && array_key_exists('confirm_password',$error_array))  {?>
                                         <div class="row">
                                             <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -489,7 +489,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                     <div class="form-group col-lg-6 col-md-6">
                                         <label class="text-dark" for="last_name">New password</label>
-                                        <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" required>
+                                        <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" title="Should have atleast 8 charactors" required>
                                         <?php if(isset($error_array) && array_key_exists('new_password',$error_array))  {?>
                                             <div class="row">
                                                 <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -503,7 +503,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
                                     <div class="form-group col-lg-6 col-md-6">
                                         <label class="text-dark" for="email">Confirm Password</label>
-                                        <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" placeholder="min 8 characters"    required>
+                                        <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" placeholder="min 8 characters" title="Should have atleast 8 charactors"   required>
                                         <?php if(isset($error_array) && array_key_exists('confirm_password',$error_array))  {?>
                                             <div class="row">
                                                 <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">

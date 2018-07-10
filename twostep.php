@@ -437,7 +437,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="full_name">Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name" required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['full_name'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name" required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['full_name'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
 
                                 <?php if(isset($error_array) && array_key_exists('full_name',$error_array))  {?>
                                     <div class="row">
@@ -515,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_1">Address Line 1</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_1'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input  pattern="[A-Za-z1-9 ]+" title="Can't have  special characters" class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_1'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -531,7 +531,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_2">Address Line 2</label>
-                                <input class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_2'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z1-9 ]+" title="Can't have special characters" class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['address_line_2'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -561,7 +561,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="city">City</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['city'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z1-9 ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($employee_data)) {echo 'value="'.$employee_data['city'].'"';}} ?> <?php if(isset($employee_data)){if($employee_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('city',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -743,7 +743,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="full_name">Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name"  required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['full_name'].'"';}} ?><?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?>  >
+                                <input pattern="[A-Za-z ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="full_name" name="full_name"  required <?php if(isset($old)){echo 'value="'.$old['full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['full_name'].'"';}} ?><?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?>  >
                                 <?php if(isset($error_array) && array_key_exists('full_name',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -816,7 +816,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="father_full_name">Father's Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('father_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="father_full_name" name="father_full_name" required <?php if(isset($old)){echo 'value="'.$old['father_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['father_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('father_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="father_full_name" name="father_full_name" required <?php if(isset($old)){echo 'value="'.$old['father_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['father_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('father_full_name',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -832,7 +832,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="mother_full_name">Mother's Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('mother_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="mother_full_name" name="mother_full_name" required <?php if(isset($old)){echo 'value="'.$old['mother_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['mother_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('mother_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="mother_full_name" name="mother_full_name" required <?php if(isset($old)){echo 'value="'.$old['mother_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['mother_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('mother_full_name',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -855,7 +855,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_1">Address Line 1</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>"type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_1'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z1-9 ]+" title="Can't special characters" class="<?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  { echo('text-danger');} ?>"type="text" id="add_line_1" name="add_line_1" required <?php if(isset($old)){echo 'value="'.$old['add_line_1'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_1'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_1',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -871,7 +871,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="add_line_2">Address Line 2</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_2'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z1-9 ]+" title="Can't special characters" class="<?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  { echo('text-danger');} ?>" type="text" id="add_line_2" name="add_line_2" required <?php if(isset($old)){echo 'value="'.$old['add_line_2'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['address_line_2'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('add_line_2',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -900,7 +900,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                             </div>
                             <div class="form-group col-lg-6 col-md-6">
                                 <label class="text-dark" for="city">City</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['city'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z1-9 ]+" title="Can't special characters" class="<?php if(isset($error_array) && array_key_exists('city',$error_array))  { echo('text-danger');} ?>" type="text" id="city" name="city" required <?php if(isset($old)){echo 'value="'.$old['city'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['city'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('city',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
@@ -932,7 +932,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
                         <div class="row m-2">
                             <div class="form-group col-lg-12 col-md-12">
                                 <label class="text-dark" for="cp_full_name">Contact Person's Full Name</label>
-                                <input  class="<?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="cp_full_name" name="cp_full_name" required <?php if(isset($old)){echo 'value="'.$old['cp_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['contact_person_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
+                                <input pattern="[A-Za-z ]+" title="Can't have numbers and special characters" class="<?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  { echo('text-danger');} ?>" type="text" id="cp_full_name" name="cp_full_name" required <?php if(isset($old)){echo 'value="'.$old['cp_full_name'].'"';}else{if(isset($student_data)) {echo 'value="'.$student_data['contact_person_full_name'].'"';}} ?> <?php if(isset($student_data)){if($student_data['is_locked'] == 1){echo ('readonly');}}?> >
                                 <?php if(isset($error_array) && array_key_exists('cp_full_name',$error_array))  {?>
                                     <div class="row">
                                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
