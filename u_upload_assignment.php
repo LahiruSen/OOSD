@@ -26,7 +26,7 @@ $string = str_replace(".", "", substr($string, 0, $lastDot)) . substr($string, $
 
 $today = date("Y-m-d H:i:s");
 
-if(preg_match("/^[a-zA-Z0-9]*$/", $title)){
+if(preg_match("/^[a-zA-Z0-9 ]*$/", $title)){
 
     $sql="INSERT INTO assignments(course_id,description, attachment_link,title,date_of_deadline,date_of_update, date_of_create) VALUES ('$course_id','$description','$string','$title','$deadline','$today','$today')";
 

@@ -121,7 +121,7 @@ $student_query=$mysqli->query("SELECT * FROM course_registration WHERE course_id
         <table class="table table-striped text-center">
             <thead>
             <tr class="text-white bg-dark" style="border: dimgray solid 10px; border-radius: 1px">
-                <th>Registration Number/th>
+                <th>Registration Number</th>
                 <th>Full Name</th>
             </tr>
             </thead>
