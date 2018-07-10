@@ -236,7 +236,7 @@ else {
                                                                 <?php }else { ?>
 
                                                                     <div class="btn-group" role="group" >
-                                                                        <a  data-id="<?= $sd[0]['id'] ?>"  class=" a_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">Calculate</a>
+                                                                        <a  data-id="<?= $sd[0]['id'] ?>"  class=" ay_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">Calculate</a>
                                                                     </div>
 
                                                                 <?php } ?>
