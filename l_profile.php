@@ -124,6 +124,18 @@ elseif($_SESSION['active'] != 1)
 
 
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+
+
+
+        require 'l_profile_reset_password.php';
+
+
+
+}
 ?>
 
 
@@ -186,9 +198,56 @@ elseif($_SESSION['active'] != 1)
 <?php if($types == 1) { ?>
     <section style="padding:10px;" id="portfolio">
         <div class="container ">
-            <form id="two_step_submission_form" class="two_step_form" action="twostep.php" method="post">
+            <div id="two_step_submission_form" class="two_step_form" >
 
                 <div class="container">
+
+                    <div class="text-left">
+
+                        <form action="l_profile.php" method="post">
+                            <div id="form_section_header" class="bg-topfive">
+                                <h2> Change Password </h2>
+                            </div>
+
+                            <div class="row m-2">
+
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label class="text-dark" for="last_name">New password</label>
+                                    <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" required>
+                                    <?php if(isset($error_array) && array_key_exists('new_password',$error_array))  {?>
+                                        <div class="row">
+                                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                <small id="passwordHelp" class="text-danger">
+                                                    <?= $error_array['new_password'] ?>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
+                                <div class="form-group col-lg-6 col-md-6">
+                                    <label class="text-dark" for="email">Confirm Password</label>
+                                    <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" placeholder="min 8 characters"    required>
+                                    <?php if(isset($error_array) && array_key_exists('confirm_password',$error_array))  {?>
+                                        <div class="row">
+                                            <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                <small id="passwordHelp" class="text-danger">
+                                                    <?= $error_array['confirm_password'] ?>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="text-center m-2">
+                                <button name="changepsw" type="submit" class="btn btn-xl btn-outline-primary" >Submit</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+
                     <div class="text-left">
                         <div id="form_section_header" class="bg-topfive">
                             <h2> Basic Information </h2>
@@ -210,37 +269,6 @@ elseif($_SESSION['active'] != 1)
                             </div>
                         </div>
                     </div>
-
-                    <div class="text-left">
-                        <div id="form_section_header" class="bg-topfive">
-                            <h2> Reset Password </h2>
-                        </div>
-
-                        <div class="row m-2">
-                            <div class="form-group col-lg-12 col-md-12">
-                                <label class="text-dark" for="email">Old Password</label>
-                                <input type="text" style="background-color: #e6e9ee" id="old_password" name="old_password" class="input-active"  >
-                            </div>
-                        </div>
-
-                        <div class="row m-2">
-                            <div class="form-group col-lg-6 col-md-6">
-                                <label class="text-dark" for="first_name">New Password</label>
-                                <input type="text" style="background-color: #e6e9ee" id="new_paasowrd" name="new_password" class="input-active" >
-                            </div>
-                            <div class="form-group col-lg-6 col-md-6">
-                                <label class="text-dark" for="last_name">Re-Enter New Password</label>
-                                <input type="text" style="background-color: #e6e9ee" id="new_password1" name="new_password1" class="input-active" >
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-
-
-
 
 
 
@@ -444,9 +472,56 @@ elseif($_SESSION['active'] != 1)
 
     <section style="padding:10px;" id="portfolio">
         <div class="container ">
-            <form id="two_step_submission_form" class="two_step_form" action="twostep.php" method="post">
+            <div id="two_step_submission_form" class="two_step_form" >
 
                 <div class="container">
+
+                    <div class="container">
+
+                        <div class="text-left">
+
+                            <form action="l_profile.php" method="post">
+                                <div id="form_section_header" class="bg-topfive">
+                                    <h2> Change Password </h2>
+                                </div>
+
+                                <div class="row m-2">
+
+                                    <div class="form-group col-lg-6 col-md-6">
+                                        <label class="text-dark" for="last_name">New password</label>
+                                        <input type="password"  id="new_password" name="new_password" class="input-active" pattern=".{8,}" placeholder="min 8 characters" required>
+                                        <?php if(isset($error_array) && array_key_exists('new_password',$error_array))  {?>
+                                            <div class="row">
+                                                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <small id="passwordHelp" class="text-danger">
+                                                        <?= $error_array['new_password'] ?>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-md-6">
+                                        <label class="text-dark" for="email">Confirm Password</label>
+                                        <input type="password"  id="confirm_password" name="confirm_password" oninput="check(this)" class="input-active" pattern=".{8,}" placeholder="min 8 characters"    required>
+                                        <?php if(isset($error_array) && array_key_exists('confirm_password',$error_array))  {?>
+                                            <div class="row">
+                                                <div class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <small id="passwordHelp" class="text-danger">
+                                                        <?= $error_array['confirm_password'] ?>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="text-center m-2">
+                                    <button name="changepsw" type="submit" class="btn btn-xl btn-outline-primary" >Submit</button>
+                                </div>
+
+                            </form>
+                        </div>
+
                     <div class="text-left">
                         <div id="form_section_header" class="bg-topfive">
                             <h2> Basic Information </h2>
@@ -735,7 +810,7 @@ elseif($_SESSION['active'] != 1)
                     </div>
                 </div>
 
-            </form>
+            </div>
         </div>
     </section>
 <?php }
@@ -841,7 +916,16 @@ else
 <!-- Custom scripts for this template -->
 <script src="js/freelancer.js"></script>
 
-
+<script language='javascript' type='text/javascript'>
+    function check(input) {
+        if (input.value != document.getElementById('new_password').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
+</script>
 
 
 </body>

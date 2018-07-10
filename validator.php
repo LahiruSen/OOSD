@@ -472,6 +472,38 @@ function deadline_validator($from_date,$to_date,$deadline)
 
 }
 
+function password_matching_validator($pass,$cpass)
+{
+    if($pass == $cpass)
+    {
+
+        return "Y";
+    }
+    else
+    {
+        return "Password should be matched";
+
+    }
+
+}
+
+
+
+function password_character_matching_validator($pass)
+{
+    if(strlen($pass)>=8)
+    {
+
+        return "Y";
+    }
+    else
+    {
+        return "Password should have at least 8 character";
+
+    }
+
+}
+
 function academic_year_for_level_validator($academic_year_id,$mysqli)
 {
     if(isset($academic_year_id) )

@@ -55,7 +55,40 @@ else {
 
     </div>
 
-<?php } else { ?>
+<?php } else {
+
+
+if($two_step==1)
+{
+    $user_id =  $_SESSION['user_id'];
+
+    $messager_result = $mysqli->query("SELECT title,description FROM notifications WHERE target_user_ids='$user_id' and delete_receiver='0' ORDER BY date_of_create DESC LIMIT 5");
+
+    if($messager_result->num_rows>0)
+    {
+        $meesages = array();
+
+        while($row=$messager_result->fetch_assoc())
+        {
+            $meesages[] =$row;
+        }
+
+    }else
+    {
+
+        $meesages = array();
+
+
+    }
+
+
+
+
+
+
+
+}
+    ?>
 
 
     <!-- Navigation -->
@@ -110,10 +143,8 @@ else {
                 <div class=" col-lg-6">
                     <div class="card card-style">
                         <div class="card-header bg-topfive">
-                            <h3 class="card-header-pills">News</h3>
+                            <h3 class="card-header-pills">Messages</h3>
                         </div>
-
-
                         <div class="card-body">
 
                             <?php if($_SESSION['two_step'] == 0) { ?>
@@ -125,20 +156,42 @@ else {
                                     </div>
 
                                 </div>
-                            <?php }else{ ?>
+                            <?php }else { ?>
 
-                        <?php } ?>
+                                <?php if (count($meesages) > 0) {
+                                    $xi =0;
+                                    foreach ($meesages as $m) { $xi++;  ?>
+                                        <div class="card">
+                                            <div class="card-header bg-secondary">
+                                                <h5 class="text-white"><?= $xi ?>. <?= $m['title'] ?></h5>
+                                            </div>
+                                            <div class="card-body m-2">
+                                                <div class="row">
+                                                    <p class="bg-topfive-text"><?= $m['description'] ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php }
+                                } else { ?>
+                                    <div class="row topfive-margin">
+                                        <div class="col-lg-12">
+
+                                            <h2>No messages to display</h2>
+
+                                        </div>
+
+                                    </div>
+
+                                <?php }
+                            }?>
 
                         </div>
 
-
-
                         <?php if($_SESSION['two_step'] != 0) { ?>
                             <div class="card-footer text-muted">
-                                <button class="btn btn-primary text-white btn-md">More</button>
+                                <a href="notification_list_inbox.php"><button class="btn btn-primary text-white btn-md">More</button></a>
                             </div>
                         <?php } ?>
-
                     </div>
                 </div>
             </div>
