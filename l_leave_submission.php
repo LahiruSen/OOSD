@@ -40,11 +40,11 @@ if ($_SESSION['logged_in'] != 1) {
                 die();
             }
 
-            if (!preg_match("/^[a-zA-Z0-9 ]*$/", $description)) {
-                $_SESSION['message'] = "Description can only contain letters and numbers";
-                header("location: error.php");
-                die();
-            }
+//            if (!preg_match("/^[a-zA-Z0-9. ]*$/", $description)) {
+//                $_SESSION['message'] = "Description can only contain letters and numbers";
+//                header("location: error.php");
+//                die();
+//            }
 
 
 
@@ -191,7 +191,7 @@ if ($_SESSION['logged_in'] != 1) {
             <label>
                 Description<span class="req">*</span>
             </label>
-            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50" pattern="[A-Za-z]" required></textarea>
+            <textarea name='description' value='Please describe the reason briefly.' rows="4" cols="50" pattern="[A-Za-z ]+" required></textarea>
             <label>
                 Start Date<span class="req">*</span>
             </label>
@@ -217,18 +217,16 @@ if ($_SESSION['logged_in'] != 1) {
             <hr class="star-light mb-5">
             <div class="row">
                 <div class="col-lg-4 ml-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
+                    <h4>Our Vision</h4>
+                    <p class="lead">To become the most efficient training providing organization effectively contributing to achieve prosperity in Sri Lanka through Human Resource Development.</p>
                 </div>
                 <div class="col-lg-4 mr-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
+                    <h4>Our Mission</h4>
+                    <p class="lead">Providing vocational and Technical Training for youth, to acquire employable skills through well formulated skills programs with highest professional Standards to meet the skilled manpower requirement in the industry.</p>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a class="btn btn-xl btn-outline-light" href="#">
-                    <i class="fa fa-info mr-2"></i>
-                    Read More
-                </a>
-            </div>
+
+
         </div>
     </section>
 
