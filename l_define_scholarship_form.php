@@ -135,11 +135,11 @@ else {
                         <label class="text-dark" size="10">
                             Title<span class="req">*</span>
                         </label>
-                        <input type="text" class="text-dark border-dark"   name="title"/>
+                        <input type="text" class="text-dark border-dark"   name="title" required/>
                         <label class="text-dark">
                             Description<span class="req">*</span>
                         </label>
-                        <textarea class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
+                        <textarea required class="border-dark"  name='description'value= 'Please describe the reason briefly.'rows="4" cols="50"></textarea>
                         </div>
                         <button class="btn btn-dark btn-block " />Submit </button>
                     </form>
@@ -397,7 +397,50 @@ else
     </script>
 
 <?php } ?>
+<script type="text/javascript">
 
+
+    $(document).ready(function() {
+        setInterval(function(){getMessage()}, 10000);
+
+    });
+
+    function getMessage() {
+
+        $.ajax({
+            type: 'get',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {user_id: '<?= $_SESSION['user_id'] ?>'},
+            success: function (data) {
+
+
+                if(data =='0'){
+
+                    $('#unseen_count').html('');
+                    $('#user_logo').css({"border-color": '', "border-style": '',"border-size": '',"border-radius": ''});
+
+                }else
+                {
+
+                    $('#unseen_count').html("  "+data);
+                    $('#user_logo').css({"border-color": "orangered", "border-style": "solid","border-size": "2px","border-radius": "25px"});
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+
+            }
+        });
+
+    }
+
+
+
+
+</script>
 </body>
 </html>
 

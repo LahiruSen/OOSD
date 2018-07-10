@@ -15,7 +15,8 @@ $name='';
     $student=$student_query->fetch_assoc();
 
     $student_reg_no=$student['registration_number'];
-    $course_query_student=$mysqli->query("SELECT course_id FROM course_registration WHERE registration_number='$student_reg_no' and is_approved=0 ");
+
+    $course_query_student=$mysqli->query("SELECT * FROM course_registration WHERE registration_number='$student_reg_no' and is_approved=0 ");
 
 
 

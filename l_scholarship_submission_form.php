@@ -27,6 +27,35 @@ else {
 
     }
 
+$result_user = $mysqli->query("SELECT id FROM users WHERE email='$email'");
+
+if ( $result_user->num_rows == 0 ) // User doesn't exist
+{
+    $_SESSION['message'] = "This user detail doesn't exist in the system.";
+    header("location: error.php");
+    die();
+}
+else { // User exists (num_rows != 0)
+
+$result_user_array = $result_user->fetch_assoc(); // $user becomes array with user data
+
+$user_id = $result_user_array['id'];
+$result_registration_number = $mysqli->query("SELECT registration_number FROM student_data WHERE user_id='$user_id' " );}
+
+if($result_registration_number->num_rows==0){
+    $_SESSION['message']="This student's details doesn't exist in the system.";
+    header("location: error.php");
+    die();
+}
+else{
+    $registration_num_array = $result_registration_number->fetch_assoc();
+    $registration_num = $registration_num_array['registration_number'];}
+
+
+
+
+
+
     $result = $mysqli->query("SELECT id,title FROM scholarships") ;//or die($mysqli->error());
 
     if ( $result->num_rows == 0 ) // Scholarships are not available
@@ -49,7 +78,7 @@ else {
 
 
 
-    } } ?>
+    }  }?>
 
 
 
@@ -114,10 +143,10 @@ else {
     <form action="l_scholarship_submission.php" method="post" enctype="multipart/form-data">
         <div class="field-wrap">
             First Name              :<br>
-            <input type="text" name="first_name" pattern="[A-Za-z]" required>
+            <input type="text" name="first_name" value="<?php echo $first_name?>" readonly required>
             <br>
             Registration Number     :<br>
-            <input type="number" name = "registration_number" maxlength=10 required>
+            <input type="number" name = "registration_number" value="<?php echo $registration_num ?>" readonly maxlength=10 required>
             Select the scholarship   :<br>
 
             <select name="list" required>
@@ -284,7 +313,50 @@ else {
     </script>
 
 <?php } ?>
+<script type="text/javascript">
 
+
+    $(document).ready(function() {
+        setInterval(function(){getMessage()}, 10000);
+
+    });
+
+    function getMessage() {
+
+        $.ajax({
+            type: 'get',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {user_id: '<?= $_SESSION['user_id'] ?>'},
+            success: function (data) {
+
+
+                if(data =='0'){
+
+                    $('#unseen_count').html('');
+                    $('#user_logo').css({"border-color": '', "border-style": '',"border-size": '',"border-radius": ''});
+
+                }else
+                {
+
+                    $('#unseen_count').html("  "+data);
+                    $('#user_logo').css({"border-color": "orangered", "border-style": "solid","border-size": "2px","border-radius": "25px"});
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+
+            }
+        });
+
+    }
+
+
+
+
+</script>
 </body>
 
 </html>

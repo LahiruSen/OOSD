@@ -114,7 +114,8 @@ else {
 
 
 
-                                <?php require "u_search_courses.php";
+                                <?php require "A_search_courses.php";
+
                                 while ($course = mysqli_fetch_array($course_query_student,MYSQLI_NUM)) {
                                     $course_id=$course[5];
                                     $result5=$mysqli->query("SELECT * FROM courses WHERE course_id='$course_id'");
@@ -124,7 +125,12 @@ else {
                                     $level_query=$mysqli->query("SELECT * FROM level WHERE id='$level_id'");
                                     $level=$level_query->fetch_assoc();
 
+                                    $current_date = date('Y-m-d H:i:s');
+                                    $deadline=$level['deadline'];
+
+                                    $interval = strtotime($deadline)-strtotime($current_date);
                                     ?>
+                                    <?php if($interval>=0){?>
                                     <tr>
                                         <td class="text-success font-weight-bold"><?php echo $level['title'];?></td>
                                         <td class="text-success font-weight-bold"><?php echo $my_course['title'];?></td>
@@ -132,11 +138,12 @@ else {
 
                                         <td class="text-center">
                                             <div class="btn-group" role="group" >
-                                                <a class="btn btn-info" href="A_course_session_setup.php?course_id=<?php echo $my_course['course_id'];?>&course_title=<?php echo $my_course['title'];?>"> Unenroll</a>
+                                                <a data-regno="<?=$student_reg_no?>" data-course="<?=$course_id?>" class="enroll_view btn btn-info" > Unenroll</a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <?php
+
+                                    <?php }
                                 }
 
                                 ?>
@@ -155,20 +162,19 @@ else {
             <hr class="star-light mb-5">
             <div class="row">
                 <div class="col-lg-4 ml-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description left]</p>
+                    <h4>Our Vision</h4>
+                    <p class="lead">To become the most efficient training providing organization effectively contributing to achieve prosperity in Sri Lanka through Human Resource Development.</p>
                 </div>
                 <div class="col-lg-4 mr-auto">
-                    <p class="lead">Basic introduction about the web site goes here! {description right</p>
+                    <h4>Our Mission</h4>
+                    <p class="lead">Providing vocational and Technical Training for youth, to acquire employable skills through well formulated skills programs with highest professional Standards to meet the skilled manpower requirement in the industry.</p>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a class="btn btn-xl btn-outline-light" href="#">
-                    <i class="fa fa-info mr-2"></i>
-                    Read More
-                </a>
-            </div>
+
+
         </div>
     </section>
+
 
 <?php if($_SESSION['two_step'] == 0) { ?>
     <div class="modal fade" id="completeProfile">
@@ -242,6 +248,37 @@ else {
         </div>
     </footer>
 
+    <div class="modal fade" id="academic_level_view">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div id="modal_head_div" class="modal-header">
+                    <h4 id="al_title" class="modal-title">Are you sure?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <a href="" id="al_delete_btn"  class="btn btn-danger" data-dismiss="modal">Delete</a>
+                        </div>
+                        <div class="col-lg-4 ">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="copyright py-4 text-center text-white">
         <div class="container">
             <small>Copyright &copy; EMPLUP 2018</small>
@@ -283,6 +320,78 @@ else {
     </script>
 
 <?php } ?>
+
+
+<script type="text/javascript">
+
+
+    $(document.body).on('click', '.enroll_view' ,function()
+    {
+
+        regno = $(this).data('regno');
+        course = $(this).data('course');
+
+
+
+
+        $('#academic_level_view #modal_head_div').addClass('bg-primary');
+
+
+        $('#academic_level_view #al_delete_btn').click(function(){
+            window.location.href='A_enroll_unenroll.php?course='+course+'&regno='+regno;
+        });
+
+        $('#academic_level_view').modal('show');
+
+
+    });
+
+
+</script>
+<script type="text/javascript">
+
+
+    $(document).ready(function() {
+        setInterval(function(){getMessage()}, 10000);
+
+    });
+
+    function getMessage() {
+
+        $.ajax({
+            type: 'get',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {user_id: '<?= $_SESSION['user_id'] ?>'},
+            success: function (data) {
+
+
+                if(data =='0'){
+
+                    $('#unseen_count').html('');
+                    $('#user_logo').css({"border-color": '', "border-style": '',"border-size": '',"border-radius": ''});
+
+                }else
+                {
+
+                    $('#unseen_count').html("  "+data);
+                    $('#user_logo').css({"border-color": "orangered", "border-style": "solid","border-size": "2px","border-radius": "25px"});
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+
+            }
+        });
+
+    }
+
+
+
+
+</script>
 
 </body>
 

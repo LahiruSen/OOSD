@@ -171,10 +171,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
                                         <div class="row m-2">
                                             <div class=" form-group col-lg-12 col-md-12">
-                                                <label class="text-dark" for="title">Corse ID</label>
+                                                <label class="text-dark" for="title">Course ID</label>
                                                 <input  class="text-dark <?php if(isset($error_array) && array_key_exists(
                                                         'course_id',$error_array))  { echo('text-danger');} ?>" type="text"
-                                                        id="course_id" name="course_id" required <?php if(isset($old)){
+                                                        id="course_id" name="course_id" required placeholder="CS2062" <?php if(isset($old)){
                                                     echo 'value="'.$old['course_id'].'"';}elseif(isset($selected)){
                                                     echo 'value="'.$selected['course_id'].'"';} ?> >
 
@@ -263,15 +263,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                             </div>
                                         </div>
 
+                                        <?php
+
+                                        $records1=array();
+
+                                        if($results2=$mysqli->query("SELECT id FROM level ")){
+                                        if($results2->num_rows){
+                                        while($row=$results2->fetch_object()){
+                                        $records1[]=$row;
+                                        }
+                                        $results2->free();
+                                        }
+                                        }
+
+                                        ?>
+
+
+
+                                        <?php $option2="<select name='level_id'>";foreach ($records1 as $r){
+
+                                            $is_select1="";
+                                            if(isset($old)){if ($old['level_id'] == $r->id) {$is_select1= "selected";}}else{if(isset($selected)) {if ($selected['level_id'] == $r->id) {$is_select1= "selected";}}}
+
+                                            $option2.='<option value="'.$r->id.'">'.$r->id.'</option>' ;
+                                        } ?>
+
+
+
 
                                         <div class="row m-2">
                                             <div class=" form-group col-lg-12 col-md-12">
-                                                <label class="text-dark" for="title">Level ID</label>
-                                                <input  class="text-dark <?php if(isset($error_array) && array_key_exists(
-                                                        'level_id',$error_array))  { echo('text-danger');}
-                                                        ?>" type="text" id="level_id" name="level_id" required
-                                                    <?php if(isset($old)){echo 'value="'.$old['level_id'].'"';}
-                                                    elseif(isset($selected)){echo 'value="'.$selected['level_id'].'"';} ?> >
+                                                <label class="text-dark" for="title">Level</label>
+
+                                                <?php
+                                                echo $option2.='</select>';
+                                                ?>
 
                                                 <?php if(isset($error_array) && array_key_exists('level_id',$error_array))  {?>
                                                     <div class="row">
@@ -286,14 +312,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
                                             </div>
                                         </div>
 
+                                        <?php
+                                        $records=array();
+
+                                        if($results=$mysqli->query("SELECT user_id,full_name FROM employee_data where employee_type_id=2")){
+                                            if($results->num_rows){
+                                                 while($row=$results->fetch_object()){
+                                                     $records[]=$row;
+                                                }
+                                            $results->free();
+                                            }
+                                        }
+
+                                         ?>
+
+
+
+                                                    <?php $option="<select name='assigned_teacher_id'>";foreach ($records as $r){
+
+                                                        $is_select="";
+                                                        if(isset($old)){if ($old['assigned_teacher_id'] == $r->user_id) {$is_select= "selected";}}else{if(isset($selected)) {if ($selected['assigned_teacher_id'] == $r->user_id) {$is_select= "selected";}}}
+
+                                                        $option.='<option value="'.$r->user_id.'">'.$r->full_name.'</option>' ;
+                                                    } ?>
+
+
+
+
+
+
                                         <div class="row m-2">
                                             <div class=" form-group col-lg-12 col-md-12">
-                                                <label class="text-dark" for="title">Assigned Teacher ID</label>
-                                                <input  class="text-dark <?php if(isset($error_array) && array_key_exists(
-                                                        'assigned_teacher_id',$error_array))  { echo('text-danger');}
-                                                        ?>" type="text" id="assigned_teacher_id" name="assigned_teacher_id" required
-                                                    <?php if(isset($old)){echo 'value="'.$old['assigned_teacher_id'].'"';}
-                                                    elseif(isset($selected)){echo 'value="'.$selected['assigned_teacher_id'].'"';} ?> >
+                                                <label class="text-dark" for="title">Assigned Teacher</label>
+
+                                                <?php
+                                                echo $option.='</select>';
+                                                ?>
 
                                                 <?php if(isset($error_array) && array_key_exists('assigned_teacher_id',$error_array))
                                                 {?>
@@ -769,6 +823,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET')
 
 </script>
 
+<script type="text/javascript">
+
+
+    $(document).ready(function() {
+        setInterval(function(){getMessage()}, 10000);
+
+    });
+
+    function getMessage() {
+
+        $.ajax({
+            type: 'get',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {user_id: '<?= $_SESSION['user_id'] ?>'},
+            success: function (data) {
+
+
+                if(data =='0'){
+
+                    $('#unseen_count').html('');
+                    $('#user_logo').css({"border-color": '', "border-style": '',"border-size": '',"border-radius": ''});
+
+                }else
+                {
+
+                    $('#unseen_count').html("  "+data);
+                    $('#user_logo').css({"border-color": "orangered", "border-style": "solid","border-size": "2px","border-radius": "25px"});
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+
+            }
+        });
+
+    }
+
+
+
+
+</script>
 
 </body>
 </html>

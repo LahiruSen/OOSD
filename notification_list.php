@@ -142,7 +142,7 @@ else {
                                             <td><?php if($sd['types']==1){ echo("Employee");}else{echo("Student");} ?></td>
                                               <td class="text-center">
                                                 <div class="btn-group" role="group" >
-                                                    <a data-id="<?= $sd['id'] ?>" data-title="<?= $sd['title'] ?>" data-email="<?= $sd['email'] ?>" data-description="<?= $sd['description'] ?>" class=" al_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">View</a>
+                                                    <a  data-id="<?= $sd['id'] ?>" data-title="<?= $sd['title'] ?>" data-email="<?= $sd['email'] ?>" data-description="<?= $sd['description'] ?>" class=" al_view w-100 btn list-group-item list-group-item-action text-dark btn-outline-primary font-weight-bold">View</a>
                                                  </div>
                                             </td>
 
@@ -278,6 +278,33 @@ else {
         </div>
     </div>
 
+    <div class="modal fade" id="academic_year_delete">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div id="modal_head_div" class="modal-header">
+                    <h4  class="modal-title"> Are you sure? </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <a href="" id="ay_delete_confirm_btn"  class="btn btn-outline-danger" >Delete</a>
+                        </div>
+                        <div class="col-lg-6 ">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aa8ad68cc6156e6"></script>
 
@@ -330,6 +357,7 @@ else {
 
 
 
+
         $('#academic_level_view #al_title').text(title);
         $('#academic_level_view #al_description').text(description);
         $('#academic_level_view #al_email').text(email);
@@ -339,7 +367,8 @@ else {
 
 
         $('#academic_level_view #al_delete_btn').click(function(){
-            window.location.href='notification_delete.php?id='+id;
+            $('#academic_year_delete #ay_delete_confirm_btn').attr('href','notification_delete.php?id='+id+'&types=sender');
+            $('#academic_year_delete').modal('show');
         });
 
         $('#academic_level_view').modal('show');
@@ -353,6 +382,50 @@ else {
 <!--custom-->
 
 
+<script type="text/javascript">
+
+
+    $(document).ready(function() {
+        setInterval(function(){getMessage()}, 10000);
+
+    });
+
+    function getMessage() {
+
+        $.ajax({
+            type: 'get',
+            url: 'message_count.php',
+            dataType:"html",
+            data: {user_id: '<?= $_SESSION['user_id'] ?>'},
+            success: function (data) {
+
+
+                if(data =='0'){
+
+                    $('#unseen_count').html('');
+                    $('#user_logo').css({"border-color": '', "border-style": '',"border-size": '',"border-radius": ''});
+
+                }else
+                {
+
+                    $('#unseen_count').html("  "+data);
+                    $('#user_logo').css({"border-color": "orangered", "border-style": "solid","border-size": "2px","border-radius": "25px"});
+
+                }
+
+
+            },
+            error: function(jqxhr, status, exception) {
+
+            }
+        });
+
+    }
+
+
+
+
+</script>
 
 </body>
 </html>

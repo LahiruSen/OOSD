@@ -133,6 +133,194 @@ function address_validator($val)
 
 }
 
+
+
+
+
+function course_id_validator($val)
+{
+
+    if(isset($val)) {
+
+
+        if (strlen($val) == 0) {
+            return "This is can not be empty!";
+        } else {
+            if(strlen($val)==6 && preg_match("/^[A-Z]{2}+[0-9]{4}/", $val)){
+                return "Y";
+
+            }else{
+                return "Invalid Course ID format!";
+            }
+
+        }
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function title_validator($val)
+{
+
+    if(isset($val)) {
+
+
+        if (strlen($val) == 0) {
+            return "This is can not be empty!";
+        } else {
+
+            if(preg_match("/^[A-Z]{1}/", $val)){
+                if(strlen($val)>3){
+                    return "Y";
+                }else{
+                    return "Please type something more";
+                }
+
+
+            }else{
+                return "Invalid course name!";
+            }
+        }
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function description_validator($val)
+{
+
+    if(isset($val)) {
+
+
+        if (strlen($val) == 0) {
+            return "This is can not be empty!";
+
+        } else {
+
+            if(preg_match("/^[A-Z]{1}/", $val)){
+                if(strlen($val) > 10){
+                    return "Y";
+
+                }else{
+                    return "Please add some more description!";
+                }
+
+            }else{
+                return "Invalid course description!";
+            }
+
+
+        }
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function credits_validator($val)
+{
+
+    if(isset($val)) {
+
+
+        if (strlen($val) == 0) {
+            return "This is can not be empty!";
+        } else {
+            if(is_numeric($val)){
+
+                    if($val<=5 && $val>=1){
+                        return "Y";
+                    }else{
+                        return "Enter numbers between 1 to 5";
+                    }
+
+                }else{
+                return "Enter numbers only";
+            }
+        }
+
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function working_hours_validator($val)
+{
+
+    if(isset($val)) {
+
+        if (strlen($val) == 0) {
+            return "This is can not be empty!";
+        } else {
+            if(is_numeric($val)){
+
+                    if($val>=10 && $val<=50){
+                        return "Y";
+                    }else{
+                        return "Enter numbers between 10 to 50";
+                    }
+
+            }else{
+                return "Enter numbers only";
+            }
+        }
+
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function level_validator($val)
+{
+
+    if(isset($val)) {
+
+        if ($val == "select") {
+            return "Select a level!";
+        }
+        else
+        {
+            return "Y";
+        }
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+function teacher_validator($val)
+{
+
+    if(isset($val)) {
+
+        if ($val == "select") {
+            return "Select a teacher name!";
+        }
+        else
+        {
+            return "Y";
+        }
+    } else
+    {
+        return "This input did not receive!";
+    }
+
+}
+
+
+
+
+
 //postal_code validator
 function postal_code_validator($val)
 {
@@ -281,6 +469,38 @@ function deadline_validator($from_date,$to_date,$deadline)
             return "Deadline is not in the academic year range!";
 
         }
+
+}
+
+function password_matching_validator($pass,$cpass)
+{
+    if($pass == $cpass)
+    {
+
+        return "Y";
+    }
+    else
+    {
+        return "Password should be matched";
+
+    }
+
+}
+
+
+
+function password_character_matching_validator($pass)
+{
+    if(strlen($pass)>=8)
+    {
+
+        return "Y";
+    }
+    else
+    {
+        return "Password should have at least 8 character";
+
+    }
 
 }
 

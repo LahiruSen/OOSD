@@ -68,13 +68,13 @@ $old['no_of_working_hours'] = $_POST['no_of_working_hours'];
 //validate post inputs
 $validation_result = array();
 
-$validation_result[] = array('course_id',address_validator($_POST['course_id']));
-$validation_result[] = array('title',address_validator($_POST['title']));
-$validation_result[] = array('description',address_validator($_POST['description']));
-$validation_result[] = array('credits',address_validator($_POST['credits']));
-$validation_result[] = array('level_id',address_validator($_POST['level_id']));
-$validation_result[] = array('assigned_teacher_id',address_validator($_POST['assigned_teacher_id']));
-$validation_result[] = array('no_of_working_hours',address_validator($_POST['no_of_working_hours']));
+$validation_result[] = array('course_id',course_id_validator($_POST['course_id']));
+$validation_result[] = array('title',title_validator($_POST['title']));
+$validation_result[] = array('description',description_validator($_POST['description']));
+$validation_result[] = array('credits',credits_validator($_POST['credits']));
+$validation_result[] = array('credits',level_validator($_POST['level_id']));
+$validation_result[] = array('credits',teacher_validator($_POST['assigned_teacher_id']));
+$validation_result[] = array('no_of_working_hours',working_hours_validator($_POST['no_of_working_hours']));
 
 
 
@@ -125,23 +125,49 @@ if($error_counter == 0)
 
 
         //insert query
-        $sql = "INSERT INTO courses  (course_id,title, description, credits, level_id, assigned_teacher_id,"
-            ." no_of_working_hours,date_of_create,date_of_update) "
-            . "VALUES ('$course_id','$title','$description','$credits', '$level_id','$assigned_teacher_id','$no_of_working_hours',"
-            ."NOW(),NOW())";
+
+        if ($results3 = $mysqli->query("select * from courses where course_id='{$_POST['course_id']}'")){
+            if ($results3->num_rows) {
+
+                //If the course is registered before
 
 
+                $_SESSION['message'] = "You have already created this course!";
+                header("location: error.php");
+            } else {
+
+                //If the course is not registered before
 
 
-        if($mysqli->query($sql))
-        {
-            header("location:A_create_courses.php");
+                if ($results4 = $mysqli->query("INSERT INTO courses  (course_id,title, description, credits, level_id, assigned_teacher_id,"
+                    ." no_of_working_hours,date_of_create,date_of_update) "
+                    . "VALUES ('$course_id','$title','$description','$credits', '$level_id','$assigned_teacher_id','$no_of_working_hours',"
+                    ."NOW(),NOW())")) {
+                    if ($results4->affected_rows != 0) {
+                        $_SESSION['message'] = "Err1 Something went wrong!";
+                        header("location: error.php");
+
+                    } else {
+                        $_SESSION['message'] = "Success!";
+                        header("location: success.php");
+
+                    }
+                } else {
+                    $_SESSION['message'] = "Err2 Something went wrong!";
+                    header("location: error.php");
+                }
+            }
+        }else {
+            $_SESSION['message'] = "Err3 Something went wrong!";
+            header("location: error.php");
         }
-        else
-        {
-            $_SESSION['message'] = "Something went wrong in submit page!";
-            header("location:error.php");
-        }
+
+
+
+
+
+
+
 
     }
     else
