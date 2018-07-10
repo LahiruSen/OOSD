@@ -55,6 +55,7 @@ if ($_SESSION['logged_in'] != 1) {
 
                 } elseif (strcasecmp($employee_title, "HR Manager") == 0) {
                     $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_hr=0 AND approved_by_principal=1");
+
                 } elseif (strcasecmp($employee_title, "Administrator") == 0) {
                     $leave_result = $mysqli->query("SELECT * FROM leave_submission WHERE approved_by_admin=0 AND approved_by_hr=1 ");
                 } else {
